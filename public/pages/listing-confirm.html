@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Your Listing – LinkUp Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/shared.css" />
+  <link rel="stylesheet" href="../assets/css/listing-confirm.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-links">
+        <a href="../../index.html">← Back to Store</a>
+        <span>|</span>
+        <a href="listings.html">My Listings</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="../../index.html" class="logo">LinkUp<span>Express</span></a>
+      <div class="header-right">
+        <span class="seller-badge">🏪 Seller Portal</span>
+        <a href="#">My Listings</a>
+        <a href="#">Orders</a>
+        <a href="signup.html">Account</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROGRESS STEPS -->
+  <div class="progress-bar">
+    <div class="progress-inner">
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num">✓</div>
+          <div class="step-label">Listing Details</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step active">
+          <div class="step-num">2</div>
+          <div class="step-label">Review &amp; Confirm</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-label">Published</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="page-title">
+      <h1>Review Your Listing</h1>
+      <p>Check all details carefully before publishing. Once live, buyers will be able to see and purchase your item.</p>
+    </div>
+
+    <div class="notice-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p><strong>Almost there!</strong> Review your listing details below. Click <strong>"Edit"</strong> next to any section to go back and make changes, or click <strong>"Publish Listing"</strong> when you're happy.</p>
+    </div>
+
+    <div class="confirm-layout">
+
+      <!-- LEFT: DETAIL REVIEW -->
+      <div>
+
+        <!-- MOCK PREVIEW -->
+        <div class="preview-card" style="margin-bottom:20px;">
+          <div class="preview-card-header">
+            <h2>How buyers will see it</h2>
+            <span>Live preview</span>
+          </div>
+          <div class="listing-preview-mock">
+            <div class="mock-img" id="mock-img">
+              <div class="mock-badge" id="mock-badge" style="display:none;"></div>
+              🎧
+            </div>
+            <span class="mock-brand" id="mock-brand">Brand</span>
+            <div class="mock-title" id="mock-title">Your product title will appear here</div>
+            <div class="mock-price">
+              <span class="now" id="mock-price">R0.00</span>
+              <span class="was" id="mock-was" style="display:none;"></span>
+              <span class="save" id="mock-save" style="display:none;"></span>
+            </div>
+            <div class="mock-delivery" id="mock-delivery">🚚 Delivery info will appear here</div>
+            <div class="mock-cta">Add to Cart</div>
+          </div>
+        </div>
+
+        <!-- BASIC INFO -->
+        <div class="preview-card detail-section">
+          <div class="detail-section-head">
+            <h3>Basic Information</h3>
+            <a href="create-listing.html" class="btn-edit">Edit</a>
+          </div>
+          <div class="detail-rows">
+            <div class="detail-row"><span class="dr-label">Title</span><span class="dr-value" id="r-title">—</span></div>
+            <div class="detail-row"><span class="dr-label">Category</span><span class="dr-value" id="r-category">—</span></div>
+            <div class="detail-row"><span class="dr-label">Brand</span><span class="dr-value" id="r-brand">—</span></div>
+            <div class="detail-row"><span class="dr-label">Description</span><span class="dr-value" id="r-description" style="white-space:pre-wrap;">—</span></div>
+          </div>
+        </div>
+
+        <!-- IMAGES -->
+        <div class="preview-card detail-section">
+          <div class="detail-section-head">
+            <h3>Product Images</h3>
+            <a href="create-listing.html" class="btn-edit">Edit</a>
+          </div>
+          <div id="image-strip-area"></div>
+        </div>
+
+        <!-- PRICING -->
+        <div class="preview-card detail-section">
+          <div class="detail-section-head">
+            <h3>Pricing &amp; Stock</h3>
+            <a href="create-listing.html" class="btn-edit">Edit</a>
+          </div>
+          <div class="detail-rows">
+            <div class="detail-row"><span class="dr-label">Selling Price</span><span class="dr-value" id="r-price">—</span></div>
+            <div class="detail-row"><span class="dr-label">Stock Quantity</span><span class="dr-value" id="r-quantity">—</span></div>
+            <div class="detail-row"><span class="dr-label">SKU</span><span class="dr-value" id="r-sku">—</span></div>
+          </div>
+        </div>
+
+        <!-- CONDITION -->
+        <div class="preview-card detail-section">
+          <div class="detail-section-head">
+            <h3>Item Condition</h3>
+            <a href="create-listing.html" class="btn-edit">Edit</a>
+          </div>
+          <div class="detail-rows">
+            <div class="detail-row"><span class="dr-label">Condition</span><span class="dr-value" id="r-condition">—</span></div>
+          </div>
+        </div>
+
+        <!-- SHIPPING -->
+        <div class="preview-card detail-section">
+          <div class="detail-section-head">
+            <h3>Shipping &amp; Delivery</h3>
+            <a href="create-listing.html" class="btn-edit">Edit</a>
+          </div>
+          <div class="detail-rows">
+            <div class="detail-row"><span class="dr-label">Shipping Fee</span><span class="dr-value" id="r-shipping">—</span></div>
+            <div class="detail-row"><span class="dr-label">Dispatch Within</span><span class="dr-value" id="r-dispatch">—</span></div>
+            <div class="detail-row"><span class="dr-label">Item Location</span><span class="dr-value" id="r-location">—</span></div>
+            <div class="detail-row"><span class="dr-label">Delivery Options</span><span class="dr-value" id="r-delivery-opts">—</span></div>
+          </div>
+        </div>
+
+        <!-- ADDITIONAL -->
+              </div>
+
+      <!-- RIGHT: SIDEBAR -->
+      <div class="sidebar-card">
+        <div class="sidebar-head">
+          <h3>Listing Checklist</h3>
+          <p>Make sure everything is ready before publishing.</p>
+        </div>
+        <div class="sidebar-body">
+
+          <!-- CHECKLIST -->
+          <div id="checklist"></div>
+
+          <!-- FEE BREAKDOWN -->
+          <div class="fee-breakdown">
+            <div style="font-size:12px; font-weight:700; color:var(--gray-600); text-transform:uppercase; letter-spacing:0.6px; margin-bottom:10px;">Seller Fee Estimate</div>
+            <div class="fee-row"><span class="label">Listing fee</span><span class="value">R0.00</span></div>
+            <div class="fee-row"><span class="label">Commission (8%)</span><span class="value" id="fee-commission">R0.00</span></div>
+            <div class="fee-row total"><span class="label">You receive</span><span class="value" id="fee-receive">R0.00</span></div>
+            <p class="fee-note">Commission is deducted after a successful sale only.</p>
+          </div>
+
+          <!-- TERMS -->
+          <label class="terms-check">
+            <input type="checkbox" id="terms-agree" onchange="checkPublish()" />
+            I confirm this listing complies with LinkUp Express  and <a href="#">Terms of Service</a>.
+          </label>
+
+          <!-- ACTIONS -->
+          <button class="btn-publish" id="btn-publish" onclick="publishListing()" disabled style="opacity:0.5; cursor:not-allowed;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Publish Listing
+          </button>
+          <button class="btn-back" onclick="window.location.href='create-listing.html'">← Back to Edit</button>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2025 LinkUp Express (Pty) Ltd · Registered in South Africa</span>
+    <span style="margin:0 12px;">·</span>
+    
+    <a href="contact.html">Help &amp; Support</a>
+    <a href="privacy.html">Privacy Policy</a>
+  </footer>
+
+  <!-- SUCCESS OVERLAY -->
+  <div class="success-overlay" id="success-overlay">
+    <div class="success-modal">
+      <div class="success-icon">🎉</div>
+      <h2>Listing Published!</h2>
+      <p>Your item is now live on LinkUp Express and visible to thousands of buyers across South Africa.</p>
+      <div class="listing-ref">Listing reference: <strong id="listing-ref">LUE-000000</strong></div>
+      <button class="btn-go-listings" onclick="goToListings()">View My Listings</button>
+      <button class="btn-go-home" onclick="goToHome()">Return to Store</button>
+    </div>
+  </div>
+
+  <script src="../assets/java/auth.js"></script>
+  <script>
+    var listing = {};
+    var conditionLabels = { 'new': 'New', 'openbox': 'Open Box', 'used-good': 'Used – Good', 'used-fair': 'Used – Fair', 'parts': 'For Parts' };
+    var conditionClasses = { 'new': 'new', 'openbox': 'openbox', 'used-good': 'used', 'used-fair': 'used', 'parts': 'parts' };
+    var mockIcons = { 'Electronics': '🎧', 'Fashion': '👗', 'Home': '🏠', 'Gaming': '🎮', 'Sports': '⚽', 'Automotive': '🚗', 'Other': '📦' };
+
+    function val(id, fallback) {
+      var el = document.getElementById(id);
+      if (!el) return fallback || '—';
+      el.textContent = fallback || '—';
+    }
+
+    function setText(id, text, isEmpty) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = text || '—';
+      el.className = 'dr-value' + (isEmpty ? ' empty' : '');
+    }
+
+    function loadListing() {
+      var data = sessionStorage.getItem('pendingListing');
+      if (data) {
+        try { listing = JSON.parse(data); } catch(e) { listing = {}; }
+      }
+
+      // If no data, use demo values
+      if (!listing.title) {
+        listing = {
+          title: 'Sony WH-1000XM5 Wireless Noise-Cancelling Headphones — Black',
+          category: 'Electronics',
+          brand: 'Sony',
+          description: 'Brand new, sealed in original box. Industry-leading noise cancellation, 30-hour battery, USB-C charging. Full manufacturer warranty included.',
+          price: '5999',
+          originalPrice: '9199',
+          quantity: '5',
+          sku: '',
+          condition: 'new',
+          shippingCost: '0',
+          dispatchDays: '2',
+          location: '',
+          nationwide: true,
+          pickup: false,
+          express: false,
+          imageCount: 0
+        };
+      }
+
+      renderAll();
+    }
+
+    function renderAll() {
+      // Mock preview
+      document.getElementById('mock-brand').textContent = listing.brand || 'Unknown Brand';
+      document.getElementById('mock-title').textContent = listing.title || 'Product title';
+
+      var price = parseFloat(listing.price) || 0;
+      var origPrice = parseFloat(listing.originalPrice) || 0;
+      document.getElementById('mock-price').textContent = 'R' + price.toLocaleString('en-ZA', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+      if (origPrice > price) {
+        var wasEl = document.getElementById('mock-was');
+        var saveEl = document.getElementById('mock-save');
+        var badge = document.getElementById('mock-badge');
+        wasEl.textContent = 'R' + origPrice.toLocaleString('en-ZA', {minimumFractionDigits:2, maximumFractionDigits:2});
+        wasEl.style.display = 'inline';
+        var pct = Math.round((1 - price / origPrice) * 100);
+        saveEl.textContent = '-' + pct + '%';
+        saveEl.style.display = 'inline';
+        badge.textContent = '-' + pct + '% OFF';
+        badge.style.display = 'block';
+      }
+
+      // Delivery mock
+      var ship = parseFloat(listing.shippingCost) || 0;
+      document.getElementById('mock-delivery').textContent = ship === 0 ? '🚚 Free Delivery' : '🚚 Delivery from R' + ship.toFixed(2);
+
+      // Update mock icon based on category
+      var catKey = Object.keys(mockIcons).find(function(k) { return listing.category && listing.category.indexOf(k) !== -1; });
+      // Keep default emoji if no match
+
+      // Basic info
+      setText('r-title', listing.title, !listing.title);
+      setText('r-category', listing.category, !listing.category);
+      setText('r-brand', listing.brand || 'Not specified', !listing.brand);
+      setText('r-description', listing.description, !listing.description);
+
+      // Images — use real stored image data if available
+      var imgArea = document.getElementById('image-strip-area');
+      var storedImages = [];
+      try { storedImages = JSON.parse(sessionStorage.getItem('pendingListingImages') || '[]'); } catch(e) {}
+
+      if (storedImages.length > 0) {
+        // Show real images from sessionStorage
+        var strip = '<div class="image-strip">';
+        storedImages.forEach(function(src, i) {
+          strip += '<div class="img-thumb-sm' + (i===0?' main':'') + '" style="background-image:url(' + src + ');background-size:cover;background-position:center;"></div>';
+        });
+        strip += '</div>';
+        imgArea.innerHTML = strip;
+
+        // Also update the mock preview with the first real image
+        var mockImg = document.getElementById('mock-product-image');
+        if (mockImg) {
+          mockImg.style.backgroundImage = 'url(' + storedImages[0] + ')';
+          mockImg.style.backgroundSize = 'cover';
+          mockImg.style.backgroundPosition = 'center';
+          mockImg.textContent = '';
+        }
+      } else if (listing.imageCount && listing.imageCount > 0) {
+        var icons = ['🎧','📸','📦','🔌','🖼️','📷','🔊','💡'];
+        var strip = '<div class="image-strip">';
+        for (var i = 0; i < Math.min(listing.imageCount, 8); i++) {
+          strip += '<div class="img-thumb-sm' + (i===0?' main':'') + '">' + icons[i] + '</div>';
+        }
+        strip += '</div>';
+        imgArea.innerHTML = strip;
+      } else {
+        imgArea.innerHTML = '<div class="no-images">No images uploaded. Consider adding photos to improve your listing.</div>';
+      }
+
+      // Pricing
+      setText('r-price', 'R' + (price.toLocaleString('en-ZA', {minimumFractionDigits:2})), !listing.price);
+      if (origPrice > price) {
+          var disc = Math.round((1 - price / origPrice) * 100);
+          } else {
+          }
+      setText('r-quantity', listing.quantity ? listing.quantity + ' unit(s)' : null, !listing.quantity);
+      setText('r-sku', listing.sku || 'Not specified', !listing.sku);
+
+      // Condition
+      var condEl = document.getElementById('r-condition');
+      var condLabel = conditionLabels[listing.condition] || listing.condition || '—';
+      var condClass = conditionClasses[listing.condition] || 'new';
+      condEl.innerHTML = '<span class="condition-pill ' + condClass + '">' + condLabel + '</span>';
+
+      // Shipping
+      setText('r-shipping', ship === 0 ? 'Free delivery' : 'R' + ship.toFixed(2));
+      setText('r-dispatch', listing.dispatchDays ? 'Within ' + listing.dispatchDays + ' business day(s)' : null);
+      setText('r-location', listing.location, !listing.location);
+      var opts = [];
+      if (listing.nationwide) opts.push('<span class="toggle-chip on">Nationwide</span>');
+      if (listing.pickup) opts.push('<span class="toggle-chip on">Local Pickup</span>');
+      if (listing.express) opts.push('<span class="toggle-chip on">Express</span>');
+      if (!listing.nationwide) opts.push('<span class="toggle-chip off">No Nationwide</span>');
+      document.getElementById('r-delivery-opts').innerHTML = '<div class="toggle-display">' + opts.join('') + '</div>';
+
+      // Additional
+
+      // Fee breakdown
+      var commission = price * 0.08;
+      var receive = price - commission;
+      document.getElementById('fee-commission').textContent = 'R' + commission.toLocaleString('en-ZA', {minimumFractionDigits:2});
+      document.getElementById('fee-receive').textContent = 'R' + receive.toLocaleString('en-ZA', {minimumFractionDigits:2});
+
+      // Checklist
+      renderChecklist();
+    }
+
+    function renderChecklist() {
+      var checks = [
+        { label: 'Title provided', pass: !!listing.title },
+        { label: 'Category selected', pass: !!listing.category },
+        { label: 'Description written', pass: !!(listing.description && listing.description.length > 20) },
+        { label: 'Price set', pass: !!(listing.price && parseFloat(listing.price) > 0) },
+        { label: 'Stock quantity set', pass: !!(listing.quantity && parseInt(listing.quantity) > 0) },
+        { label: 'Item location added', pass: !!listing.location },
+        { label: 'Images uploaded', pass: !!(listing.imageCount && listing.imageCount > 0), warn: true },
+      ];
+
+      var html = '';
+      checks.forEach(function(c) {
+        var cls = c.pass ? 'pass' : (c.warn ? 'warn' : 'fail');
+        var icon = c.pass ? '✓' : (c.warn ? '!' : '✗');
+        html += '<div class="checklist-item"><div class="check-icon ' + cls + '">' + icon + '</div><span>' + c.label + '</span></div>';
+      });
+      document.getElementById('checklist').innerHTML = html;
+    }
+
+    function checkPublish() {
+      var agreed = document.getElementById('terms-agree').checked;
+      var btn = document.getElementById('btn-publish');
+      btn.disabled = !agreed;
+      btn.style.opacity = agreed ? '1' : '0.5';
+      btn.style.cursor = agreed ? 'pointer' : 'not-allowed';
+    }
+
+    async function publishListing() {
+      if (!document.getElementById('terms-agree').checked) return;
+
+      var btn = document.getElementById('btn-publish');
+      btn.disabled = true;
+      btn.textContent = 'Publishing…';
+
+      // ── Step 0: Get user ID ───────────────────────────────────────
+      var userId = window._lueConfirmUserId || '';
+      if (!userId) {
+        try { userId = localStorage.getItem('lue_uid') || ''; } catch(e) {}
+      }
+      if (!userId) {
+        try {
+          var mr  = await fetch(buildApiUrl('auth') + '?action=me', { credentials: 'same-origin' });
+          var md  = await mr.json();
+          if (md.ok && md.data) userId = md.data.id;
+        } catch(e) {}
+      }
+
+      if (!userId) {
+        btn.disabled    = false;
+        btn.textContent = 'Publish Listing';
+        alert('Session expired. Please log in again.');
+        window.location.href = 'signup.html#login';
+        return;
+      }
+
+      // ── Step 1: Get categories from DB to find category ID ────────
+      var categoryId = null;
+      try {
+        var catUrl  = buildApiUrl('products') + '?action=categories&user_id=' + encodeURIComponent(userId);
+        var catRes  = await fetch(catUrl, { credentials: 'same-origin' });
+        var catData = await catRes.json();
+        if (catData.ok && catData.data) {
+          var match = catData.data.find(function(c) {
+            return c.name.toLowerCase().includes((listing.category || '').toLowerCase()) ||
+                   (listing.category || '').toLowerCase().includes(c.name.toLowerCase());
+          });
+          if (match) categoryId = match.id;
+          // Use first category as fallback
+          if (!categoryId && catData.data.length > 0) categoryId = catData.data[0].id;
+        }
+      } catch(e) { console.warn('Could not fetch categories:', e); }
+
+      // ── Step 2: Post listing to PHP API ───────────────────────────
+      var listingId = null;
+      try {
+        var apiUrl = buildApiUrl('listings') + '?action=create';
+        // Get images from sessionStorage
+        var listingImages = [];
+        try { listingImages = JSON.parse(sessionStorage.getItem('pendingListingImages') || '[]'); } catch(e) {}
+
+        var payload = {
+          user_id:          userId,
+          title:            listing.title       || '',
+          category_id:      categoryId          || listing.category || 'General',
+          category_name:    listing.category    || 'General',
+          description:      listing.description || '',
+          brand:            listing.brand       || '',
+          price:            parseFloat(listing.price)    || 0,
+          stock_qty:        parseInt(listing.quantity)   || 1,
+          condition:        listing.condition   || 'new',
+          sku:              listing.sku         || '',
+          image_urls:       JSON.stringify(listingImages),
+          shipping_options: [
+            {
+              method:        'standard',
+              fee:           parseFloat(listing.shippingCost) || 0,
+              dispatch_days: parseInt(listing.dispatchDays)   || 2,
+              provider:      'Courier'
+            }
+          ]
+        };
+
+        var res  = await fetch(apiUrl, {
+          method:      'POST',
+          headers:     { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body:        JSON.stringify(payload)
+        });
+        var data = await res.json();
+
+        if (data.ok && data.data && data.data.listing_id) {
+          listingId = data.data.listing_id;
+          console.log('Listing created in DB:', listingId);
+
+          // Step 3: Publish it (set status to live)
+          var pubUrl = buildApiUrl('listings') + '?action=publish&id=' + listingId + '&user_id=' + encodeURIComponent(userId);
+          await fetch(pubUrl, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user_id: userId }) });
+          console.log('Listing published');
+        } else {
+          console.error('API listing create failed:', JSON.stringify(data));
+          alert('Listing failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch(e) {
+        console.warn('PHP API not reachable, saving to localStorage only:', e.message);
+      }
+
+      // ── Step 4: Save to localStorage as backup ────────────────────
+      try {
+        var listings = JSON.parse(localStorage.getItem('lue_listings') || '[]');
+        listing.status    = 'live';
+        listing.id        = listingId || listing.id || ('lst-' + Date.now());
+        listing.createdAt = listing.createdAt || new Date().toISOString();
+        var idx = listings.findIndex(function(l) { return l.id === listing.id; });
+        if (idx !== -1) { listings[idx] = listing; } else { listings.unshift(listing); }
+        localStorage.setItem('lue_listings', JSON.stringify(listings));
+      } catch(e) {}
+
+      // ── Step 5: Clear session data ─────────────────────────────────
+      sessionStorage.removeItem('pendingListing');
+      sessionStorage.removeItem('pendingListingImages');
+
+      // ── Step 6: Show success overlay ──────────────────────────────
+      var overlay = document.getElementById('success-overlay');
+      if (overlay) {
+        overlay.style.display        = 'flex';
+        overlay.style.position       = 'fixed';
+        overlay.style.inset          = '0';
+        overlay.style.background     = 'rgba(10,36,99,0.80)';
+        overlay.style.zIndex         = '9999';
+        overlay.style.alignItems     = 'center';
+        overlay.style.justifyContent = 'center';
+      }
+      var ref = 'LUE-' + Math.floor(100000 + Math.random() * 900000);
+      var refEl = document.getElementById('listing-ref');
+      if (refEl) refEl.textContent = ref;
+    }
+
+    function buildApiUrl(endpoint) {
+      // Always use lue_apiUrl from auth.js which handles all path cases
+      if (window.lue_apiUrl) return lue_apiUrl(endpoint);
+      // Fallback manual build
+      var href = window.location.href;
+      var root = href.includes('/pages/')
+        ? href.substring(0, href.indexOf('/pages/'))
+        : href.substring(0, href.lastIndexOf('/'));
+      return root + '/api/' + endpoint + '.php';
+    }
+
+    function goToListings() {
+      window.location.href = 'listings.html';
+    }
+    function goToHome() {
+      window.location.href = '../../index.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Try to get user ID from multiple sources
+      var uid = '';
+
+      // Source 1: lue_uid in localStorage (set on login)
+      try { uid = localStorage.getItem('lue_uid') || ''; } catch(e) {}
+
+      // Source 2: PHP session via API
+      if (!uid) {
+        try {
+          var r = await fetch(buildApiUrl('auth') + '?action=me', { credentials: 'same-origin' });
+          var d = await r.json();
+          if (d.ok && d.data && d.data.id) { uid = d.data.id; }
+        } catch(e) {}
+      }
+
+      // Source 3: lue_initSession
+      if (!uid) {
+        await lue_initSession();
+        var s = lue_getSession();
+        if (s && s.id) uid = s.id;
+      }
+
+      if (uid) {
+        window._lueConfirmUserId = uid;
+        // Verify this user exists in DB and restore session
+        try {
+          var vr = await fetch(buildApiUrl('auth') + '?action=me&user_id=' + encodeURIComponent(uid), { credentials: 'same-origin' });
+          var vd = await vr.json();
+          if (vd.ok && vd.data) {
+            window._lueConfirmUserId = vd.data.id;
+            try { localStorage.setItem('lue_uid', vd.data.id); } catch(e) {}
+          }
+        } catch(e) {}
+      }
+
+      loadListing();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkUp Express – South Africa's Online Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="public/assets/css/shared.css" />
+  <link rel="stylesheet" href="public/assets/css/index.css" />
+  <style>
+    /* ── User dropdown ── */
+    .user-dropdown-trigger {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 12px; background: transparent; border: none;
+      cursor: pointer; color: var(--white); border-radius: var(--radius);
+      font-family: var(--font); font-size: 13px; font-weight: 600;
+      transition: background .15s;
+    }
+    .user-dropdown-trigger:hover { background: rgba(255,255,255,.10); }
+    .user-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--yellow); color: var(--blue);
+      font-weight: 700; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .user-dropdown-menu {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--white); border: 1px solid var(--gray-100);
+      border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.15);
+      min-width: 220px; z-index: 200; overflow: hidden;
+    }
+    .dropdown-user-info { padding: 14px 16px; background: var(--blue-light); }
+    .dropdown-name  { font-weight: 700; font-size: 14px; color: var(--blue); }
+    .dropdown-email { font-size: 11px; color: var(--gray-400); margin-top: 2px; word-break: break-all; }
+    .dropdown-role-badge {
+      display: inline-block; margin-top: 6px;
+      background: var(--yellow-light); color: var(--yellow-dark);
+      font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px;
+    }
+    .dropdown-divider { height: 1px; background: var(--gray-100); }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-800); transition: background .12s;
+      text-decoration: none; width: 100%; background: none;
+      border: none; cursor: pointer; font-family: var(--font); text-align: left;
+    }
+    .dropdown-item svg { width: 16px; height: 16px; color: var(--gray-400); flex-shrink: 0; }
+    .dropdown-item:hover { background: var(--gray-50); color: var(--blue); }
+    .dropdown-item:hover svg { color: var(--blue); }
+    .dropdown-signout { color: var(--red, #C0392B) !important; }
+    .dropdown-signout svg { color: var(--red, #C0392B) !important; }
+    .dropdown-signout:hover { background: #FDECEA !important; }
+    /* Sidebar button styles */
+    /* sidebar removed */
+    .cat-filter-btn {
+      padding: 9px 22px;
+      border: 2px solid var(--gray-200);
+      border-radius: 24px;
+      background: var(--white);
+      color: var(--gray-600);
+      font-family: var(--font-cond, Barlow Condensed, sans-serif);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .cat-filter-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+    .cat-filter-btn.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: var(--white);
+    }
+    .sidebar-link-unused {
+      display: block; width: 100%; text-align: left;
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font); font-size: 14px; color: var(--gray-600);
+      padding: 7px 12px; border-radius: var(--radius);
+      transition: background .12s, color .12s;
+    }
+    .sidebar-link:hover { background: var(--blue-light); color: var(--blue); }
+    .sidebar-link.active {
+      background: var(--yellow-light); color: var(--blue);
+      font-weight: 700; border-left: 3px solid var(--yellow); padding-left: 9px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-links"><span>|</span><span>|</span>
+        <a href="public/pages/contact.html">Help &amp; Support</a>
+      </div>
+      <div class="topbar-links">
+        <a href="public/pages/signup.html">Sell on LinkUp Express</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <!-- Logo -->
+      <a href="index.html" class="logo">LinkUp<span>Express</span></a>
+
+      <!-- Search -->
+      <div class="search-bar">
+        <input type="text" placeholder="Search for products, brands, categories…" />
+        <button class="search-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          Search
+        </button>
+      </div>
+
+      <!-- Actions -->
+      <div class="header-actions">
+        <button class="btn-sell" id="sell-btn" onclick="handleSellClick()">+ Sell</button>
+
+        <div class="header-action" id="header-signin" style="cursor:pointer;" onclick="if(!this.querySelector('#user-dropdown'))window.location.href='public/pages/signup.html'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span data-lue="user-name">Sign In</span>
+        </div>
+
+        <a href="public/pages/cart.html" class="header-action">
+          <div class="badge" id="cart-count" data-lue="cart-badge">0</div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span>Cart</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- HERO BANNER -->
+    <section class="hero">
+      <div class="hero-main">
+        <div class="hero-tag">Limited Time Offer</div>
+        <h1>Shop Big.<br>Save Bigger.</h1>
+        <p>Discover thousands of products from trusted sellers across South Africa — delivered to your door.</p>
+        <a href="public/pages/product-detail.html" class="hero-cta">
+          Shop Now
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+      <div class="hero-side">
+        <div class="hero-card hero-card-1">
+          <div>
+            <h3>Sell on LinkUp Express</h3>
+            <p>Reach millions of shoppers across SA</p>
+          </div>
+          <a href="public/pages/signup.html" class="card-link btn-sell">Start Selling →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PROMO STRIP -->
+    <div class="promo-strip">
+      <div class="promo-item">
+        <div class="promo-icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div class="promo-text"><strong>Fast Delivery</strong><span>Orders over R500</span></div>
+      </div>
+      <div class="promo-item">
+        <div class="promo-icon orange">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="promo-text"><strong>Secure Payments</strong><span>256-bit SSL encryption</span></div>
+      </div>
+      <div class="promo-item">
+        <div class="promo-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <div class="promo-text"><strong>Best Prices</strong><span>Price match guarantee</span></div>
+      </div>
+
+    </div>
+
+    <!-- CATEGORY FILTER -->
+    <section class="section" style="padding-bottom:0;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="cat-filter-btn active" onclick="filterByCategory(this,'all')">All</button>
+        <button class="cat-filter-btn" onclick="filterByCategory(this,'Electronics')">Electronics</button>
+        <button class="cat-filter-btn" onclick="filterByCategory(this,'Fashion')">Fashion</button>
+        <button class="cat-filter-btn" onclick="filterByCategory(this,'Home and Furniture')">Home and Furniture</button>
+        <button class="cat-filter-btn" onclick="filterByCategory(this,'Vehicles')">Vehicles</button>
+        <button class="cat-filter-btn" onclick="filterByCategory(this,'Toys')">Toys</button>
+        <button class="cat-filter-btn" onclick="filterByCategory(this,'Books')">Books</button>
+        <button class="cat-filter-btn" onclick="filterByCategory(this,'Other')">Other</button>
+      </div>
+    </section>
+
+    <!-- FEATURED PRODUCTS -->
+    <section class="section" style="margin-bottom:0">
+      <div class="section-header">
+        <h2 class="section-title">Featured <span>Products</span></h2>
+      </div>
+      <div class="product-grid" id="product-grid">
+      </div>
+      <div id="no-products-msg" style="text-align:center; padding:60px 20px; color:var(--gray-400);">
+        <div style="font-size:48px; margin-bottom:16px;">🛍️</div>
+        <h3 style="font-family:var(--font-cond);font-size:22px;color:var(--blue);margin-bottom:8px;">No products yet</h3>
+        <p style="font-size:14px;">Products added by sellers will appear here.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-main">
+
+      <!-- Brand block -->
+      <div class="footer-brand">
+        <div class="logo">LinkUp<span>Express</span></div>
+        <p>South Africa's leading online marketplace connecting buyers and sellers since 2025. Shop smarter, live better.</p>
+      </div>
+
+      <!-- Account column -->
+      <div class="footer-col">
+        <h5>Account</h5>
+        <a href="public/pages/signup.html#login">Log In</a>
+        <a href="public/pages/signup.html">Sign Up</a>
+        <a href="public/pages/profile.html">My Dashboard</a>
+      </div>
+
+      <!-- Support column -->
+      <div class="footer-col">
+        <h5>Support</h5>
+        <a href="public/pages/contact.html">Help Centre</a>
+        <a href="public/pages/privacy.html">Privacy Policy</a>
+        <a href="public/pages/terms.html">Terms of Use</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 LinkUp Express (Pty) Ltd · Registered in South Africa</span>
+    </div>
+  </footer>
+
+  <!-- FLOATING SELL BUTTON -->
+  <a href="public/pages/signup.html" class="float-sell btn-sell">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Start Selling
+  </a>
+
+  <script>
+    /* Category sidebar filter - unused */
+    function filterCategory(btn, category) {
+      document.querySelectorAll('.sidebar-link').forEach(function(el) { el.classList.remove('active'); });
+      btn.classList.add('active');
+      var cards  = document.querySelectorAll('.product-card');
+      var shown  = 0;
+      cards.forEach(function(card) {
+        if (category === 'all') { card.style.display = ''; shown++; }
+        else {
+          var match = (card.dataset.category || '').toLowerCase().includes(category);
+          card.style.display = match ? '' : 'none';
+          if (match) shown++;
+        }
+      });
+      var noMsg = document.getElementById('no-products-msg');
+      if (noMsg) noMsg.style.display = shown === 0 ? 'block' : 'none';
+    }
+
+    /* Cart badge from localStorage */
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Load session from PHP
+      await lue_initSession();
+      // ── Cart badge ─────────────────────────────────────────────
+      var cart = [];
+      try { cart = JSON.parse(localStorage.getItem('lue_cart') || '[]'); } catch(e) {}
+      var total = cart.reduce(function(s,i){ return s + (i.quantity||1); }, 0);
+      var badge = document.getElementById('cart-count');
+      if (badge) { badge.textContent = total||''; badge.style.display = total > 0 ? 'flex' : 'none'; }
+
+      // ── Load products from database ────────────────────────────
+      loadProducts();
+    });
+
+    async function loadProducts() {
+      var grid  = document.getElementById('product-grid');
+      var noMsg = document.getElementById('no-products-msg');
+      if (!grid) return;
+
+      try {
+        var url  = 'public/api/products.php?action=all';
+        var res  = await fetch(url, { credentials: 'same-origin' });
+        var data = await res.json();
+
+        if (data.ok && data.data && data.data.length > 0) {
+          if (noMsg) noMsg.style.display = 'none';
+          grid.innerHTML = '';
+          _allProductCards = [];
+          data.data.forEach(function(p) {
+            var cardEl = makeProductCard(
+              p.id,
+              p.name || 'Product',
+              (p.brand || '').toUpperCase(),
+              p.category_name || p.category_slug || '',
+              p.seller_name || '',
+              Number(p.avg_rating || 0).toFixed(1),
+              Number(p.price || 0)
+            );
+            grid.appendChild(cardEl);
+          });
+        } else {
+          loadLocalListings(grid, noMsg);
+        }
+      } catch(e) {
+        loadLocalListings(grid, noMsg);
+      }
+    }
+
+    function makeProductCard(id, name, brand, category, seller, stars, price) {
+      var catLower = category.toLowerCase();
+      var emoji    = getCategoryEmoji(catLower);
+      var priceStr = price.toLocaleString('en-ZA', { minimumFractionDigits: 2 });
+      var card = document.createElement('div');
+      card.className       = 'product-card';
+      card.dataset.category = catLower;
+      card.style.cursor    = 'pointer';
+      // Make the whole card clickable except the button
+      card.setAttribute('data-category', (category || '').toLowerCase());
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON') return;
+        if (id) sessionStorage.setItem('viewingListingId', String(id));
+        window.location.href = 'public/pages/product-detail.html?id=' + encodeURIComponent(id);
+      });
+      card.innerHTML =
+        '<div style="background:var(--gray-50);display:flex;align-items:center;justify-content:center;height:180px;font-size:64px;">' + emoji + '</div>' +
+        '<div style="padding:12px;">' +
+        '<div style="font-size:11px;font-weight:700;color:var(--gray-400);letter-spacing:.5px;">' + esc(brand) + '</div>' +
+        '<div style="font-weight:700;color:var(--gray-800);margin:4px 0;font-size:14px;">' + esc(name) + '</div>' +
+        '<div style="font-size:11px;color:var(--gray-400);margin-bottom:6px;">' + esc(seller) + '</div>' +
+        '<div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;">' +
+        '<span style="color:var(--yellow);font-size:12px;">&#9733;</span>' +
+        '<span style="font-size:12px;color:var(--gray-600);">' + stars + '</span></div>' +
+        '<div style="font-family:var(--font-cond);font-size:20px;font-weight:700;color:var(--blue);">R&#160;' + priceStr + '</div>' +
+        '<button class="add-to-cart-btn" data-id="' + esc(id) + '" data-name="' + esc(name) + '" data-price="' + price + '" ' +
+        'style="width:100%;margin-top:10px;padding:10px;background:var(--yellow);color:var(--blue);font-weight:700;border:none;border-radius:var(--radius);cursor:pointer;font-family:var(--font);">Add to Cart</button>' +
+        '</div>';
+      // Attach click to button separately to avoid quotes issues
+      var btn = card.querySelector('.add-to-cart-btn');
+      if (btn) btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        addToCartQuick(this.dataset.id, this.dataset.name, parseFloat(this.dataset.price));
+      });
+      return card;
+    }
+
+    function loadLocalListings(grid, noMsg) {
+      // Never use localStorage for products — always show empty state
+      // so deleted listings don't appear
+      if (noMsg) noMsg.style.display = 'block';
+      return;
+      var listings = [];
+      live.forEach(function(l) {
+        var cardEl = makeProductCard(
+          l.id || '',
+          l.title || 'Product',
+          (l.brand || '').toUpperCase(),
+          l.category || '',
+          '',
+          '0.0',
+          Number(l.price || 0)
+        );
+        grid.appendChild(cardEl);
+      });
+    }
+
+    function getCategoryEmoji(cat) {
+      cat = (cat || '').toLowerCase();
+      if (cat.includes('gaming') | cat.includes('game'))         return '🎮';
+      if (cat.includes('phone') | cat.includes('mobile'))        return '📱';
+      if (cat.includes('laptop') | cat.includes('computer'))     return '💻';
+      if (cat.includes('audio') | cat.includes('headphone'))     return '🎧';
+      if (cat.includes('camera'))                                  return '📷';
+      if (cat.includes('tv') | cat.includes('display'))          return '🖥️';
+      if (cat.includes('fashion') | cat.includes('clothing'))    return '👗';
+      if (cat.includes('kitchen') | cat.includes('home'))        return '🏠';
+      if (cat.includes('sport'))                                   return '⚽';
+      if (cat.includes('electronic'))                             return '⚡';
+      return '📦';
+    }
+
+    function addToCartQuick(id, name, price) {
+      var cart = [];
+      try { cart = JSON.parse(localStorage.getItem('lue_cart') || '[]'); } catch(e) {}
+      var existing = cart.find(function(i){ return i.id === id; });
+      if (existing) { existing.quantity = (existing.quantity || 1) + 1; }
+      else { cart.push({ id: id, name: name, price: price, quantity: 1 }); }
+      localStorage.setItem('lue_cart', JSON.stringify(cart));
+      // Update badge
+      var badge = document.getElementById('cart-count');
+      var total = cart.reduce(function(s,i){ return s + (i.quantity||1); }, 0);
+      if (badge) { badge.textContent = total; badge.style.display = 'flex'; }
+      // Show quick toast
+      var t = document.createElement('div');
+      t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;padding:12px 24px;border-radius:32px;font-weight:600;font-size:13px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);';
+      t.textContent = '✓ ' + name + ' added to cart!';
+      document.body.appendChild(t);
+      setTimeout(function(){ document.body.removeChild(t); }, 2500);
+    }
+
+    function esc(str) {
+      return String(str || '').replace(/[&<>"']/g, function(c){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+      });
+    }
+
+    /* Sign Out — called from main.js dropdown */
+    function handleSignOut() {
+      lue_logout();
+    }
+    window.handleSignOut = handleSignOut;
+
+    // Category filter for product grid
+    var _allProductCards = [];
+    function filterByCategory(btn, cat) {
+      document.querySelectorAll('.cat-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var grid = document.getElementById('product-grid');
+      if (!grid) return;
+      // If no cards cached yet, cache them now
+      if (_allProductCards.length === 0) {
+        _allProductCards = Array.from(grid.children);
+      }
+      _allProductCards.forEach(function(card) {
+        if (cat === 'all') {
+          card.style.display = '';
+        } else {
+          var cardCat = (card.getAttribute('data-category') || '').toLowerCase().trim();
+          var filterCat = cat.toLowerCase().trim();
+          // Match if category contains the filter word or vice versa
+          var match = cardCat === filterCat || cardCat.includes(filterCat) || filterCat.includes(cardCat);
+          card.style.display = match ? '' : 'none';
+        }
+      });
+    }
+    window.filterByCategory = filterByCategory;
+  </script>
+
+  <script src="public/assets/java/auth.js"></script>
+  <script src="public/assets/java/main.js"></script>
+
+</body>
+</html>

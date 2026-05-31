@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart – LinkUp Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/shared.css" />
+  <link rel="stylesheet" href="../assets/css/cart.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-links">
+        <a href="../../index.html">← Continue Shopping</a>
+        <span>|</span><span>|</span>
+        <a href="contact.html">Help &amp; Support</a>
+      </div>
+      <div class="topbar-links">
+        <a href="signup.html">Sell on LinkUp Express</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="../../index.html" class="logo">LinkUp<span>Express</span></a>
+      <div class="search-bar">
+        <input type="text" placeholder="Search for products, brands, categories…" autocomplete="off" />
+        <button class="search-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Search
+        </button>
+      </div>
+      <div class="header-actions">
+        <button class="btn-sell" onclick="window.location.href='signup.html'">+ Sell</button>
+        <div class="header-action" id="header-signin" style="cursor:pointer;"
+             onclick="if(!this.querySelector('#user-dropdown'))window.location.href='signup.html'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span data-lue="user-name">Sign In</span>
+        </div>
+
+        <a href="cart.html" class="header-action">
+          <div class="badge" id="cart-badge" data-lue="cart-badge">0</div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span>Cart</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a><span class="sep">›</span>
+      <span class="current">Shopping Cart</span>
+    </div>
+  </div>
+
+  <!-- CHECKOUT STEPS -->
+  <div class="checkout-steps">
+    <div class="steps-inner">
+      <div class="cstep active">
+        <div class="cstep-num">1</div>
+        <div class="cstep-label">Cart</div>
+      </div>
+      <div class="cstep-line"></div>
+      <div class="cstep">
+        <div class="cstep-num">2</div>
+        <div class="cstep-label">Delivery</div>
+      </div>
+      <div class="cstep-line"></div>
+      <div class="cstep">
+        <div class="cstep-num">3</div>
+        <div class="cstep-label">Payment</div>
+      </div>
+      <div class="cstep-line"></div>
+      <div class="cstep">
+        <div class="cstep-num">4</div>
+        <div class="cstep-label">Confirmation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="page-title">
+      <h1>Your Cart</h1>
+      <span id="item-count-label">0 items</span>
+    </div>
+
+    <div class="cart-layout">
+
+      <!-- LEFT: CART ITEMS -->
+      <div>
+
+        <!-- EMPTY STATE -->
+        <div class="empty-cart" id="empty-cart">
+          <div class="icon">🛒</div>
+          <h2>Your cart is empty</h2>
+          <p>Looks like you haven't added anything yet. Browse our store and find something you love.</p>
+          <a href="../../index.html" class="btn-shop">Start Shopping</a>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="cart-toolbar" id="cart-toolbar">
+          <label class="select-all">
+            <input type="checkbox" id="select-all" onchange="toggleSelectAll()" checked />
+            Select all items
+          </label>
+          <button class="btn-remove-selected" onclick="removeSelected()">Remove Selected</button>
+        </div>
+
+        <!-- ITEMS -->
+        <div class="cart-items" id="cart-items">
+        </div>
+          <div class="upsell-grid">
+            
+
+      </div>
+
+      <!-- RIGHT: SUMMARY -->
+      <div class="summary-card">
+        <div class="summary-head">
+          <h2>Order Summary</h2>
+        </div>
+        <div class="summary-body">
+
+
+          <div class="summary-lines">
+            <div class="sum-line"><span class="lbl" id="sum-items-lbl">Items (0)</span><span class="val" id="sum-subtotal">R 0,00</span></div>
+            <div class="sum-line"><span class="lbl">Delivery</span><span class="val green">Free</span></div>
+            <div class="sum-line"><span class="lbl">VAT (15% incl.)</span><span class="val" id="sum-vat">R 0,00</span></div>
+          </div>
+
+          <div class="sum-total">
+            <span class="lbl">Total</span>
+            <span class="val" id="sum-total">R 0,00</span>
+          </div>
+
+          <a href="order-confirmation.html" class="btn-checkout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Proceed to Payment
+          </a>
+          <a href="../../index.html" class="btn-continue">← Continue Shopping</a>
+
+          <div class="security-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Secure checkout · 256-bit SSL encryption
+          </div>
+
+          <div class="payment-icons">
+            <span class="pay-pill">VISA</span>
+            <span class="pay-pill">MC</span>
+            <span class="pay-pill">Yoko</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2025 LinkUp Express (Pty) Ltd · Registered in South Africa</span>
+    <span style="margin:0 12px;">·</span>
+    <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="contact.html">Contact Us</a>
+  </footer>
+
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-msg">Done!</span>
+  </div>
+
+  <script src="../assets/java/auth.js"></script>
+  <script src="../assets/java/main.js"></script>
+  <script src="../assets/java/cart.js"></script>
+</body>
+</html>

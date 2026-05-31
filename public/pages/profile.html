@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile – LinkUp Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/shared.css" />
+  <link rel="stylesheet" href="../assets/css/profile.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-links">
+        <a href="../../index.html">← Back to Store</a>
+        <span>|</span>
+        <a href="#">My Orders</a>
+        <span>|</span>
+        <a href="#">Help &amp; Support</a>
+      </div>
+      <div class="topbar-links">
+        <a href="signup.html">Sell on LinkUp Express</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="../../index.html" class="logo">LinkUp<span>Express</span></a>
+      <div class="search-bar">
+        <input type="text" id="site-search" name="site-search"
+               placeholder="Search for products, brands, categories…"
+               autocomplete="new-password"
+               onfocus="this.removeAttribute('readonly')"
+               readonly />
+        <button class="search-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Search
+        </button>
+      </div>
+      <div class="header-actions">
+        <a href="profile.html" class="header-action active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </a>
+
+        <a href="cart.html" class="header-action">
+          <div class="badge" id="cart-count" style="display:none;">0</div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span>Cart</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a><span class="sep">›</span>
+      <span class="current">My Profile</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip">
+      <div class="stat-card"><div class="stat-num" id="stat-orders">0</div><div class="stat-label">Orders placed</div></div>
+      
+      <div class="stat-card"><div class="stat-num" id="stat-listings">0</div><div class="stat-label">Active listings</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-saved">—</div><div class="stat-label">Total saved</div></div>
+    </div>
+
+    <div class="page-layout">
+
+      <!-- ── SIDEBAR ── -->
+      <div class="profile-sidebar">
+
+        <div class="avatar-card">
+          <div class="avatar-wrap">
+            <div class="avatar" id="avatar-initials">SD</div>
+            <button class="avatar-edit-btn" onclick="showToast('Profile photo upload coming soon!')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+          </div>
+          <div class="profile-name" id="sidebar-name"> </div>
+          <div class="profile-email-sm" id="sidebar-email"> </div>
+          <span class="role-badge buyer" id="sidebar-role-badge">🛍️ Buyer</span>
+        </div>
+
+        <div class="sidebar-nav">
+          <div class="sidebar-nav-item active" onclick="navigateSection(this, 'personal')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Personal Details
+          </div>
+          <div class="sidebar-nav-item" onclick="navigateSection(this, 'contact')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Contact Info
+          </div>
+          <div class="sidebar-nav-item" onclick="navigateSection(this, 'address')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Address
+          </div>
+          <div class="sidebar-nav-item" onclick="navigateSection(this, 'role')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Account Type
+          </div>
+          <div class="sidebar-nav-item" onclick="navigateSection(this, 'password')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Password &amp; Security
+          </div>
+          <div class="sidebar-nav-item" onclick="navigateSection(this, 'danger')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Delete Account
+            </div>
+        </div>
+
+      </div>
+
+      <!-- ── CONTENT ── -->
+      <div class="content-area">
+
+        <!-- PERSONAL DETAILS -->
+        <div class="section-card" id="personal">
+          <div class="section-head">
+            <div class="section-head-left">
+              <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div><h2>Personal Details</h2><p>Your name and display information.</p></div>
+            </div>
+            <div class="edit-controls">
+              <button class="btn-cancel-section" onclick="cancelEdit('personal')">Cancel</button>
+              <button class="btn-save-section" onclick="saveSection('personal')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Save Changes
+              </button>
+              <button class="btn-edit-section" onclick="editSection('personal')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit
+              </button>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="field-label">First Name</label>
+                <div class="field-value" id="v-first-name">—</div>
+                <input type="text" class="field-input" id="i-first-name" value="" placeholder="First name" oninput="liveUpdate()" />
+              </div>
+              <div class="form-group">
+                <label class="field-label">Last Name</label>
+                <div class="field-value" id="v-last-name">—</div>
+                <input type="text" class="field-input" id="i-last-name" value="" placeholder="Last name" oninput="liveUpdate()" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Display Name</label>
+              <div class="field-value" id="v-display-name">—</div>
+              <input type="text" class="field-input" id="i-display-name" value="" placeholder="How your name shows on reviews" />
+            </div>
+            <div class="form-group">
+              <label class="field-label">Date of Birth</label>
+              <div class="field-value" id="v-dob">—</div>
+              <input type="date" class="field-input" id="i-dob" value="" />
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT INFO -->
+        <div class="section-card" id="contact">
+          <div class="section-head">
+            <div class="section-head-left">
+              <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+              <div><h2>Contact Information</h2><p>Email address and phone number.</p></div>
+            </div>
+            <div class="edit-controls">
+              <button class="btn-cancel-section" onclick="cancelEdit('contact')">Cancel</button>
+              <button class="btn-save-section" onclick="saveSection('contact')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Save Changes
+              </button>
+              <button class="btn-edit-section" onclick="editSection('contact')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit
+              </button>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="form-group">
+              <label class="field-label">Email Address</label>
+              <div class="field-value" id="v-email"> </div>
+              <input type="email" class="field-input" id="i-email" value="" placeholder="your@email.com" oninput="updateSidebarEmail()" />
+              <div style="font-size:11px; color:var(--gray-400); margin-top:4px;" id="email-note" class="field-input">A verification link will be sent to your new address.</div>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Phone Number</label>
+              <div class="field-value" id="v-phone">071 234 5678</div>
+              <input type="tel" class="field-input" id="i-phone" value="" placeholder="e.g. 071 234 5678" />
+            </div>
+            <div class="form-group">
+              <label class="field-label">Alternate Phone</label>
+              <div class="field-value empty" id="v-alt-phone">Not provided</div>
+              <input type="tel" class="field-input" id="i-alt-phone" value="" placeholder="Optional second number" />
+            </div>
+          </div>
+        </div>
+
+        <!-- ADDRESS -->
+        <div class="section-card" id="address">
+          <div class="section-head">
+            <div class="section-head-left">
+              <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div><h2>Delivery Address</h2><p>Your default shipping address.</p></div>
+            </div>
+            <div class="edit-controls">
+              <button class="btn-cancel-section" onclick="cancelEdit('address')">Cancel</button>
+              <button class="btn-save-section" onclick="saveSection('address')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Save Changes
+              </button>
+              <button class="btn-edit-section" onclick="editSection('address')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit
+              </button>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="form-group">
+              <label class="field-label">Street Address</label>
+              <div class="field-value" id="v-street">—</div>
+              <input type="text" class="field-input" id="i-street" value="" placeholder="Street and unit number" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="field-label">City / Town</label>
+                <div class="field-value" id="v-city">—</div>
+                <input type="text" class="field-input" id="i-city" value="" placeholder="City / Town" />
+              </div>
+              <div class="form-group">
+                <label class="field-label">Postal Code</label>
+                <div class="field-value" id="v-postal">—</div>
+                <input type="text" class="field-input" id="i-postal" value="" placeholder="e.g. 2000" maxlength="4" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="field-label">Province</label>
+                <div class="field-value" id="v-province">—</div>
+                <select class="field-input" id="i-province">
+                  <option value="">Select province…</option>
+                  <option value="GP" selected>Gauteng</option>
+                  <option value="WC">Western Cape</option>
+                  <option value="KZN">KwaZulu-Natal</option>
+                  <option value="EC">Eastern Cape</option>
+                  <option value="FS">Free State</option>
+                  <option value="LP">Limpopo</option>
+                  <option value="MP">Mpumalanga</option>
+                  <option value="NC">Northern Cape</option>
+                  <option value="NW">North West</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="field-label">Country</label>
+                <div class="field-value" id="v-country">South Africa</div>
+                <input type="text" class="field-input" id="i-country" value="South Africa" placeholder="Country" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCOUNT TYPE (ROLE) -->
+        <div class="section-card" id="role">
+          <div class="section-head">
+            <div class="section-head-left">
+              <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+              <div><h2>Account Type</h2><p>Switch between Buyer and Seller at any time.</p></div>
+            </div>
+          </div>
+          <div class="role-toggle-section">
+            <span class="role-toggle-label">I want to use LinkUp Express as a…</span>
+            <div class="role-cards">
+              <label class="role-option selected" id="role-buyer-card" onclick="selectRole('buyer')">
+                <input type="radio" name="account-role" value="buyer" checked />
+                <div class="ro-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="ro-icon">🛍️</div>
+                <div class="ro-title">Buyer</div>
+                <div class="ro-desc">Browse and purchase products from thousands of sellers across South Africa.</div>
+              </label>
+              <label class="role-option" id="role-seller-card" onclick="selectRole('seller')">
+                <input type="radio" name="account-role" value="seller" />
+                <div class="ro-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="ro-icon">🏪</div>
+                <div class="ro-title">Seller</div>
+                <div class="ro-desc">List your products and reach millions of shoppers across South Africa.</div>
+              </label>
+            </div>
+            <div class="role-note">
+              <strong>Note:</strong> Switching to Seller will unlock the Seller Dashboard and listing tools. Your buyer order history will be retained.
+            </div>
+          </div>
+        </div>
+
+        <!-- PASSWORD & SECURITY -->
+        <div class="section-card" id="password">
+          <div class="section-head">
+            <div class="section-head-left">
+              <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+              <div><h2>Password &amp; Security</h2><p>Update your password to keep your account safe.</p></div>
+            </div>
+            <div class="edit-controls">
+              <button class="btn-cancel-section" onclick="cancelEdit('password')">Cancel</button>
+              <button class="btn-save-section" onclick="saveSection('password')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Update Password
+              </button>
+              <button class="btn-edit-section" onclick="editSection('password')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Change Password
+              </button>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="form-group">
+              <label class="field-label">Current Password</label>
+              <div class="field-value">••••••••••••</div>
+              <div class="pwd-input-wrap field-input" style="display:none;">
+                <input type="password" id="i-current-pwd" placeholder="Enter current password" style="width:100%; padding:10px 44px 10px 14px; border:1.5px solid var(--gray-200); border-radius:var(--radius); font-family:var(--font); font-size:14px; outline:none; transition:border-color 0.15s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--gray-200)'" />
+                <button type="button" class="pwd-toggle" onclick="togglePwd('i-current-pwd')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="field-label">New Password</label>
+              <div class="field-value" style="color:var(--gray-400); font-style:italic;">Not set</div>
+              <div class="pwd-input-wrap field-input" style="display:none;">
+                <input type="password" id="i-new-pwd" placeholder="Minimum 8 characters" oninput="checkStrength(this.value)" style="width:100%; padding:10px 44px 10px 14px; border:1.5px solid var(--gray-200); border-radius:var(--radius); font-family:var(--font); font-size:14px; outline:none; transition:border-color 0.15s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--gray-200)'" />
+                <button type="button" class="pwd-toggle" onclick="togglePwd('i-new-pwd')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="pwd-strength field-input" id="pwd-strength" style="display:none;">
+                <div class="bar" id="bar1"></div><div class="bar" id="bar2"></div><div class="bar" id="bar3"></div>
+                <span class="label" id="strength-label"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Confirm New Password</label>
+              <div class="field-value" style="color:var(--gray-400); font-style:italic;">Not set</div>
+              <div class="pwd-input-wrap field-input" style="display:none;">
+                <input type="password" id="i-confirm-pwd" placeholder="Re-enter new password" style="width:100%; padding:10px 44px 10px 14px; border:1.5px solid var(--gray-200); border-radius:var(--radius); font-family:var(--font); font-size:14px; outline:none; transition:border-color 0.15s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--gray-200)'" />
+                <button type="button" class="pwd-toggle" onclick="togglePwd('i-confirm-pwd')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DANGER ZONE -->
+        <div class="danger-section" id="danger">
+          <div class="danger-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <h2>Delete Account</h2>
+          </div>
+          <div class="danger-body">
+            <p>Permanently delete your LinkUp Express account. All your data, orders, listings, and history will be removed and <strong>cannot be recovered</strong>. This action is irreversible.</p>
+            <button class="btn-danger" onclick="confirmDelete()">Delete My Account</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2025 LinkUp Express (Pty) Ltd · Registered in South Africa</span>
+    <span style="margin:0 12px;">·</span>
+    <a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Contact Us</a>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-msg">Saved!</span>
+  </div>
+
+  <script>
+    /* ── EDIT / SAVE / CANCEL ── */
+    function editSection(id) {
+      document.getElementById(id).classList.add('editing');
+      if (id === 'password') {
+        document.querySelectorAll('#password .pwd-input-wrap.field-input, #password #pwd-strength').forEach(function(el){ el.style.display = 'flex'; });
+      }
+    }
+
+    function cancelEdit(id) {
+      document.getElementById(id).classList.remove('editing');
+    }
+
+    function saveSection(id) {
+      if (id === 'personal') {
+        var first = document.getElementById('i-first-name').value.trim();
+        var last  = document.getElementById('i-last-name').value.trim();
+        var disp  = document.getElementById('i-display-name').value.trim();
+        var dob   = document.getElementById('i-dob').value.trim();
+        if (!first || !last) { showToast('First and last name are required.'); return; }
+        document.getElementById('v-first-name').textContent = first;
+        document.getElementById('v-last-name').textContent = last;
+        document.getElementById('v-display-name').textContent = disp || first + ' ' + last.charAt(0) + '.';
+        document.getElementById('v-dob').textContent = dob;
+        updateAvatar(first, last);
+        document.getElementById('sidebar-name').textContent = first + ' ' + last;
+      }
+
+      if (id === 'contact') {
+        var email = document.getElementById('i-email').value.trim();
+        var phone = document.getElementById('i-phone').value.trim();
+        var alt   = document.getElementById('i-alt-phone').value.trim();
+        if (!email || !phone) { showToast('Email and phone are required.'); return; }
+        document.getElementById('v-email').textContent = email;
+        document.getElementById('v-phone').textContent = phone;
+        var altEl = document.getElementById('v-alt-phone');
+        altEl.textContent = alt || 'Not provided';
+        altEl.className = 'field-value' + (alt ? '' : ' empty');
+        document.getElementById('sidebar-email').textContent = email;
+      }
+
+      if (id === 'address') {
+        var street  = document.getElementById('i-street').value.trim();
+        var city    = document.getElementById('i-city').value.trim();
+        var postal  = document.getElementById('i-postal').value.trim();
+        var provEl  = document.getElementById('i-province');
+        var provTxt = provEl.options[provEl.selectedIndex].text;
+        var country = document.getElementById('i-country').value.trim();
+        document.getElementById('v-street').textContent  = street  || '—';
+        document.getElementById('v-city').textContent    = city    || '—';
+        document.getElementById('v-postal').textContent  = postal  || '—';
+        document.getElementById('v-province').textContent = provTxt;
+        document.getElementById('v-country').textContent = country || '—';
+      }
+
+      if (id === 'password') {
+        var curr = document.getElementById('i-current-pwd').value;
+        var nw   = document.getElementById('i-new-pwd').value;
+        var conf = document.getElementById('i-confirm-pwd').value;
+        if (!curr) { showToast('Please enter your current password.'); return; }
+        if (nw.length < 8) { showToast('New password must be at least 8 characters.'); return; }
+        if (nw !== conf) { showToast('Passwords do not match.'); return; }
+        document.getElementById('i-current-pwd').value = '';
+        document.getElementById('i-new-pwd').value = '';
+        document.getElementById('i-confirm-pwd').value = '';
+      }
+
+      document.getElementById(id).classList.remove('editing');
+      showToast('Changes saved successfully!');
+    }
+
+    /* ── LIVE UPDATES ── */
+    function liveUpdate() {
+      var first = document.getElementById('i-first-name').value.trim();
+      var last  = document.getElementById('i-last-name').value.trim();
+      if (first || last) updateAvatar(first, last);
+    }
+
+    function updateAvatar(first, last) {
+      var initials = (first.charAt(0) + (last ? last.charAt(0) : '')).toUpperCase();
+      document.getElementById('avatar-initials').textContent = initials;
+    }
+
+    function updateSidebarEmail() {
+      var email = document.getElementById('i-email').value.trim();
+      if (email) document.getElementById('sidebar-email').textContent = email;
+    }
+
+    /* ── ROLE SELECT ── */
+    function selectRole(role) {
+      document.getElementById('role-buyer-card').classList.toggle('selected', role === 'buyer');
+      document.getElementById('role-seller-card').classList.toggle('selected', role === 'seller');
+      document.querySelector('[value="' + role + '"]').checked = true;
+
+      var badge = document.getElementById('sidebar-role-badge');
+      if (role === 'buyer') {
+        badge.textContent = '🛍️ Buyer';
+        badge.className = 'role-badge buyer';
+      } else {
+        badge.textContent = '🏪 Seller';
+        badge.className = 'role-badge seller';
+      }
+      showToast('Account type updated to ' + (role === 'buyer' ? 'Buyer' : 'Seller') + '!');
+    }
+
+    /* ── PASSWORD STRENGTH ── */
+    function checkStrength(pwd) {
+      var bars  = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3')];
+      var label = document.getElementById('strength-label');
+      var score = 0;
+      if (pwd.length >= 8) score++;
+      if (/[A-Z]/.test(pwd) && /[0-9]/.test(pwd)) score++;
+      if (/[^A-Za-z0-9]/.test(pwd) && pwd.length >= 12) score++;
+
+      bars.forEach(function(b) { b.className = 'bar'; });
+      if (score === 1) { bars[0].className = 'bar weak'; label.textContent = 'Weak'; label.className = 'label weak'; }
+      else if (score === 2) { bars[0].className = 'bar fair'; bars[1].className = 'bar fair'; label.textContent = 'Fair'; label.className = 'label fair'; }
+      else if (score === 3) { bars.forEach(function(b){ b.className = 'bar strong'; }); label.textContent = 'Strong'; label.className = 'label strong'; }
+      else { label.textContent = ''; }
+    }
+
+    /* ── TOGGLE PWD VISIBILITY ── */
+    function togglePwd(inputId) {
+      var input = document.getElementById(inputId);
+      if (!input) return;
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    /* ── SMOOTH SCROLL ── */
+    function navigateSection(btn, id) {
+      // Update active state on sidebar
+      document.querySelectorAll('.sidebar-nav-item').forEach(function(item) {
+        item.classList.remove('active');
+      });
+      if (btn) btn.classList.add('active');
+
+      // Scroll to the section
+      var el = document.getElementById(id);
+      if (el) {
+        var top = el.getBoundingClientRect().top + window.pageYOffset - 90;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    }
+
+    /* ── DELETE CONFIRM ── */
+    function confirmDelete() {
+      if (confirm('Are you sure you want to permanently delete your account? This cannot be undone.')) {
+        showToast('Account deletion request submitted.');
+      }
+    }
+
+    /* ── TOAST ── */
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(function(){ t.classList.remove('show'); }, 3200);
+    }
+  </script>
+  <script src="../assets/java/auth.js"></script>
+  <script src="../assets/java/profile.js"></script>
+  <script>
+    /* Clear search bar — stops browser autocomplete filling it with email */
+    document.addEventListener('DOMContentLoaded', function() {
+      var search = document.getElementById('site-search');
+      if (search) { search.value = ''; search.removeAttribute('readonly'); }
+    });
+
+    /* Update cart badge from localStorage on load */
+    document.addEventListener('DOMContentLoaded', function() {
+      var cart  = [];
+      try { cart = JSON.parse(localStorage.getItem('lue_cart') || '[]'); } catch(e) {}
+      var total = cart.reduce(function(s, i) { return s + (i.quantity || 1); }, 0);
+      var badge = document.getElementById('cart-count');
+      if (badge) {
+        badge.textContent   = total > 0 ? String(total) : '';
+        badge.style.display = total > 0 ? 'flex' : 'none';
+      }
+    });
+  </script>
+</body>
+</html>

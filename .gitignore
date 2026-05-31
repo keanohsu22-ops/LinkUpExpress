@@ -1,0 +1,72 @@
+# VS Code
+.vscode/
+
+# JetBrains IDEs (IntelliJ, PhpStorm, PyCharm, etc.)
+.idea/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Cache directories
+.cache/
+tmp/
+temp/
+
+# Dependency directories
+vendor/
+
+# Build/output folders
+dist/
+build/
+out/
+
+# Coverage reports
+coverage/
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# Backup files
+*.bak
+*.old
+
+# Compressed files
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# PHP Composer
+composer.lock
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Uploads (if user-generated content)
+uploads/
+
+# Local configuration files
+config.local.php
+settings.local.php

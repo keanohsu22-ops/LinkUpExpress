@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout – LinkUp Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #0A2463;
+      --blue-mid:   #1B3A8C;
+      --yellow:     #F5C518;
+      --yellow-dk:  #D4A914;
+      --white:      #FFFFFF;
+      --gray-50:    #F8F9FA;
+      --gray-100:   #F1F3F5;
+      --gray-200:   #E9ECEF;
+      --gray-400:   #ADB5BD;
+      --gray-500:   #6C757D;
+      --gray-600:   #495057;
+      --gray-700:   #343A40;
+      --dark:       #0D1B2A;
+      --green:      #2E7D32;
+      --red:        #C0392B;
+      --radius:     10px;
+      --shadow:     0 2px 12px rgba(10,36,99,.08);
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--gray-50);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────────── */
+    .top-bar {
+      background: var(--blue);
+      color: rgba(255,255,255,.65);
+      font-size: 12px;
+      padding: 6px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-bar a { color: rgba(255,255,255,.65); text-decoration: none; }
+    .top-bar a:hover { color: var(--yellow); }
+
+    header {
+      background: var(--blue);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 64px;
+      border-bottom: 3px solid var(--yellow);
+    }
+    .logo { font-size: 22px; font-weight: 800; color: var(--white); text-decoration: none; flex-shrink: 0; }
+    .logo span { color: var(--yellow); }
+
+    /* ── PROGRESS STEPS ─────────────────────────────────────────── */
+    .checkout-progress {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 16px 24px;
+    }
+    .progress-inner {
+      max-width: 820px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-400);
+      flex: 1;
+    }
+    .step.active { color: var(--blue); }
+    .step.done   { color: var(--green); }
+    .step-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      color: var(--gray-500);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .step.active .step-num { background: var(--blue); color: var(--white); }
+    .step.done   .step-num { background: var(--green); color: var(--white); }
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: var(--gray-200);
+      margin: 0 8px;
+    }
+    .step-line.done { background: var(--green); }
+
+    /* ── MAIN LAYOUT ────────────────────────────────────────────── */
+    .checkout-wrap {
+      max-width: 900px;
+      margin: 32px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── CARDS ──────────────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-header h2 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .card-header .step-badge {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-body { padding: 20px; }
+
+    /* ── FORM FIELDS ────────────────────────────────────────────── */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 5px;
+    }
+    .field input, .field select {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      outline: none;
+      transition: border-color .15s;
+    }
+    .field input:focus, .field select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(10,36,99,.08);
+    }
+    .field input.error { border-color: var(--red); }
+    .field-error {
+      font-size: 11px;
+      color: var(--red);
+      font-weight: 600;
+      margin-top: 4px;
+      display: none;
+    }
+
+    /* ── PAYMENT METHOD ─────────────────────────────────────────── */
+    .pay-methods {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .pay-method {
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all .15s;
+    }
+    .pay-method:hover { border-color: var(--blue-mid); }
+    .pay-method.selected { border-color: var(--blue); background: rgba(10,36,99,.04); }
+    .pay-method input[type=radio] { accent-color: var(--blue); }
+    .pay-icon { font-size: 18px; }
+
+    /* ── DELIVERY OPTIONS ───────────────────────────────────────── */
+    .delivery-options { display: flex; flex-direction: column; gap: 10px; }
+    .delivery-opt {
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 14px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all .15s;
+    }
+    .delivery-opt:hover { border-color: var(--blue-mid); }
+    .delivery-opt.selected { border-color: var(--blue); background: rgba(10,36,99,.03); }
+    .delivery-opt input[type=radio] { accent-color: var(--blue); flex-shrink: 0; }
+    .delivery-info { flex: 1; }
+    .delivery-name { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .delivery-eta  { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .delivery-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .delivery-price.free { color: var(--green); }
+
+    /* ── ADDRESS ────────────────────────────────────────────────── */
+    .address-display {
+      background: var(--gray-50);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--gray-700);
+    }
+    .address-display strong { color: var(--dark); font-weight: 700; }
+
+    /* ── ORDER SUMMARY ──────────────────────────────────────────── */
+    .summary-card { position: sticky; top: 20px; }
+    .summary-items { padding: 16px 20px; border-bottom: 1px solid var(--gray-100); }
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 13px;
+    }
+    .summary-item:first-child { padding-top: 0; }
+    .summary-item-name { color: var(--gray-700); flex: 1; line-height: 1.4; }
+    .summary-item-name span { font-size: 11px; color: var(--gray-400); display: block; }
+    .summary-item-price { font-weight: 700; color: var(--dark); white-space: nowrap; }
+    .summary-totals { padding: 16px 20px; }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 5px 0;
+      color: var(--gray-600);
+    }
+    .summary-row.total {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--dark);
+      border-top: 2px solid var(--gray-100);
+      padding-top: 12px;
+      margin-top: 6px;
+    }
+    .summary-row .green { color: var(--green); font-weight: 700; }
+
+    /* ── SUBMIT BUTTON ──────────────────────────────────────────── */
+    .btn-pay {
+      width: 100%;
+      background: var(--yellow);
+      color: var(--blue);
+      border: none;
+      border-radius: 8px;
+      padding: 15px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      margin: 16px 20px;
+      width: calc(100% - 40px);
+      transition: background .15s, transform .1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-pay:hover { background: var(--yellow-dk); transform: translateY(-1px); }
+    .btn-pay:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .secure-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--gray-400);
+      padding: 0 20px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    /* ── TOAST ──────────────────────────────────────────────────── */
+    #pay-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--blue);
+      color: var(--yellow);
+      padding: 12px 22px;
+      border-radius: 32px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 9999;
+      transition: transform .3s, opacity .3s;
+      opacity: 0;
+      white-space: nowrap;
+    }
+    #pay-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ── SUCCESS OVERLAY ────────────────────────────────────────── */
+    #success-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,36,99,.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    #success-overlay.show { display: flex; }
+    .success-box {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 40px 36px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+    .success-icon { font-size: 56px; margin-bottom: 16px; }
+    .success-box h2 { font-size: 22px; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
+    .success-box p  { font-size: 14px; color: var(--gray-600); line-height: 1.6; margin-bottom: 6px; }
+    .order-ref { font-size: 18px; font-weight: 800; color: var(--yellow-dk); margin: 12px 0; }
+    .btn-continue {
+      display: inline-block;
+      margin-top: 20px;
+      background: var(--blue);
+      color: var(--white);
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      font-family: 'Barlow', sans-serif;
+    }
+    .btn-continue:hover { background: var(--blue-mid); }
+
+    @media (max-width: 680px) {
+      .checkout-wrap { grid-template-columns: 1fr; }
+      .summary-card { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+      .pay-methods { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div><a href="../../index.html">← Back to Store</a> | <a href="contact.html">Help &amp; Support</a></div>
+    <div>Secure Checkout · 256-bit SSL</div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <a href="../../index.html" class="logo">LinkUp<span>Express</span></a>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="checkout-progress">
+    <div class="progress-inner">
+      <div class="step done">
+        <div class="step-num">✓</div>
+        <span>Cart</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step active">
+        <div class="step-num">2</div>
+        <span>Payment</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <span>Confirmation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="checkout-wrap">
+
+    <!-- LEFT COLUMN -->
+    <div>
+
+      <!-- DELIVERY ADDRESS -->
+      <div class="card">
+        <div class="card-header">
+          <div class="step-badge">1</div>
+          <h2>Delivery Address</h2>
+        </div>
+        <div class="card-body">
+          <div class="address-display" id="address-display">
+            <strong id="addr-name">Loading...</strong><br>
+            <span id="addr-street"></span><br>
+            <span id="addr-city"></span>
+          </div>
+          <div class="form-row single" style="margin-top:14px;">
+            <div class="field">
+              <label>Phone Number</label>
+              <input type="tel" id="field-phone" placeholder="e.g. 082 123 4567" />
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="field">
+              <label>Delivery Instructions (optional)</label>
+              <input type="text" id="field-instructions" placeholder="e.g. Leave at gate, buzz unit 3B" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DELIVERY METHOD -->
+      <div class="card">
+        <div class="card-header">
+          <div class="step-badge">2</div>
+          <h2>Delivery Method</h2>
+        </div>
+        <div class="card-body">
+          <div class="delivery-options">
+            <label class="delivery-opt selected" id="opt-standard">
+              <input type="radio" name="delivery" value="standard" checked />
+              <div class="delivery-info">
+                <div class="delivery-name">🚚 Standard Courier</div>
+                <div class="delivery-eta">3–5 business days</div>
+              </div>
+              <div class="delivery-price" id="price-standard">R50</div>
+            </label>
+            <label class="delivery-opt" id="opt-express">
+              <input type="radio" name="delivery" value="express" />
+              <div class="delivery-info">
+                <div class="delivery-name">⚡ Express Courier</div>
+                <div class="delivery-eta">1–2 business days</div>
+              </div>
+              <div class="delivery-price">R120</div>
+            </label>
+            <label class="delivery-opt" id="opt-pickup">
+              <input type="radio" name="delivery" value="pickup" />
+              <div class="delivery-info">
+                <div class="delivery-name">🏪 Collect from Seller</div>
+                <div class="delivery-eta">Arrange with seller</div>
+              </div>
+              <div class="delivery-price free">Free</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENT METHOD -->
+      <div class="card">
+        <div class="card-header">
+          <div class="step-badge">3</div>
+          <h2>Payment Method</h2>
+        </div>
+        <div class="card-body">
+          <div class="pay-methods" style="grid-template-columns:1fr;">
+            <label class="pay-method selected" id="pm-card">
+              <input type="radio" name="paymethod" value="card" checked />
+              <span class="pay-icon">💳</span> Credit / Debit Card
+            </label>
+          </div>
+
+          <!-- Card fields -->
+          <div id="card-fields">
+            <div class="form-row single">
+              <div class="field">
+                <label>Name on Card</label>
+                <input type="text" id="field-cardname" placeholder="As it appears on your card" />
+                <div class="field-error" id="err-cardname">Please enter the name on your card.</div>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="field">
+                <label>Card Number</label>
+                <input type="text" id="field-cardnum" placeholder="1234  5678  9012  3456" maxlength="19" />
+                <div class="field-error" id="err-cardnum">Please enter a valid card number.</div>
+              </div>
+            </div>
+            <div class="form-row triple">
+              <div class="field">
+                <label>Expiry</label>
+                <input type="text" id="field-expiry" placeholder="MM/YY" maxlength="5" />
+                <div class="field-error" id="err-expiry">Invalid expiry.</div>
+              </div>
+              <div class="field">
+                <label>CVV</label>
+                <input type="text" id="field-cvv" placeholder="123" maxlength="4" />
+                <div class="field-error" id="err-cvv">Invalid CVV.</div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN — ORDER SUMMARY -->
+    <div class="summary-card">
+      <div class="card">
+        <div class="card-header">
+          <h2>Order Summary</h2>
+        </div>
+        <div class="summary-items" id="summary-items">
+          <!-- populated by JS -->
+        </div>
+        <div class="summary-totals">
+          <div class="summary-row">
+            <span id="items-label">Items (0)</span>
+            <span id="sum-subtotal">R 0,00</span>
+          </div>
+          <div class="summary-row">
+            <span>Delivery</span>
+            <span id="sum-delivery" class="green">Free</span>
+          </div>
+          <div class="summary-row">
+            <span>VAT (15% incl.)</span>
+            <span id="sum-vat">R 0,00</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="sum-total">R 0,00</span>
+          </div>
+        </div>
+        <button class="btn-pay" id="btn-pay" onclick="submitPayment()">
+          🔒 Place Order &amp; Pay
+        </button>
+        <div class="secure-note">🔐 256-bit SSL · Your data is safe</div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div id="pay-toast"></div>
+
+  <script src="../assets/java/auth.js"></script>
+  <script>
+    var deliveryFees = { standard: 50, express: 120, pickup: 0 };
+    var selectedDelivery = 'standard';
+    var selectedPayMethod = 'card';
+    var checkoutData = null;
+
+    /* ── BOOT ── */
+    document.addEventListener('DOMContentLoaded', async function() {
+      if (window.lue_initSession) await lue_initSession();
+
+      // Load checkout data from sessionStorage
+      try {
+        checkoutData = JSON.parse(sessionStorage.getItem('lue_checkout') || 'null');
+      } catch(e) {}
+
+      if (!checkoutData || !checkoutData.items || checkoutData.items.length === 0) {
+        // No checkout data — redirect back to cart
+        window.location.href = 'cart.html';
+        return;
+      }
+
+      // Populate address from session
+      var session = lue_getSession ? lue_getSession() : null;
+      if (session) {
+        document.getElementById('addr-name').textContent   = session.fullName || 'Your Name';
+        var street   = session.address_street   || session.address || '';
+        var city     = session.address_city     || '';
+        var postal   = session.address_postal   || '';
+        var province = session.address_province || '';
+        var country  = session.address_country  || 'South Africa';
+        var addrLine = [street, city, postal, province, country].filter(Boolean).join(', ');
+        document.getElementById('addr-street').textContent = addrLine || 'No address saved — update in your Profile';
+        document.getElementById('addr-city').textContent   = '';
+        var phoneEl = document.getElementById('field-phone');
+        if (phoneEl && session.phone) phoneEl.value = session.phone;
+      }
+
+      renderSummary();
+      initDeliveryOptions();
+      initPayMethods();
+      initCardFormatting();
+    });
+
+    /* ── RENDER ORDER SUMMARY ── */
+    function renderSummary() {
+      if (!checkoutData) return;
+      var items    = checkoutData.items;
+      var subtotal = items.reduce(function(s, i) { return s + (Number(i.price) * (i.quantity || 1)); }, 0);
+      var delivery = deliveryFees[selectedDelivery] || 0;
+      var total    = subtotal + delivery;
+      var vat      = total * (15 / 115);
+
+      var html = items.map(function(item) {
+        return '<div class="summary-item">' +
+          '<div class="summary-item-name">' + (item.name || 'Product') +
+          '<span>Qty: ' + (item.quantity || 1) + '</span></div>' +
+          '<div class="summary-item-price">R\u00A0' + (Number(item.price) * (item.quantity || 1)).toLocaleString('en-ZA', {minimumFractionDigits:2}) + '</div>' +
+          '</div>';
+      }).join('');
+
+      document.getElementById('summary-items').innerHTML = html;
+      document.getElementById('items-label').textContent  = 'Items (' + items.length + ')';
+      document.getElementById('sum-subtotal').textContent = 'R\u00A0' + subtotal.toLocaleString('en-ZA', {minimumFractionDigits:2});
+      document.getElementById('sum-delivery').textContent = delivery === 0 ? 'Free' : 'R\u00A0' + delivery.toLocaleString('en-ZA', {minimumFractionDigits:2});
+      document.getElementById('sum-delivery').className   = delivery === 0 ? 'green' : '';
+      document.getElementById('sum-vat').textContent      = 'R\u00A0' + vat.toLocaleString('en-ZA', {minimumFractionDigits:2});
+      document.getElementById('sum-total').textContent    = 'R\u00A0' + total.toLocaleString('en-ZA', {minimumFractionDigits:2});
+    }
+
+    /* ── DELIVERY OPTIONS ── */
+    function initDeliveryOptions() {
+      document.querySelectorAll('input[name="delivery"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+          selectedDelivery = radio.value;
+          document.querySelectorAll('.delivery-opt').forEach(function(el) {
+            el.classList.remove('selected');
+          });
+          radio.closest('.delivery-opt').classList.add('selected');
+          renderSummary();
+        });
+      });
+    }
+
+    /* ── PAYMENT METHOD ── */
+    function initPayMethods() {
+      // Only card is available — nothing to switch
+    }
+
+    /* ── CARD FORMATTING ── */
+    function initCardFormatting() {
+      var cardNum = document.getElementById('field-cardnum');
+      if (cardNum) {
+        cardNum.addEventListener('input', function() {
+          var v = cardNum.value.replace(/\D/g,'').substring(0,16);
+          cardNum.value = v.replace(/(.{4})/g, '$1 ').trim();
+        });
+      }
+      var expiry = document.getElementById('field-expiry');
+      if (expiry) {
+        expiry.addEventListener('input', function() {
+          var v = expiry.value.replace(/\D/g,'');
+          if (v.length >= 2) v = v.substring(0,2) + '/' + v.substring(2,4);
+          expiry.value = v;
+        });
+      }
+    }
+
+    /* ── VALIDATE ── */
+    function validate() {
+      var ok = true;
+      if (selectedPayMethod !== 'card') return true;
+
+      var checks = [
+        { id: 'field-cardname', err: 'err-cardname', fn: function(v) { return v.trim().length > 2; } },
+        { id: 'field-cardnum',  err: 'err-cardnum',  fn: function(v) { return v.replace(/\s/g,'').length === 16; } },
+        { id: 'field-expiry',   err: 'err-expiry',   fn: function(v) { return /^\d{2}\/\d{2}$/.test(v); } },
+        { id: 'field-cvv',      err: 'err-cvv',      fn: function(v) { return /^\d{3,4}$/.test(v); } },
+      ];
+
+      checks.forEach(function(c) {
+        var el  = document.getElementById(c.id);
+        var err = document.getElementById(c.err);
+        if (!c.fn(el.value)) {
+          el.classList.add('error');
+          err.style.display = 'block';
+          ok = false;
+        } else {
+          el.classList.remove('error');
+          err.style.display = 'none';
+        }
+      });
+      return ok;
+    }
+
+    /* ── SUBMIT ── */
+    function submitPayment() {
+      if (!validate()) {
+        showToast('Please fix the errors above.');
+        return;
+      }
+      var btn = document.getElementById('btn-pay');
+      btn.disabled    = true;
+      btn.textContent = 'Processing...';
+
+      // Simulate payment processing then save order to DB
+      setTimeout(async function() {
+        var ref = 'LUE-' + Math.floor(100000 + Math.random() * 900000);
+        var uid = localStorage.getItem('lue_uid') || '';
+
+        // Build items list for DB
+        var items        = checkoutData.items || [];
+        var subtotal     = items.reduce(function(s,i){ return s + Number(i.price)*(i.quantity||1); }, 0);
+        var deliveryFee  = selectedDelivery === 'express' ? 120 : selectedDelivery === 'pickup' ? 0 : 50;
+        var total        = subtotal + deliveryFee;
+
+        // Save order to PHP database
+        if (uid && window.lue_apiUrl && items.length > 0) {
+          try {
+            var orderPayload = {
+              user_id:       uid,
+              items:         items.map(function(i) {
+                return {
+                  listing_id:   i.id || i.listing_id,
+                  quantity:     i.quantity || 1,
+                  unit_price:   i.price
+                };
+              }),
+              delivery_method: selectedDelivery,
+              delivery_fee:    deliveryFee,
+              ref_number:      ref
+            };
+
+            var res  = await fetch(lue_apiUrl('orders') + '?action=place&user_id=' + encodeURIComponent(uid), {
+              method:      'POST',
+              headers:     { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body:        JSON.stringify(orderPayload)
+            });
+            var text = await res.text();
+            console.log('Orders API raw response:', text);
+            var data;
+            try { data = JSON.parse(text); } catch(e) { console.error('Orders API non-JSON:', text); data = {ok:false}; }
+            console.log('Orders API parsed:', data);
+            if (data.ok && data.data && (data.data.ref_number || data.data.ref)) {
+              ref = data.data.ref_number || data.data.ref;
+            } else if (!data.ok) {
+              console.error('Order failed:', data.error || 'Unknown error');
+            }
+          } catch(e) {
+            console.warn('Order save failed:', e.message);
+          }
+        }
+
+        // Save data for confirmation page
+        sessionStorage.setItem('lue_order_ref',      ref);
+        sessionStorage.setItem('lue_order_items',    JSON.stringify(items));
+        sessionStorage.setItem('lue_order_delivery', selectedDelivery);
+
+        // Clear cart from localStorage and DB
+        if (window.lue_clearCart) lue_clearCart();
+        if (uid && window.lue_apiUrl) {
+          fetch(lue_apiUrl('cart') + '?action=clear&user_id=' + encodeURIComponent(uid), {
+            method: 'POST', credentials: 'same-origin',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ user_id: uid })
+          }).catch(function(){});
+        }
+        sessionStorage.removeItem('lue_checkout');
+
+        window.location.href = 'order-confirmation.html';
+      }, 1800);
+    }
+    window.submitPayment = submitPayment;
+
+    /* ── TOAST ── */
+    function showToast(msg) {
+      var t = document.getElementById('pay-toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+  </script>
+
+</body>
+</html>

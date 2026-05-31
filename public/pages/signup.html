@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up / Log In – LinkUp Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/shared.css" />
+  <link rel="stylesheet" href="../assets/css/signup.css" />
+  <style>
+    /* ── Signup page layout ── */
+    body { background: var(--gray-50); }
+
+    .page-wrap {
+      min-height: calc(100vh - 120px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .auth-card {
+      background: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 4px 32px rgba(10,36,99,0.12);
+      width: 100%;
+      max-width: 560px;
+      overflow: hidden;
+    }
+
+    /* ── Tab bar ── */
+    .tab-bar {
+      display: flex;
+      border-bottom: 2px solid var(--gray-100);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 18px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-400);
+      background: var(--white);
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
+      font-family: var(--font);
+    }
+
+    .tab-btn.active {
+      color: var(--blue);
+      border-bottom-color: var(--yellow);
+    }
+
+    /* ── Panels — only .active is visible ── */
+    .auth-panel {
+      display: none;
+      padding: 32px;
+      animation: fadeIn .2s ease;
+    }
+
+    .auth-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Panel heading ── */
+    .panel-heading { margin-bottom: 24px; }
+    .panel-heading h2 { font-family: var(--font-cond); font-size: 26px; font-weight: 700; color: var(--blue); }
+    .panel-heading p  { font-size: 13px; color: var(--gray-400); margin-top: 4px; }
+
+    /* ── Form elements ── */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+    .form-group label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--gray-600); }
+    .form-group input {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--gray-200); border-radius: var(--radius);
+      font-size: 14px; font-family: var(--font); outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .form-group input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(10,36,99,.10); }
+    .form-group input::placeholder { color: var(--gray-400); }
+
+    /* ── Password wrap ── */
+    .input-wrap { position: relative; }
+    .input-wrap input { padding-right: 44px; }
+    .pwd-toggle {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--gray-400);
+      padding: 2px; transition: color .12s;
+    }
+    .pwd-toggle:hover { color: var(--blue); }
+    .pwd-toggle svg { width: 16px; height: 16px; display: block; }
+
+    /* ── Role cards ── */
+    .role-group { margin-bottom: 20px; }
+    .role-group > label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--gray-600); display: block; margin-bottom: 10px; }
+    .role-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .role-card {
+      border: 2px solid var(--gray-200); border-radius: 10px; padding: 16px 12px;
+      cursor: pointer; text-align: center; transition: border-color .15s, background .15s;
+      display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative;
+    }
+    .role-card:hover { border-color: var(--blue-mid); background: var(--blue-light); }
+    /* Pure CSS selection — no JS needed */
+    .role-card:has(input[type="radio"]:checked) {
+      border-color: var(--blue); background: var(--blue-light);
+      box-shadow: 0 0 0 3px rgba(10,36,99,0.12);
+    }
+    .role-card input[type="radio"] {
+      position: absolute; opacity: 0; width: 0; height: 0;
+    }
+    .role-label { font-weight: 700; font-size: 13px; color: var(--blue); }
+    .role-label { font-weight: 700; font-size: 13px; color: var(--blue); }
+    .role-desc { font-size: 11px; color: var(--gray-400); line-height: 1.4; }
+
+    /* ── Buttons ── */
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: var(--yellow); color: var(--blue);
+      font-size: 15px; font-weight: 700; font-family: var(--font);
+      border: none; border-radius: var(--radius); cursor: pointer;
+      transition: background .15s, transform .1s;
+      margin-top: 4px;
+    }
+    .btn-submit:hover { background: var(--yellow-dark); transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    /* ── Extras ── */
+    .terms-text { font-size: 12px; color: var(--gray-400); text-align: center; margin-top: 12px; }
+    .terms-text a { color: var(--blue); font-weight: 600; }
+    .forgot-link { display: block; text-align: right; font-size: 13px; color: var(--blue); font-weight: 600; margin-bottom: 16px; }
+    .forgot-link:hover { text-decoration: underline; }
+    .error-banner { background: var(--red-light); color: var(--red); border: 1px solid rgba(192,57,43,.25); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; font-weight: 500; margin-bottom: 14px; display: none; }
+    .success-banner { background: var(--green-light); color: var(--green); border: 1px solid rgba(26,122,54,.25); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; font-weight: 500; margin-bottom: 14px; display: none; }
+
+    /* ── Header nav for this page ── */
+    .header-nav { display: flex; gap: 4px; margin-left: auto; }
+    .header-nav a { padding: 7px 16px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,.75); border-radius: var(--radius); transition: background .12s, color .12s; }
+    .header-nav a:hover, .header-nav a.active { background: rgba(255,255,255,.12); color: var(--white); }
+
+    /* ── Footer ── */
+    footer { background: var(--gray-800); color: var(--gray-400); font-size: 12px; padding: 16px 24px; display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    footer a { color: var(--gray-400); } footer a:hover { color: var(--white); }
+
+    @media (max-width: 480px) {
+      .form-row { grid-template-columns: 1fr; }
+      .role-options { grid-template-columns: 1fr; }
+      .auth-panel { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-links">
+        <a href="../../index.html">← Back to Store</a>
+        <span>|</span>
+        <a href="#">Help &amp; Support</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="../../index.html" class="logo">LinkUp<span>Express</span></a>
+      <nav class="header-nav">
+        <a href="signup.html" class="active" onclick="switchTab('signup'); return false;">Sign Up</a>
+        <a href="signup.html" onclick="switchTab('login'); return false;">Log In</a>
+        <a href="#">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <div class="page-wrap">
+    <div class="auth-card">
+
+      <!-- TAB SWITCHER -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('signup')">Create Account</button>
+        <button class="tab-btn"        onclick="switchTab('login')">Log In</button>
+      </div>
+
+      <!-- ══════════════ SIGN UP PANEL ══════════════ -->
+      <div class="auth-panel active" id="panel-signup">
+        <div class="panel-heading">
+          <h2>Join LinkUp Express</h2>
+          <p>Create your free account and start buying or selling today.</p>
+        </div>
+
+        <div class="error-banner"   id="signup-error"></div>
+        <div class="success-banner" id="signup-success"></div>
+
+        <form id="signup-form" novalidate>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="full-name">Full Name</label>
+              <input type="text" id="full-name" placeholder="e.g. Sipho Dlamini" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="e.g. 071 234 5678" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email-signup">Email Address</label>
+            <input type="email" id="email-signup" placeholder="you@example.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="address">Delivery Address</label>
+            <input type="text" id="address" placeholder="Street, Suburb, City, Province" required />
+          </div>
+
+          <div class="form-group">
+            <label for="pwd-signup">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="pwd-signup" placeholder="Minimum 8 characters" required />
+              <button type="button" class="pwd-toggle" onclick="togglePwd('pwd-signup', this)" aria-label="Show password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="role-group">
+            <label>I want to join as a…</label>
+            <div class="role-options">
+              <label class="role-card" id="role-buyer-card">
+                <input type="radio" name="role" value="buyer" checked />
+                <div class="role-label">Buyer</div>
+                <div class="role-desc">Browse and purchase products from sellers across SA</div>
+              </label>
+              <label class="role-card" id="role-seller-card">
+                <input type="radio" name="role" value="seller" />
+                <div class="role-label">Seller</div>
+                <div class="role-desc">List your products and reach millions of shoppers</div>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="signup-btn">Create My Account</button>
+
+          <p class="terms-text">
+            By signing up you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+          </p>
+
+        </form>
+      </div>
+
+      <!-- ══════════════ LOG IN PANEL ══════════════ -->
+      <div class="auth-panel" id="panel-login">
+        <div class="panel-heading">
+          <h2>Welcome back</h2>
+          <p>Sign in to your LinkUp Express account to continue.</p>
+        </div>
+
+        <div class="error-banner"   id="login-error"></div>
+        <div class="success-banner" id="login-success"></div>
+
+        <form id="login-form" novalidate>
+
+          <div class="form-group">
+            <label for="email-login">Email Address</label>
+            <input type="email" id="email-login" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="pwd-login">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="pwd-login" placeholder="Your password" autocomplete="current-password" required />
+              <button type="button" class="pwd-toggle" onclick="togglePwd('pwd-login', this)" aria-label="Show password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <a href="#" class="forgot-link">Forgot your password?</a>
+
+          <button type="submit" class="btn-submit" id="login-btn">Log In to My Account</button>
+
+        </form>
+      </div>
+
+    </div><!-- /auth-card -->
+  </div><!-- /page-wrap -->
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2025 LinkUp Express (Pty) Ltd · Registered in South Africa</span>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+    <a href="#">Contact Us</a>
+  </footer>
+
+  <script>
+    /* ── Tab switching ── */
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(function(btn, i) {
+        btn.classList.toggle('active', (tab === 'signup' && i === 0) || (tab === 'login' && i === 1));
+      });
+      document.getElementById('panel-signup').classList.toggle('active', tab === 'signup');
+      document.getElementById('panel-login').classList.toggle('active',  tab === 'login');
+    }
+
+    /* ── Role selection ── */
+    // selectRole handled by signup.js
+
+    /* ── Password show/hide ── */
+    function togglePwd(inputId, btn) {
+      var input   = document.getElementById(inputId);
+      var hidden  = input.type === 'password';
+      input.type  = hidden ? 'text' : 'password';
+      var svg = btn.querySelector('svg');
+      if (svg) {
+        svg.innerHTML = hidden
+          ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+          : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+      }
+    }
+
+    /* ── Sign up handler ── */
+    /* ── Register — DB only ── */
+    async function handleSignup(e) {
+      e.preventDefault();
+      var errBox = document.getElementById('signup-error');
+      var okBox  = document.getElementById('signup-success');
+      errBox.style.display = 'none';
+      okBox.style.display  = 'none';
+
+      var name    = document.getElementById('full-name').value.trim();
+      var phone   = document.getElementById('phone').value.trim();
+      var email   = document.getElementById('email-signup').value.trim();
+      var address = document.getElementById('address').value.trim();
+      var pwd     = document.getElementById('pwd-signup').value;
+      var roleInput = document.querySelector('input[name="role"]:checked');
+      var role      = roleInput ? roleInput.value : 'buyer';
+
+      if (!name || !phone || !email || !address || !pwd) {
+        errBox.textContent = 'Please fill in all fields before continuing.';
+        errBox.style.display = 'block'; return;
+      }
+      if (pwd.length < 8) {
+        errBox.textContent = 'Password must be at least 8 characters.';
+        errBox.style.display = 'block'; return;
+      }
+
+      var btn = document.getElementById('signup-btn');
+      btn.disabled    = true;
+      btn.textContent = 'Creating account…';
+
+      try {
+        var res  = await fetch(lue_apiUrl('auth') + '?action=register', {
+          method:      'POST',
+          headers:     { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ fullName:name, email:email, phone:phone, address:address, password:pwd, role:role })
+        });
+        var result = await res.json();
+
+        if (result.ok && result.data) {
+          /* Save session cache */
+          lue_setSession({
+            id:       result.data.id,
+            fullName: result.data.fullName || name,
+            email:    result.data.email    || email,
+            phone:    result.data.phone    || phone,
+            address:  result.data.address  || address,
+            role:     result.data.role     || role
+          });
+          okBox.textContent    = '✓ Account created! Welcome to LinkUp Express. Redirecting…';
+          okBox.style.display  = 'block';
+          btn.textContent      = '✓ Account Created!';
+          btn.disabled         = false;
+          setTimeout(function(){ window.location.href = '../../index.html'; }, 1400);
+        } else {
+          errBox.textContent   = result.error || 'Registration failed. Please try again.';
+          errBox.style.display = 'block';
+          btn.disabled         = false;
+          btn.textContent      = 'Create My Account';
+        }
+      } catch(err) {
+        errBox.textContent   = 'Cannot connect to the server. Is XAMPP running?';
+        errBox.style.display = 'block';
+        btn.disabled         = false;
+        btn.textContent      = 'Create My Account';
+      }
+    }
+
+    /* ── Login — DB only ── */
+    async function handleLogin(e) {
+      e.preventDefault();
+      var errBox = document.getElementById('login-error');
+      var okBox  = document.getElementById('login-success');
+      errBox.style.display = 'none';
+      okBox.style.display  = 'none';
+
+      var email = document.getElementById('email-login').value.trim();
+      var pwd   = document.getElementById('pwd-login').value;
+
+      if (!email || !pwd) {
+        errBox.textContent = 'Please enter your email and password.';
+        errBox.style.display = 'block'; return;
+      }
+
+      var btn = document.getElementById('login-btn');
+      btn.disabled    = true;
+      btn.textContent = 'Signing in…';
+
+      try {
+        var res    = await fetch(lue_apiUrl('auth') + '?action=login', {
+          method:      'POST',
+          headers:     { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ email:email, password:pwd })
+        });
+        var result = await res.json();
+
+        if (result.ok && result.data) {
+          /* Cache session for UI */
+          lue_setSession({
+            id:       result.data.id,
+            fullName: result.data.fullName,
+            email:    result.data.email,
+            phone:    result.data.phone   || '',
+            address:  result.data.address || '',
+            role:     result.data.role
+          });
+          okBox.textContent    = 'Welcome back! Redirecting…';
+          okBox.style.display  = 'block';
+          btn.textContent      = '✓ Signed In!';
+          btn.disabled         = false;
+          setTimeout(function(){ window.location.href = '../../index.html'; }, 1200);
+        } else {
+          errBox.textContent   = result.error || 'Login failed. Please check your details.';
+          errBox.style.display = 'block';
+          btn.disabled         = false;
+          btn.textContent      = 'Log In to My Account';
+        }
+      } catch(err) {
+        errBox.textContent   = 'Cannot connect to the server. Is XAMPP running?';
+        errBox.style.display = 'block';
+        btn.disabled         = false;
+        btn.textContent      = 'Log In to My Account';
+      }
+    }
+
+        /* ── Simple hash (mirrors auth.js) ── */
+    function simpleHash(str) {
+      var hash = 0;
+      for (var i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return 'lue_' + Math.abs(hash).toString(16);
+    }
+
+    /* ── Check URL hash on load to auto-open login tab ── */
+    if (window.location.hash === '#login') switchTab('login');
+  </script>
+
+  <script src="../assets/java/auth.js"></script>
+  <script src="../assets/java/signup.js"></script>
+
+</body>
+</html>

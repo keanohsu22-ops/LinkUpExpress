@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Confirmed – LinkUp Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/shared.css" />
+  <link rel="stylesheet" href="../assets/css/order-confirmation.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-links">
+        <a href="../../index.html">← Back to Store</a>
+        <span>|</span>
+        <a href="#">Track My Order</a>
+        <span>|</span>
+        <a href="contact.html">Help &amp; Support</a>
+      </div>
+      <div class="topbar-links">
+        <a href="#">My Account</a>
+        <span>|</span>
+        <a href="#">My Orders</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="../../index.html" class="logo">LinkUp<span>Express</span></a>
+      <div class="header-right">
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          My Account
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          My Orders
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- CHECKOUT STEPS – ALL DONE -->
+  <div class="checkout-steps">
+    <div class="steps-inner">
+      <div class="cstep done"><div class="cstep-num">✓</div><div class="cstep-label">Cart</div></div>
+      <div class="cstep-line"></div>
+      <div class="cstep done"><div class="cstep-num">✓</div><div class="cstep-label">Delivery</div></div>
+      <div class="cstep-line"></div>
+      <div class="cstep done"><div class="cstep-num">✓</div><div class="cstep-label">Payment</div></div>
+      <div class="cstep-line"></div>
+      <div class="cstep done"><div class="cstep-num">✓</div><div class="cstep-label">Confirmation</div></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- SUCCESS HERO -->
+    <div class="success-hero">
+      <div class="success-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <h1>Payment Confirmed!</h1>
+      <p class="sub">Thank you for your order. Your payment was processed successfully and your items are being prepared for dispatch.</p>
+      <div class="order-ref">
+        Order reference: <strong id="order-num">LUE-2026-847291</strong>
+        <button onclick="copyRef()">Copy</button>
+      </div>
+    </div>
+
+    <!-- RECEIPT CARD -->
+    <div class="receipt-card">
+
+      <!-- RECEIPT HEADER -->
+      <div class="receipt-header">
+        <div class="receipt-header-left">
+          <h2>Payment Receipt</h2>
+          <p id="receipt-date">Issued Saturday, 25 April 2026 · 14:32 SAST</p>
+        </div>
+        <div class="receipt-header-right">
+          <div class="rh-label">Amount Paid</div>
+          <div class="rh-val" id="confirm-amount-paid">—</div>
+        </div>
+      </div>
+
+      <!-- META STRIP -->
+      <div class="receipt-meta">
+        <div class="meta-item">
+          <div class="meta-label">Order Number</div>
+          <div class="meta-val blue" id="confirm-order-num-meta">—</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Payment Status</div>
+          <div class="meta-val"><span class="payment-badge">Payment Confirmed</span></div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Payment Method</div>
+          <div class="meta-val">Credit / Debit Card</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Transaction ID</div>
+          <div class="meta-val">—</div>
+        </div>
+      </div>
+
+      <!-- ORDERED ITEMS -->
+      <div class="receipt-section-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <h3>Items Ordered</h3>
+      </div>
+      <div id="confirm-items-list" style="padding:4px 0 8px;">
+        <p style="color:var(--gray-400);font-size:13px;padding:12px 0;">Loading items...</p>
+      </div>
+
+      <!-- COST BREAKDOWN -->
+      <div class="receipt-section-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <h3>Cost Breakdown</h3>
+      </div>
+      <div class="cost-breakdown">
+        <div class="cost-row"><span class="lbl" id="confirm-items-count">Items</span><span class="val" id="confirm-subtotal">—</span></div>
+        <div class="cost-row"><span class="lbl">Delivery fee</span><span class="val green" id="confirm-delivery-fee">—</span></div>
+        <div class="cost-row"><span class="lbl">VAT (15% included)</span><span class="val" id="confirm-vat">—</span></div>
+        <div class="cost-row total-row"><span class="lbl">Total Paid</span><span class="val" id="confirm-total">—</span></div>
+      </div>
+
+      <!-- DELIVERY INFO -->
+      <div class="receipt-section-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <h3>Delivery Information</h3>
+      </div>
+      <div class="delivery-block">
+        <div class="delivery-grid">
+          <div class="delivery-box">
+            <h4>Deliver To</h4>
+            <p id="confirm-delivery-address">—</p>
+            <div class="eta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span id="confirm-eta">Estimated arrival: 3–5 business days</span>
+            </div>
+          </div>
+          <div class="delivery-box">
+            <h4>Delivery Method</h4>
+            <p id="confirm-delivery-method">Standard Delivery<br/>LinkUp Express Courier<br/>3–5 business days</p>
+            <div class="eta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              You will be contacted regarding delivery updates.
+            </div>
+          </div>
+        </div>
+
+        <!-- TRACKING PROGRESS -->
+        <div class="tracking-bar">
+          <div style="font-size:12px; font-weight:700; color:var(--gray-600); text-transform:uppercase; letter-spacing:0.6px; margin-bottom:12px;">Order Tracking</div>
+          <div class="tracking-steps">
+            <div class="track-step">
+              <div class="track-dot done">✓</div>
+              <div class="track-label done">Order<br/>Placed</div>
+            </div>
+            <div class="track-line done"></div>
+            <div class="track-step">
+              <div class="track-dot done">✓</div>
+              <div class="track-label done">Payment<br/>Confirmed</div>
+            </div>
+            <div class="track-line done"></div>
+            <div class="track-step">
+              <div class="track-dot active">●</div>
+              <div class="track-label active">Preparing<br/>Order</div>
+            </div>
+            <div class="track-line pending"></div>
+            <div class="track-step">
+              <div class="track-dot pending">4</div>
+              <div class="track-label">Out for<br/>Delivery</div>
+            </div>
+            <div class="track-line pending"></div>
+            <div class="track-step">
+              <div class="track-dot pending">5</div>
+              <div class="track-label">Delivered</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- END RECEIPT CARD -->
+
+
+
+    <!-- CONTINUE SHOPPING -->
+    <a href="../../index.html" class="btn-continue-shopping">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Continue Shopping
+    </a>
+
+    <!-- HELP BOX -->
+    <div class="help-box">
+      <p><strong>Need help with your order?</strong> Our support team is available 24/7. Quote your order number <strong id="confirm-support-ref">—</strong> for faster assistance.</p>
+      <a href="#" class="btn-help">Contact Support</a>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>© 2025 LinkUp Express (Pty) Ltd · Registered in South Africa</span>
+    <span style="margin:0 12px;">·</span>
+    <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="contact.html">Contact Us</a>
+  </footer>
+
+  <script src="../assets/java/auth.js"></script>
+  <script>
+    /* ── ORDER CONFIRMATION BOOT ── */
+    document.addEventListener('DOMContentLoaded', async function() {
+
+      // 1. Load session from PHP
+      if (window.lue_initSession) await lue_initSession();
+      var session = window.lue_getSession ? lue_getSession() : null;
+
+      // 2. Set date/time
+      var now = new Date();
+      var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var h = now.getHours(), m = now.getMinutes();
+      var timeStr = (h < 10 ? '0'+h : h) + ':' + (m < 10 ? '0'+m : m) + ' SAST';
+      var dateStr = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+      var rdEl = document.getElementById('receipt-date');
+      if (rdEl) rdEl.textContent = 'Issued ' + dateStr + ' · ' + timeStr;
+
+      // 3. Read order data from sessionStorage (saved by payment.html)
+      var ref          = sessionStorage.getItem('lue_order_ref') || ('LUE-' + Math.floor(100000 + Math.random() * 900000));
+      var deliveryType = sessionStorage.getItem('lue_order_delivery') || 'standard';
+      var items        = [];
+      try { items = JSON.parse(sessionStorage.getItem('lue_order_items') || '[]'); } catch(e) {}
+
+      // Clear from sessionStorage after reading
+      sessionStorage.removeItem('lue_order_ref');
+      sessionStorage.removeItem('lue_order_items');
+      sessionStorage.removeItem('lue_order_delivery');
+
+      // 4. Set order reference everywhere
+      var setEl = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+      setEl('order-num', ref);
+      setEl('confirm-order-num-meta', ref);
+      setEl('confirm-support-ref', ref);
+      document.querySelectorAll('[data-order-ref]').forEach(function(el){ el.textContent = ref; });
+
+      // 5. Populate items and totals
+      var fmt = function(n) { return 'R ' + Number(n).toLocaleString('en-ZA', {minimumFractionDigits:2}); };
+      var deliveryFee = deliveryType === 'express' ? 120 : deliveryType === 'pickup' ? 0 : 50;
+
+      if (items.length > 0) {
+        var subtotal = items.reduce(function(s,i){ return s + (Number(i.price)*(i.quantity||1)); }, 0);
+        var total    = subtotal + deliveryFee;
+        var vat      = total * (15/115);
+
+        setEl('confirm-subtotal',    fmt(subtotal));
+        setEl('confirm-delivery',    deliveryFee === 0 ? 'Free' : fmt(deliveryFee));
+        setEl('confirm-delivery-fee', deliveryFee === 0 ? 'Free' : fmt(deliveryFee));
+        setEl('confirm-vat',         fmt(vat));
+        setEl('confirm-total',       fmt(total));
+        setEl('confirm-amount-paid', fmt(total));
+        setEl('confirm-items-count', items.length + ' item' + (items.length !== 1 ? 's' : ''));
+
+        var listEl = document.getElementById('confirm-items-list');
+        if (listEl) {
+          listEl.innerHTML = items.map(function(item) {
+            return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f3f5;font-size:13px;">' +
+              '<span style="color:#495057;">' + (item.name||'Product') + ' <span style="color:#adb5bd;">×' + (item.quantity||1) + '</span></span>' +
+              '<span style="font-weight:700;color:#0d1b2a;">' + fmt(Number(item.price)*(item.quantity||1)) + '</span>' +
+              '</div>';
+          }).join('');
+        }
+      } else {
+        setEl('confirm-amount-paid', '—');
+        setEl('confirm-items-count', '0 items');
+      }
+
+      // 6. Delivery method
+      var deliveryLabels = {
+        standard: 'Standard Courier<br/>LinkUp Express Courier<br/>3–5 business days',
+        express:  'Express Courier<br/>LinkUp Express Courier<br/>1–2 business days',
+        pickup:   'Collect from Seller<br/>Arrange with seller directly<br/>Free'
+      };
+      var dmEl = document.getElementById('confirm-delivery-method');
+      if (dmEl) dmEl.innerHTML = deliveryLabels[deliveryType] || deliveryLabels.standard;
+
+      // 7. Delivery address from session
+      var addrEl = document.getElementById('confirm-delivery-address');
+      if (addrEl) {
+        if (session) {
+          var st = session.address_street   || session.address || '';
+          var ct = session.address_city     || '';
+          var ps = session.address_postal   || '';
+          var pv = session.address_province || '';
+          var cn = session.address_country  || 'South Africa';
+          var parts = [st, ct, ps, pv, cn].filter(Boolean);
+          addrEl.innerHTML = '<strong>' + (session.fullName || '') + '</strong>' +
+            (parts.length ? '<br/>' + parts.join('<br/>') : '') +
+            (session.phone ? '<br/>' + session.phone : '');
+        } else {
+          addrEl.innerHTML = '<em>Sign in to see your delivery address</em>';
+        }
+      }
+    });
+
+    function copyRef() {
+      var ref = document.getElementById('order-num').textContent;
+      navigator.clipboard.writeText(ref).then(function() {
+        showToast('Order number copied!');
+      }).catch(function() {
+        showToast('Order number: ' + ref);
+      });
+    }
+
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--blue);color:var(--white);padding:12px 22px;border-radius:32px;font-size:13px;font-weight:600;box-shadow:0 6px 24px rgba(10,36,99,.3);z-index:500;transition:transform .35s,opacity .35s;opacity:0;white-space:nowrap;font-family:var(--font);';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.transform = 'translateX(-50%) translateY(0)';
+      t.style.opacity   = '1';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function() {
+        t.style.transform = 'translateX(-50%) translateY(80px)';
+        t.style.opacity   = '0';
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>

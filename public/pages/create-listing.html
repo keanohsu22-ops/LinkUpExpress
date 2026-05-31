@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create a Listing – LinkUp Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/shared.css" />
+  <link rel="stylesheet" href="../assets/css/create-listing.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-links">
+        <a href="../../index.html">← Back to Store</a>
+        <span>|</span>
+        <a href="listings.html">Seller Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="../../index.html" class="logo">LinkUp<span>Express</span></a>
+      <div class="header-right">
+        <span class="seller-badge">🏪 Seller Portal</span>
+        <a href="listings.html">My Listings</a>
+        <a href="#">Orders</a>
+        <a href="signup.html">Account</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROGRESS STEPS -->
+  <div class="progress-bar">
+    <div class="progress-inner">
+      <div class="steps">
+        <div class="step active">
+          <div class="step-num">1</div>
+          <div class="step-label">Listing Details</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-label">Review &amp; Confirm</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-label">Published</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="page-title">
+      <h1>Create a New Listing</h1>
+      <p>Fill in the details below to list your item on LinkUp Express.</p>
+    </div>
+
+
+    <form id="listing-form" novalidate onsubmit="handleSubmit(event)">
+
+      <!-- SECTION 1: BASIC INFO -->
+      <div class="form-section">
+        <div class="section-head">
+          <div class="section-head-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div>
+            <h2>Basic Information</h2>
+            <p>Tell buyers what you're selling.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="form-group">
+            <label for="title">Product Title <span class="req">*</span></label>
+            <input type="text" id="title" maxlength="120" placeholder="e.g. Sony WH-1000XM5 Wireless Noise-Cancelling Headphones — Black" oninput="updateCount('title','title-count',120)" required />
+            <div style="display:flex; justify-content:space-between;">
+              <span class="hint">Include brand, model, and key details.</span>
+              <span class="char-counter"><span id="title-count">0</span>/120</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category <span class="req">*</span></label>
+            <select id="category" required>
+              <option value="">Select a category…</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Home and Furniture">Home and Furniture</option>
+              <option value="Vehicles">Vehicles</option>
+              <option value="Toys">Toys</option>
+              <option value="Books">Books</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="brand">Brand / Manufacturer</label>
+            <input type="text" id="brand" placeholder="e.g. Sony" />
+          </div>
+
+          <div class="form-group">
+            <label for="description">Product Description <span class="req">*</span></label>
+            <textarea id="description" maxlength="2000" placeholder="Describe your item in detail — condition, features, what's included in the box, any defects or signs of use, etc." oninput="updateCount('description','desc-count',2000)" required></textarea>
+            <div style="display:flex; justify-content:space-between;">
+              <span class="hint">Be honest and thorough. More detail = more trust.</span>
+              <span class="char-counter"><span id="desc-count">0</span>/2000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: IMAGES -->
+      <div class="form-section">
+        <div class="section-head">
+          <div class="section-head-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div>
+            <h2>Product Images</h2>
+            <p>Upload up to 8 photos. First image will be the cover image.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="upload-zone" id="upload-zone">
+            <input type="file" accept="image/*" multiple onchange="handleImages(event)" />
+            <div class="upload-icon">📸</div>
+            <h4>Drag &amp; drop images here</h4>
+            <p>JPG, PNG or WEBP · Max 5 MB per image · Up to 8 images</p>
+            <span class="btn-browse">Browse Files</span>
+          </div>
+          <div class="image-previews" id="image-previews"></div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: PRICING & STOCK -->
+      <div class="form-section">
+        <div class="section-head">
+          <div class="section-head-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div>
+            <h2>Pricing &amp; Stock</h2>
+            <p>Set your selling price and available quantity.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="form-row three">
+            <div class="form-group">
+              <label for="price">Selling Price (ZAR) <span class="req">*</span></label>
+              <div class="input-prefix">
+                <span class="prefix">R</span>
+                <input type="number" id="price" min="0" step="0.01" placeholder="0.00" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="quantity">Stock Quantity <span class="req">*</span></label>
+              <input type="number" id="quantity" min="1" step="1" placeholder="e.g. 10" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sku">SKU / Product Code</label>
+            <input type="text" id="sku" placeholder="e.g. WH1000XM5-BLK" />
+            <span class="hint">Your internal reference code. Not visible to buyers.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: ITEM CONDITION -->
+      <div class="form-section">
+        <div class="section-head">
+          <div class="section-head-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div>
+            <h2>Item Condition</h2>
+            <p>Select the condition that best describes your item.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="form-group">
+            <label>Condition <span class="req">*</span></label>
+            <div class="condition-options">
+              <label class="condition-card selected" id="cond-new" onclick="selectCondition('new')">
+                <input type="radio" name="condition" value="new" checked />
+                <span class="c-label">New</span>
+                <span class="c-desc">Sealed, never used</span>
+              </label>
+              <label class="condition-card" id="cond-openbox" onclick="selectCondition('openbox')">
+                <input type="radio" name="condition" value="openbox" />
+                <span class="c-label">Open Box</span>
+                <span class="c-desc">Opened, unused</span>
+              </label>
+              <label class="condition-card" id="cond-used-good" onclick="selectCondition('used-good')">
+                <input type="radio" name="condition" value="used-good" />
+                <span class="c-label">Used – Good</span>
+                <span class="c-desc">Minor signs of use</span>
+              </label>
+              <label class="condition-card" id="cond-used-fair" onclick="selectCondition('used-fair')">
+                <input type="radio" name="condition" value="used-fair" />
+                <span class="c-label">Used – Fair</span>
+                <span class="c-desc">Visible wear</span>
+              </label>
+              <label class="condition-card" id="cond-parts" onclick="selectCondition('parts')">
+                <input type="radio" name="condition" value="parts" />
+                <span class="c-label">For Parts</span>
+                <span class="c-desc">Not fully working</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: SHIPPING -->
+      <div class="form-section">
+        <div class="section-head">
+          <div class="section-head-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div>
+            <h2>Shipping &amp; Delivery</h2>
+            <p>Configure how your item will be delivered to buyers.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ship-cost">Shipping Fee (ZAR)</label>
+              <div class="input-prefix">
+                <span class="prefix">R</span>
+                <input type="number" id="ship-cost" min="0" step="0.01" placeholder="0.00 = Free" />
+              </div>
+              <span class="hint">Enter 0 to offer free delivery.</span>
+            </div>
+            <div class="form-group">
+              <label for="dispatch-days">Dispatch Within (Days) <span class="req">*</span></label>
+              <select id="dispatch-days" required>
+                <option value="1">1 business day</option>
+                <option value="2" selected>2 business days</option>
+                <option value="3">3 business days</option>
+                <option value="5">5 business days</option>
+                <option value="7">7 business days</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Item Location (City / Province) <span class="req">*</span></label>
+            <input type="text" id="location" placeholder="e.g. Cape Town, Western Cape" required />
+          </div>
+
+          <div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Nationwide Delivery</strong>
+                <span>Ship to any address across South Africa</span>
+              </div>
+              <label class="toggle"><input type="checkbox" id="nationwide" checked /><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Local Pickup</strong>
+                <span>Allow buyers to collect in person</span>
+              </div>
+              <label class="toggle"><input type="checkbox" id="pickup" /><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Express / Same-Day Delivery</strong>
+                <span>Offer faster delivery at extra cost</span>
+              </div>
+              <label class="toggle"><input type="checkbox" id="express" /><span class="slider"></span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 6: ADDITIONAL DETAILS -->
+
+      <!-- FORM ACTIONS -->
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="saveDraft()">Save as Draft</button>
+        <button type="submit" class="btn-primary">
+          Preview &amp; Confirm
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+    </form>
+  </main>
+
+  <footer>
+    <span>© 2025 LinkUp Express (Pty) Ltd · Registered in South Africa</span>
+    <span style="margin:0 12px;">·</span>
+    <a href="contact.html">Help &amp; Support</a>
+    <a href="privacy.html">Privacy Policy</a>
+  </footer>
+
+  <script>
+    function updateCount(inputId, countId, max) {
+      var len = document.getElementById(inputId).value.length;
+      document.getElementById(countId).textContent = len;
+    }
+
+    function selectCondition(val) {
+      var ids = ['cond-new','cond-openbox','cond-used-good','cond-used-fair','cond-parts'];
+      ids.forEach(function(id) { document.getElementById(id).classList.remove('selected'); });
+      document.getElementById('cond-' + val).classList.add('selected');
+      document.querySelector('[value="' + val + '"]').checked = true;
+    }
+
+    var uploadedImages = []; // stores base64 data URLs
+
+    function handleImages(e) {
+      var files = Array.from(e.target.files);
+      files.forEach(function(file) {
+        if (uploadedImages.length >= 8) return;
+        if (!file.type.startsWith('image/')) return;
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+          var dataUrl = ev.target.result;
+          var idx = uploadedImages.length;
+          uploadedImages.push(dataUrl);
+          renderPreview(dataUrl, idx);
+          // Save image data to sessionStorage for preview page
+          try { sessionStorage.setItem('pendingListingImages', JSON.stringify(uploadedImages)); } catch(err) {}
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderPreview(dataUrl, idx) {
+      var container = document.getElementById('image-previews');
+      if (!container) return;
+      var div = document.createElement('div');
+      div.className = 'img-preview';
+      div.id = 'preview-' + idx;
+      div.style.cssText = 'background-image:url(' + dataUrl + ');background-size:cover;background-position:center;';
+      div.innerHTML = '<div class="img-remove" onclick="removeImage(' + idx + ')">✕</div>';
+      container.appendChild(div);
+    }
+
+    function removeImage(idx) {
+      var el = document.getElementById('preview-' + idx);
+      if (el) el.remove();
+      uploadedImages.splice(idx, 1);
+      try { sessionStorage.setItem('pendingListingImages', JSON.stringify(uploadedImages)); } catch(err) {}
+    }
+
+    function saveDraft() {
+      alert('Draft saved! You can return to complete this listing from your Seller Dashboard.');
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+
+      // Clear any previous errors
+      document.querySelectorAll('.field-error').forEach(function(el) { el.remove(); });
+
+      var title       = document.getElementById('title')       ? document.getElementById('title').value.trim()       : '';
+      var category    = document.getElementById('category')    ? document.getElementById('category').value            : '';
+      var description = document.getElementById('description') ? document.getElementById('description').value.trim() : '';
+      var price       = document.getElementById('price')       ? document.getElementById('price').value               : '';
+      var quantity    = document.getElementById('quantity')    ? document.getElementById('quantity').value            : '';
+      var location    = document.getElementById('location')    ? document.getElementById('location').value.trim()    : '';
+
+      // Validate required fields
+      var errors = [];
+      if (!title)       errors.push('Product title is required.');
+      if (!category)    errors.push('Please enter a category.');
+      if (!description) errors.push('Description is required.');
+      if (!price || parseFloat(price) <= 0) errors.push('Please enter a valid price.');
+      if (!quantity || parseInt(quantity) < 1) errors.push('Please enter a valid quantity.');
+      if (!location)    errors.push('Location is required.');
+
+      if (errors.length > 0) {
+        alert(errors.join('\n'));
+        return;
+      }
+
+      // Safely read optional fields (some may have been removed)
+      function safeVal(id) {
+        var el = document.getElementById(id);
+        return el ? el.value : '';
+      }
+      function safeChecked(id) {
+        var el = document.getElementById(id);
+        return el ? el.checked : false;
+      }
+      function safeSelectText(id) {
+        var el = document.getElementById(id);
+        return el && el.selectedIndex >= 0 ? el.options[el.selectedIndex].text : '';
+      }
+      function safeRadio(name) {
+        var el = document.querySelector('input[name="' + name + '"]:checked');
+        return el ? el.value : 'new';
+      }
+
+      var listing = {
+        title:        title,
+        category:     safeSelectText('category'),
+        brand:        safeVal('brand'),
+        description:  description,
+        price:        price,
+        quantity:     quantity,
+        sku:          safeVal('sku'),
+        condition:    safeRadio('condition'),
+        shippingCost: safeVal('ship-cost') || '0',
+        dispatchDays: safeVal('dispatch-days'),
+        location:     location,
+        nationwide:   safeChecked('nationwide'),
+        pickup:       safeChecked('pickup'),
+        express:      safeChecked('express'),
+        imageCount:   (typeof uploadedImages !== 'undefined') ? uploadedImages.length : 0,
+        createdAt:    new Date().toISOString(),
+        id:           'lst-' + Date.now(),
+        status:       'draft'
+      };
+
+      // Save to sessionStorage for preview page
+      sessionStorage.setItem('pendingListing', JSON.stringify(listing));
+
+      // Also save to localStorage listings array so My Listings page can read it
+      try {
+        var listings = JSON.parse(localStorage.getItem('lue_listings') || '[]');
+        listings.unshift(listing);
+        localStorage.setItem('lue_listings', JSON.stringify(listings));
+      } catch(err) {
+        console.error('Could not save listing to localStorage:', err);
+      }
+
+      window.location.href = 'listing-confirm.html';
+    }
+  </script>
+</body>
+</html>

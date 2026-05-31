@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard – LinkUp Express</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--blue:#0A2463;--blue-mid:#1B3A8C;--yellow:#F5C518;--red:#C0392B;--green:#2E7D32;
+      --gray-50:#F8F9FA;--gray-100:#F1F3F5;--gray-200:#E9ECEF;--gray-400:#ADB5BD;
+      --gray-600:#495057;--gray-700:#343A40;--dark:#0D1B2A;--white:#fff;--radius:8px}
+    body{font-family:'Barlow',sans-serif;background:var(--gray-50);color:var(--dark);display:flex;min-height:100vh}
+
+    /* SIDEBAR */
+    .sidebar{width:230px;background:var(--blue);color:var(--white);display:flex;flex-direction:column;flex-shrink:0;min-height:100vh}
+    .sidebar-logo{padding:24px 20px;font-size:18px;font-weight:800;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo span{color:var(--yellow)}
+    .sidebar-logo small{display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.5px;margin-top:2px}
+    .sidebar-section{padding:16px 20px 6px;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px}
+    .nav-btn{width:100%;background:none;border:none;color:rgba(255,255,255,.75);font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;text-align:left;padding:10px 20px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
+    .nav-btn:hover{background:rgba(255,255,255,.08);color:var(--white)}
+    .nav-btn.active{background:rgba(245,197,24,.15);color:var(--yellow);border-right:3px solid var(--yellow)}
+    .nav-btn .icon{font-size:15px;width:18px;text-align:center}
+    .sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid rgba(255,255,255,.1)}
+    .btn-logout{width:100%;background:rgba(192,57,43,.2);color:#ff8a80;border:none;border-radius:var(--radius);padding:9px;font-family:'Barlow',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+    .btn-logout:hover{background:var(--red);color:var(--white)}
+
+    /* MAIN */
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .topbar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:14px 28px;display:flex;align-items:center;justify-content:space-between}
+    .topbar h1{font-size:18px;font-weight:800;color:var(--dark)}
+    .admin-badge{background:rgba(10,36,99,.1);color:var(--blue);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+    .content{flex:1;padding:28px;overflow-y:auto}
+
+    /* STATS */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+    .stat-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:0 1px 6px rgba(10,36,99,.07)}
+    .stat-num{font-size:28px;font-weight:800;color:var(--blue)}
+    .stat-lbl{font-size:12px;color:var(--gray-400);font-weight:600;margin-top:3px}
+
+    /* TABLE PANEL */
+    .panel{background:var(--white);border-radius:var(--radius);box-shadow:0 1px 6px rgba(10,36,99,.07);overflow:hidden}
+    .panel-header{padding:16px 20px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .panel-title{font-size:15px;font-weight:700;color:var(--dark)}
+    .panel-actions{display:flex;gap:8px;align-items:center}
+    .search-input{padding:7px 12px;border:1.5px solid var(--gray-200);border-radius:var(--radius);font-family:'Barlow',sans-serif;font-size:13px;outline:none;width:200px}
+    .search-input:focus{border-color:var(--blue)}
+    .btn-add{background:var(--blue);color:var(--white);border:none;border-radius:var(--radius);padding:8px 16px;font-family:'Barlow',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+    .btn-add:hover{background:var(--blue-mid)}
+    .btn-refresh{background:var(--gray-100);color:var(--gray-700);border:none;border-radius:var(--radius);padding:8px 12px;font-size:13px;cursor:pointer;font-family:'Barlow',sans-serif;font-weight:600}
+
+    /* DATA TABLE */
+    .table-wrap{overflow-x:auto;max-height:calc(100vh - 320px);overflow-y:auto}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th{background:var(--gray-50);padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:.4px;position:sticky;top:0;border-bottom:1px solid var(--gray-200);white-space:nowrap}
+    td{padding:10px 14px;border-bottom:1px solid var(--gray-100);vertical-align:top;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    tr:hover td{background:var(--gray-50)}
+    .td-actions{display:flex;gap:6px;white-space:nowrap}
+    .btn-edit{background:#E8F4FF;color:#1565C0;border:none;border-radius:5px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer}
+    .btn-edit:hover{background:#1565C0;color:var(--white)}
+    .btn-del{background:#FEE;color:var(--red);border:none;border-radius:5px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer}
+    .btn-del:hover{background:var(--red);color:var(--white)}
+    .btn-pause{background:#FFF8E1;color:#F57F17;border:none;border-radius:5px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer}
+    .pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
+    .pill-live{background:#E8F5E9;color:#2E7D32}
+    .pill-draft{background:var(--gray-100);color:var(--gray-600)}
+    .pill-seller{background:rgba(245,197,24,.2);color:#7B5800}
+    .pill-buyer{background:rgba(10,36,99,.1);color:var(--blue)}
+    .pill-deleted{background:#FEE;color:var(--red)}
+    .empty{text-align:center;padding:48px 20px;color:var(--gray-400);font-size:14px}
+
+    /* MODAL */
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+    .modal-bg.open{display:flex}
+    .modal{background:var(--white);border-radius:12px;padding:28px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .modal h3{font-size:17px;font-weight:800;color:var(--blue);margin-bottom:20px}
+    .modal label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gray-600);margin-bottom:5px;margin-top:12px}
+    .modal input,.modal select,.modal textarea{width:100%;padding:9px 13px;border:1.5px solid var(--gray-200);border-radius:var(--radius);font-family:'Barlow',sans-serif;font-size:13px;color:var(--dark);outline:none}
+    .modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--blue)}
+    .modal textarea{min-height:80px;resize:vertical}
+    .modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+    .btn-save{background:var(--blue);color:var(--white);border:none;border-radius:var(--radius);padding:10px 24px;font-family:'Barlow',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+    .btn-cancel{background:var(--gray-100);color:var(--gray-700);border:none;border-radius:var(--radius);padding:10px 20px;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;cursor:pointer}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--blue);color:var(--yellow);padding:11px 22px;border-radius:32px;font-size:13px;font-weight:700;z-index:9999;transition:transform .3s,opacity .3s;opacity:0;pointer-events:none}
+    #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+    .loading{text-align:center;padding:40px;color:var(--gray-400)}
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">LinkUp<span>Express</span><small>Admin Dashboard</small></div>
+
+    <div class="sidebar-section">Overview</div>
+    <button class="nav-btn active" onclick="showSection('dashboard')" id="nav-dashboard">
+      <span class="icon"></span> Dashboard
+    </button>
+
+    <div class="sidebar-section">Database Tables</div>
+    <button class="nav-btn" onclick="showSection('users')" id="nav-users">
+      <span class="icon"></span> Users
+    </button>
+    <button class="nav-btn" onclick="showSection('seller_profiles')" id="nav-seller_profiles">
+      <span class="icon"></span> Seller Profiles
+    </button>
+    <button class="nav-btn" onclick="showSection('listings')" id="nav-listings">
+      <span class="icon"></span> Listings
+    </button>
+    <button class="nav-btn" onclick="showSection('products')" id="nav-products">
+      <span class="icon"></span> Products
+    </button>
+    <button class="nav-btn" onclick="showSection('categories')" id="nav-categories">
+      <span class="icon"></span> Categories
+    </button>
+    <button class="nav-btn" onclick="showSection('orders')" id="nav-orders">
+      <span class="icon"></span> Orders
+    </button>
+    <button class="nav-btn" onclick="showSection('order_items')" id="nav-order_items">
+      <span class="icon"></span> Order Items
+    </button>
+    <button class="nav-btn" onclick="showSection('cart_items')" id="nav-cart_items">
+      <span class="icon"></span> Cart Items
+    </button>
+
+    <div class="sidebar-section">Super Admin Only</div>
+    <button class="nav-btn" onclick="showSection('admin_users')" id="nav-admin_users" style="display:none;">
+      <span class="icon"></span> Admin Users
+    </button>
+
+    <div class="sidebar-footer">
+      <div id="admin-type-badge" style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:10px;padding:6px 10px;background:rgba(255,255,255,.05);border-radius:6px;text-align:center;"></div>
+      <button class="btn-logout" onclick="adminLogout()"> Sign Out</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <h1 id="page-title">Dashboard</h1>
+      <span class="admin-badge"> Admin: <span id="admin-name">—</span></span>
+    </div>
+    <div class="content" id="content">
+      <div class="loading">Loading...</div>
+    </div>
+  </div>
+
+  <!-- EDIT/ADD MODAL -->
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <h3 id="modal-title">Edit Record</h3>
+      <div id="modal-fields"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-save" onclick="saveRecord()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    // ── Auth guard ─────────────────────────────────────────────────
+    var token      = sessionStorage.getItem('admin_token');
+    var isSuperAdmin = sessionStorage.getItem('admin_super') === 'true';
+    if (!token) { window.location.href = 'login.html'; }
+
+    var adminName = sessionStorage.getItem('admin_user') || 'Admin';
+    var adminType = isSuperAdmin ? 'Super Admin' : 'Admin';
+    document.getElementById('admin-name').textContent = adminName;
+
+    // Set type badge in sidebar
+    var badge = document.getElementById('admin-type-badge');
+    if (badge) {
+      badge.textContent  = isSuperAdmin ? ' Super Admin' : ' Admin';
+      badge.style.color  = isSuperAdmin ? 'var(--yellow)' : 'rgba(255,255,255,.5)';
+    }
+
+    // Show super admin section in sidebar if applicable
+    if (isSuperAdmin) {
+      var saNav = document.getElementById('nav-admin_users');
+      if (saNav) saNav.style.display = 'flex';
+    }
+
+    // Welcome toast
+    setTimeout(function() {
+      toast('Welcome back, ' + adminName + (isSuperAdmin ? ' (Super Admin)' : '') + '!');
+    }, 500);
+
+    var currentSection = 'dashboard';
+    var currentData    = [];
+    var editingId      = null;
+    var editingTable   = null;
+
+    // ── API helper ─────────────────────────────────────────────────
+    function api(path, method, body) {
+      var opts = {
+        method: method || 'GET',
+        headers: {'Content-Type':'application/json','X-Admin-Token': token}
+      };
+      if (body) opts.body = JSON.stringify(body);
+      return fetch('api/' + path, opts).then(function(r){ return r.json(); });
+    }
+
+    // ── Navigation ─────────────────────────────────────────────────
+    function showSection(name) {
+      currentSection = name;
+      document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+      var nb = document.getElementById('nav-' + name);
+      if (nb) nb.classList.add('active');
+      document.getElementById('page-title').textContent = name.charAt(0).toUpperCase() + name.slice(1).replace(/_/g,' ');
+      if (name === 'dashboard') { loadDashboard(); return; }
+      loadTable(name);
+    }
+
+    // ── DASHBOARD ─────────────────────────────────────────────────
+    function loadDashboard() {
+      document.getElementById('page-title').textContent = 'Dashboard';
+      api('stats.php').then(function(d) {
+        if (!d.ok) { showContent('<div class="empty">Could not load stats.</div>'); return; }
+        var s = d.data;
+        var html = '<div class="stats-grid">' +
+          statCard(s.users || 0, 'Total Users') +
+          statCard(s.listings || 0, 'Total Listings') +
+          statCard(s.orders || 0, 'Total Orders') +
+          statCard('R ' + Number(s.revenue || 0).toLocaleString('en-ZA', {minimumFractionDigits:2}), 'Total Revenue') +
+          '</div>' +
+          '<div class="panel"><div class="panel-header"><span class="panel-title">Recent Orders</span></div>' +
+          '<div class="table-wrap"><table><thead><tr><th>Ref</th><th>Buyer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>' +
+          '<tbody>' + (s.recent_orders || []).map(function(o){
+            return '<tr><td>' + esc(o.ref_number) + '</td><td>' + esc(o.buyer_name||'—') + '</td>' +
+              '<td>R ' + Number(o.total||0).toFixed(2) + '</td><td><span class="pill pill-live">' + esc(o.status) + '</span></td>' +
+              '<td>' + esc((o.placed_at||'').substring(0,10)) + '</td></tr>';
+          }).join('') + '</tbody></table></div></div>';
+        showContent(html);
+      });
+    }
+    function statCard(n, l) {
+      return '<div class="stat-card"><div class="stat-num">' + n + '</div><div class="stat-lbl">' + l + '</div></div>';
+    }
+
+    // ── TABLE LOADER ──────────────────────────────────────────────
+    function loadTable(table) {
+      showContent('<div class="loading">Loading ' + table + '...</div>');
+      api('table.php?table=' + table).then(function(d) {
+        if (!d.ok) { showContent('<div class="empty">Error: ' + esc(d.error || 'Unknown error') + '</div>'); return; }
+        var payload  = d.data || {};
+        currentData  = payload.rows    || [];
+        var columns  = payload.columns || [];
+                if (currentData.length === 0) {
+          var emptyHtml = '<div class="panel"><div class="panel-header">' +
+            '<span class="panel-title">' + esc(table) + '</span>' +
+            '<div class="panel-actions">' +
+            '<button class="btn-refresh" onclick="loadTable(currentSection)">&#8635; Refresh</button>';
+          if (['users','categories','listings'].indexOf(table) !== -1) {
+            emptyHtml += '<button class="btn-add" onclick="openAdd(currentSection)">+ Add New</button>';
+          }
+          emptyHtml += '</div></div><div class="empty">No records found in ' + esc(table) + '.</div></div>';
+          showContent(emptyHtml);
+          return;
+        }
+        renderTable(table, currentData, columns);
+      }).catch(function(e) {
+        showContent('<div class="empty">Failed to load table: ' + esc(e.message) + '</div>');
+      });
+    }
+
+    function renderTable(table, rows, columns) {
+      var canAdd    = ['users','categories','listings','admin_users'].includes(table) && (table !== 'admin_users' || isSuperAdmin);
+      var canEdit   = true;
+      var canDelete = true;
+
+      var header = '<div class="panel-header">' +
+        '<span class="panel-title">' + table + ' <span style="color:var(--gray-400);font-weight:400;font-size:13px;">(' + rows.length + ' rows)</span></span>' +
+        '<div class="panel-actions">' +
+        '<input class="search-input" placeholder="Search..." oninput="filterRows(this.value,\'' + table + '\')" />' +
+        (canAdd ? '<button class="btn-add" onclick="openAdd(\'' + table + '\')">+ Add New</button>' : '') +
+        '<button class="btn-refresh" onclick="loadTable(\'' + table + '\')">↺ Refresh</button>' +
+        '</div></div>';
+
+      if (rows.length === 0) {
+        showContent('<div class="panel">' + header + '<div class="empty">No records found.</div></div>');
+        return;
+      }
+
+      if (!rows || rows.length === 0) { showContent('<div class="empty">No records.</div>'); return; }
+      var cols = (columns && columns.length) ? columns : Object.keys(rows[0] || {});
+      if (!cols.length) { showContent('<div class="empty">No columns found.</div>'); return; }
+      // Limit display columns to avoid overflow — show first 8
+      var displayCols = cols.slice(0, 8);
+
+      var thead = '<tr>' + displayCols.map(function(c){
+        return '<th>' + esc(c) + '</th>';
+      }).join('') + '<th>Actions</th></tr>';
+
+      // Store rows in global map for safe onclick access
+      window._rowCache = {};
+      rows.forEach(function(row, idx) { window._rowCache[idx] = row; });
+
+      var tbody = rows.map(function(row, idx) {
+        var cells = displayCols.map(function(col) {
+          var val = row[col];
+          if (val === null || val === undefined) val = '—';
+          var sval = String(val);
+          if (sval.length > 40) sval = sval.substring(0,40) + '…';
+          return '<td title="' + esc(String(row[col]||'')) + '">' + esc(sval) + '</td>';
+        }).join('');
+
+        var actions = '<td class="td-actions">';
+        if (canEdit) {
+          actions += '<button class="btn-edit" data-idx="' + idx + '" data-tbl="' + esc(table) + '" onclick="openEditByIdx(+this.dataset.idx,this.dataset.tbl)">Edit</button>';
+        }
+        if (table === 'listings') {
+          actions += '<button class="btn-pause" data-id="' + String(row.id||'') + '" data-st="' + String(row.status||'live') + '" onclick="toggleListingStatus(this.dataset.id,this.dataset.st)">Pause/Live</button>';
+        }
+        if (canDelete) {
+          actions += '<button class="btn-del" data-tbl="' + table + '" data-id="' + String(row.id||row.email||'') + '" onclick="deleteRecord(this.dataset.tbl,this.dataset.id)">Delete</button>';
+        }
+        actions += '</td>';
+
+        return '<tr>' + cells + actions + '</tr>';
+      }).join('');
+
+      var html = '<div class="panel" id="table-panel">' + header +
+        '<div class="table-wrap"><table><thead>' + thead + '</thead><tbody id="table-body">' + tbody + '</tbody></table></div></div>';
+      showContent(html);
+    }
+
+    // ── FILTER ────────────────────────────────────────────────────
+    function filterRows(q, table) {
+      var filtered = currentData.filter(function(row) {
+        return JSON.stringify(row).toLowerCase().includes(q.toLowerCase());
+      });
+      var tbody = document.getElementById('table-body');
+      if (!tbody) return;
+      if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="20" class="empty">No results for "' + esc(q) + '"</td></tr>'; return; }
+      if (!currentData || !currentData[0]) return;
+      var cols = Object.keys(currentData[0]).slice(0,8);
+      tbody.innerHTML = filtered.map(function(row) {
+        var cells = cols.map(function(col){
+          var val = row[col]; if (val===null||val===undefined) val='—';
+          if (String(val).length>40) val=String(val).substring(0,40)+'…';
+          return '<td>' + esc(String(val)) + '</td>';
+        }).join('');
+        var rowId = esc(String(row.id||row.email||''));
+        return '<tr>' + cells +
+          '<td class="td-actions">' +
+          '<button class="btn-edit" data-id="' + esc(String(row.id||'')) + '" data-tbl="' + esc(table) + '" onclick="openEditById(this.dataset.id,this.dataset.tbl)">Edit</button>' +
+          '<button class="btn-del" data-tbl="' + table + '" data-id="' + String(row.id||row.email||'') + '" onclick="deleteRecord(this.dataset.tbl,this.dataset.id)">Delete</button>' +
+          '</td></tr>';
+      }).join('');
+
+    }
+
+    // ── MODAL ─────────────────────────────────────────────────────
+    var _editTable = null;
+    var _editRow   = null;
+
+    // Called from table row buttons — looks up row from cache by index
+    function openEditByIdx(idx, table) {
+      var row = window._rowCache ? window._rowCache[idx] : null;
+      if (!row) { toast('Row not found.', true); return; }
+      openEdit(table, row);
+    }
+
+    // Called from filtered rows — looks up by id
+    function openEditById(id, table) {
+      var row = currentData.find(function(r){ return String(r.id||r.email) === String(id); });
+      if (!row) { toast('Row not found.', true); return; }
+      openEdit(table, row);
+    }
+
+    function openEdit(table, row) {
+      _editTable = table;
+      _editRow   = row;
+      editingId  = row.id || row.email;
+      document.getElementById('modal-title').textContent = 'Edit ' + table + ' record';
+      buildModalFields(table, row);
+      document.getElementById('modal-bg').classList.add('open');
+    }
+
+    function openAdd(table) {
+      _editTable = table;
+      _editRow   = null;
+      editingId  = null;
+      document.getElementById('modal-title').textContent = 'Add new ' + table + ' record';
+      buildModalFields(table, null);
+      document.getElementById('modal-bg').classList.add('open');
+    }
+
+    function buildModalFields(table, row) {
+      var skip = ['password_hash','created_at','updated_at','placed_at','image_urls','tags','avg_rating','review_count','model_number'];
+
+      // For admin_users add-new: super admin only form
+      if (table === 'admin_users' && !row) {
+        var html = '';
+        html += '<label>Full Name *</label><input name="full_name" placeholder="e.g. John Smith"/>';
+        html += '<label>Email Address *</label><input name="email" type="email" placeholder="e.g. john@linkupexpress.com"/>';
+        html += '<label>Password *</label><input type="password" name="password" placeholder="Strong password"/>';
+        html += '<label>Super Admin</label>';
+        html += '<select name="super_admin"><option value="0">No — Regular Admin</option><option value="1">Yes — Super Admin</option></select>';
+        html += '<small style="color:var(--gray-400);font-size:11px;margin-top:8px;display:block;"> Super Admins can manage other admin accounts.</small>';
+        document.getElementById('modal-fields').innerHTML = html;
+        return;
+      }
+
+      // For listings add-new: show friendly fields, not raw IDs
+      if (table === 'listings' && !row) {
+        var html = '';
+        html += '<label>Product Name *</label><input name="name" placeholder="e.g. Sony Headphones"/>';
+        html += '<label>Brand</label><input name="brand" placeholder="e.g. Sony"/>';
+        html += '<label>Category</label><select name="category">' +
+          ['Electronics','Fashion','Home and Furniture','Vehicles','Toys','Books','Other']
+            .map(function(cat){ return '<option value="' + cat + '">' + cat + '</option>'; }).join('') +
+          '</select>';
+        html += '<label>Description</label><textarea name="description" placeholder="Product description..."></textarea>';
+        html += '<label>Price (R) *</label><input name="price" type="number" step="0.01" placeholder="e.g. 1500"/>';
+        html += '<label>Stock Quantity</label><input name="stock_qty" type="number" value="1"/>';
+        html += '<label>Condition</label><select name="condition">' +
+          ['New','Used - Like New','Used - Good','Used - Fair'].map(function(c){ return '<option>' + c + '</option>'; }).join('') + '</select>';
+        html += '<label>Status</label><select name="status"><option value="live">live</option><option value="draft">draft</option><option value="paused">paused</option></select>';
+        html += '<label>Seller ID *</label><input name="seller_id" placeholder="Paste seller_profiles.id here"/>';
+        html += '<small style="color:var(--gray-400);font-size:11px;">Tip: Find the seller ID in the Seller Profiles table</small>';
+        document.getElementById('modal-fields').innerHTML = html;
+        return;
+      }
+
+      var keys  = row ? Object.keys(row) : getDefaultKeys(table);
+      var html  = keys.filter(function(k){ return !skip.includes(k); }).map(function(k) {
+        var val = row ? (row[k]||'') : '';
+        if (k === 'role') {
+          return '<label>' + k + '</label><select name="' + k + '">' +
+            ['buyer','seller','admin'].map(function(r){ return '<option value="' + r + '"' + (val===r?' selected':'') + '>' + r + '</option>'; }).join('') + '</select>';
+        }
+        if (k === 'status') {
+          return '<label>' + k + '</label><select name="' + k + '">' +
+            ['live','draft','paused','out_of_stock','deleted','active','pending'].map(function(s){
+              return '<option value="' + s + '"' + (val===s?' selected':'') + '>' + s + '</option>';
+            }).join('') + '</select>';
+        }
+        if (k === 'id') {
+          return '<label>id (read-only)</label><input name="id" value="' + esc(String(val)) + '" readonly style="background:var(--gray-50);color:var(--gray-400)">';
+        }
+        if (k === 'password' && !row) {
+          return '<label>Password (new user)</label><input type="password" name="password" placeholder="Enter password">';
+        }
+        var isLong = String(val).length > 60;
+        if (isLong) {
+          return '<label>' + k + '</label><textarea name="' + k + '">' + esc(String(val)) + '</textarea>';
+        }
+        return '<label>' + k + '</label><input name="' + k + '" value="' + esc(String(val)) + '">';
+      }).join('');
+      document.getElementById('modal-fields').innerHTML = html;
+    }
+
+    function getDefaultKeys(table) {
+      var defaults = {
+        users:      ['full_name','email','phone','password','role'],
+        categories: ['name','slug'],
+        listings:   ['name','brand','category','description','price','stock_qty','condition','status','seller_id'],
+      };
+      return defaults[table] || ['id'];
+    }
+
+    function closeModal() {
+      document.getElementById('modal-bg').classList.remove('open');
+      _editRow = null; _editTable = null; editingId = null;
+    }
+
+    function saveRecord() {
+      var fields = document.querySelectorAll('#modal-fields input, #modal-fields select, #modal-fields textarea');
+      var data = {};
+      fields.forEach(function(f){ if (f.name) data[f.name] = f.value; });
+      data.table = _editTable;
+
+      var isNew     = !editingId;
+      var savedTable = _editTable; // capture before closeModal() clears it
+      var path      = isNew ? 'table.php?action=insert' : 'table.php?action=update&id=' + encodeURIComponent(editingId);
+
+      api(path, 'POST', data).then(function(d) {
+        if (d.ok) {
+          closeModal();
+          toast(isNew ? 'Record added!' : 'Record updated!');
+          loadTable(savedTable);
+        } else {
+          toast('Error: ' + (d.error || 'Save failed'), true);
+        }
+      }).catch(function(e) {
+        toast('Request failed: ' + e.message, true);
+      });
+    }
+
+    // ── DELETE ────────────────────────────────────────────────────
+    function deleteRecord(table, id) {
+      if (!table || table === 'null') { toast('Error: table not specified', true); return; }
+      if (!id || id === 'null' || id === 'undefined') { toast('Error: record ID missing', true); return; }
+      if (!confirm('Permanently delete this record from ' + table + '? This cannot be undone.')) return;
+      console.log('Deleting:', table, id);
+      api('table.php?action=delete&table=' + encodeURIComponent(table) + '&id=' + encodeURIComponent(id), 'POST')
+        .then(function(d) {
+          console.log('Delete response:', d);
+          if (d.ok) { toast('Record deleted.'); loadTable(table); }
+          else       { toast('Error: ' + (d.error || 'Delete failed'), true); }
+        }).catch(function(e) { toast('Request failed: ' + e.message, true); });
+    }
+
+    // ── TOGGLE LISTING STATUS ─────────────────────────────────────
+    function toggleListingStatus(id, currentStatus) {
+      var newStatus = currentStatus === 'live' ? 'paused' : 'live';
+      api('table.php?action=update&id=' + encodeURIComponent(id), 'POST', {table:'listings', status: newStatus, id: id})
+        .then(function(d){ if (d.ok) { toast('Listing ' + newStatus + '!'); loadTable('listings'); } });
+    }
+
+    // ── HELPERS ───────────────────────────────────────────────────
+    function showContent(html) { document.getElementById('content').innerHTML = html; }
+
+    function esc(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function toast(msg, isErr) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.background = isErr ? 'var(--red)' : 'var(--blue)';
+      t.style.color      = isErr ? '#fff' : 'var(--yellow)';
+      t.classList.add('show');
+      clearTimeout(t._t);
+      t._t = setTimeout(function(){ t.classList.remove('show'); }, 3000);
+    }
+
+    function adminLogout() {
+      sessionStorage.removeItem('admin_token');
+      sessionStorage.removeItem('admin_user');
+      window.location.href = 'login.html';
+    }
+
+    // ── BOOT ─────────────────────────────────────────────────────
+    loadDashboard();
+  </script>
+</body>
+</html>

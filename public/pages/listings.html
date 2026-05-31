@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Listings – LinkUp Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/shared.css" />
+  <style>
+    body { background: var(--gray-50); }
+
+    /* ── TOP BAR ── */
+    .topbar { background: var(--gray-800); color: var(--gray-400); font-size: 12px; padding: 6px 0; }
+    .topbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; }
+    .topbar a { color: var(--gray-400); margin: 0 8px; }
+    .topbar a:hover { color: var(--white); }
+
+    /* ── HEADER ── */
+    header { background: var(--blue); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,.15); }
+    .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 20px; height: 64px; }
+    .logo { font-family: var(--font-cond); font-size: 26px; font-weight: 700; color: var(--white); }
+    .logo span { color: var(--yellow); }
+    .header-nav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .btn-new-listing { background: var(--yellow); color: var(--blue); font-weight: 700; font-size: 13px; padding: 9px 18px; border-radius: var(--radius); border: none; cursor: pointer; font-family: var(--font); transition: background .12s; }
+    .btn-new-listing:hover { background: var(--yellow-dark); }
+    .header-nav-link { color: rgba(255,255,255,.75); font-size: 13px; font-weight: 600; padding: 8px 12px; border-radius: var(--radius); transition: background .12s; }
+    .header-nav-link:hover { background: rgba(255,255,255,.10); color: var(--white); }
+
+    /* ── PAGE ── */
+    .page-wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px 60px; }
+
+    /* ── PAGE HEADER ── */
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .page-header h1 { font-family: var(--font-cond); font-size: 30px; font-weight: 700; color: var(--blue); }
+    .page-header h1 span { color: var(--yellow-dark); }
+
+    /* ── STATS STRIP ── */
+    .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-box { background: var(--white); border: 1px solid var(--gray-100); border-radius: 10px; padding: 16px 20px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .stat-box .num { font-family: var(--font-cond); font-size: 28px; font-weight: 700; color: var(--blue); }
+    .stat-box .lbl { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+    /* ── TOOLBAR ── */
+    .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .search-input { flex: 1; min-width: 200px; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius); font-size: 14px; font-family: var(--font); outline: none; transition: border-color .15s; }
+    .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(10,36,99,.08); }
+    .filter-tabs { display: flex; gap: 4px; }
+    .filter-tab { padding: 8px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 600; color: var(--gray-600); background: var(--white); border: 1.5px solid var(--gray-200); cursor: pointer; font-family: var(--font); transition: all .12s; }
+    .filter-tab:hover { border-color: var(--blue); color: var(--blue); }
+    .filter-tab.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
+
+    /* ── TABLE ── */
+    .table-wrap { background: var(--white); border: 1px solid var(--gray-100); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: var(--blue); }
+    thead th { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: var(--white); white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--gray-100); transition: background .10s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-50); }
+    td { padding: 12px 16px; vertical-align: middle; }
+    .td-title { font-weight: 600; color: var(--blue); max-width: 200px; }
+    .td-title small { display: block; font-weight: 400; color: var(--gray-400); font-size: 11px; margin-top: 2px; }
+    .td-price { font-family: var(--font-cond); font-size: 16px; font-weight: 700; color: var(--blue); }
+
+    /* ── PILLS ── */
+    .pill { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .pill-live    { background: var(--green-light);  color: var(--green); }
+    .pill-draft   { background: var(--gray-100);     color: var(--gray-600); }
+    .pill-paused  { background: var(--amber-light, #FAEEDA);  color: #7A4A00; }
+    .pill-removed { background: var(--red-light);    color: var(--red); }
+
+    /* ── ACTION BUTTONS ── */
+    .tbl-btn { font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 4px; margin-right: 4px; border: none; cursor: pointer; font-family: var(--font); transition: all .12s; }
+    .tbl-btn-edit   { background: var(--blue-light);  color: var(--blue); }
+    .tbl-btn-edit:hover   { background: var(--blue); color: var(--white); }
+    .tbl-btn-pause  { background: #FAEEDA; color: #7A4A00; }
+    .tbl-btn-pause:hover  { background: #7A4A00; color: var(--white); }
+    .tbl-btn-delete { background: var(--red-light);   color: var(--red); }
+    .tbl-btn-delete:hover { background: var(--red); color: var(--white); }
+    .tbl-btn-live   { background: var(--green-light); color: var(--green); }
+    .tbl-btn-live:hover   { background: var(--green); color: var(--white); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--gray-400); }
+    .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state h3 { font-family: var(--font-cond); font-size: 22px; color: var(--blue); margin-bottom: 8px; }
+    .empty-state p { font-size: 14px; margin-bottom: 20px; }
+    .btn-primary { background: var(--yellow); color: var(--blue); font-weight: 700; font-size: 14px; padding: 12px 24px; border-radius: var(--radius); border: none; cursor: pointer; font-family: var(--font); transition: background .12s; }
+    .btn-primary:hover { background: var(--yellow-dark); }
+
+    /* ── TOAST ── */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--blue); color: var(--white); padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,.15); z-index: 9999; transform: translateY(80px); opacity: 0; transition: all .3s cubic-bezier(.34,1.56,.64,1); max-width: 320px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 768px) {
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .filter-tabs { flex-wrap: wrap; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div><a href="../../index.html">← Back to Store</a> | <a href="contact.html">Help &amp; Support</a></div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="../../index.html" class="logo">LinkUp<span>Express</span></a>
+      <nav class="header-nav-right">
+        <button class="btn-new-listing" onclick="window.location.href='create-listing.html'">+ New Listing</button>
+        <a href="listings.html" class="header-nav-link" style="color:var(--yellow);">My Listings</a>
+        <a href="profile.html" class="header-nav-link">Account</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <div class="page-wrap">
+
+    <div class="page-header">
+      <h1>My <span>Listings</span></h1>
+      <button class="btn-primary" onclick="window.location.href='create-listing.html'">+ Create New Listing</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-strip">
+      <div class="stat-box"><div class="num" id="stat-total">0</div><div class="lbl">Total Listings</div></div>
+      <div class="stat-box"><div class="num" id="stat-live">0</div><div class="lbl">Live</div></div>
+      <div class="stat-box"><div class="num" id="stat-draft">0</div><div class="lbl">Drafts</div></div>
+      <div class="stat-box"><div class="num" id="stat-paused">0</div><div class="lbl">Paused</div></div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <input type="text" class="search-input" placeholder="Search your listings…" oninput="filterListings(this.value)" autocomplete="off" />
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="setFilter('all', this)">All</button>
+        <button class="filter-tab" onclick="setFilter('live', this)">Live</button>
+        <button class="filter-tab" onclick="setFilter('draft', this)">Draft</button>
+        <button class="filter-tab" onclick="setFilter('paused', this)">Paused</button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap" id="table-wrap">
+      <div class="empty-state" id="empty-state" style="display:none;">
+        <div class="icon">📦</div>
+        <h3>No listings yet</h3>
+        <p>Create your first listing and start selling to buyers across South Africa.</p>
+        <button class="btn-primary" onclick="window.location.href='create-listing.html'">+ Create First Listing</button>
+      </div>
+      <table id="listings-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Condition</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="listings-tbody"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="../assets/java/auth.js"></script>
+  <script>
+    'use strict';
+
+    var allListings   = [];
+    var currentFilter = 'all';
+
+    /* ── BOOT ── */
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Get user ID from localStorage — always available after login
+      var uid = '';
+      try { uid = localStorage.getItem('lue_uid') || ''; } catch(e) {}
+
+      if (!uid) {
+        // Truly not logged in
+        window.location.href = 'signup.html';
+        return;
+      }
+
+      // Set a minimal session so the page works
+      // Full session will be loaded async but we don't block on it
+      if (window.lue_initSession) {
+        lue_initSession().catch(function() {});
+      }
+
+      // Load listings immediately using uid
+      loadListings(uid);
+    });
+
+    /* ── LOAD from localStorage + PHP API ── */
+    async function loadListings(uid) {
+      var local = [];
+      if (!uid) { try { uid = localStorage.getItem('lue_uid') || ''; } catch(e) {} }
+
+      // Load from PHP database
+      try {
+        var url = (window.lue_apiUrl ? lue_apiUrl('listings') : '../api/listings.php') + '?action=mine';
+        if (uid) url += '&user_id=' + encodeURIComponent(uid);
+        var res = await fetch(url, { credentials: 'same-origin' });
+        var data = await res.json();
+        if (data.ok && Array.isArray(data.data) && data.data.length > 0) {
+          // Merge DB listings with local ones
+          allListings = data.data.map(function(l) {
+            return {
+              id:          l.id,
+              title:       l.product_name || l.name || 'Untitled',
+              category:    l.category_name || '—',
+              price:       l.price,
+              quantity:    l.stock_qty,
+              condition:   l.condition || 'new',
+              status:      l.status || 'draft',
+              createdAt:   l.created_at || new Date().toISOString(),
+              brand:       l.brand || '',
+            };
+          });
+        } else {
+          allListings = local;
+        }
+      } catch(e) {
+        // PHP not available — use localStorage
+        allListings = local;
+      }
+
+      renderTable(allListings);
+      updateStats();
+    }
+
+    /* ── RENDER TABLE ── */
+    function renderTable(listings) {
+      var filtered = currentFilter === 'all'
+        ? listings
+        : listings.filter(function(l) { return l.status === currentFilter; });
+
+      var tbody = document.getElementById('listings-tbody');
+      var table = document.getElementById('listings-table');
+      var empty = document.getElementById('empty-state');
+
+      if (filtered.length === 0) {
+        table.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+
+      empty.style.display = 'none';
+      table.style.display = 'table';
+
+      tbody.innerHTML = filtered.map(function(l) {
+        return '<tr id="row-' + esc(l.id) + '">' +
+          '<td class="td-title">' + esc(l.title) + '<small>' + esc(l.brand || '') + '</small></td>' +
+          '<td>' + esc(l.category || '—') + '</td>' +
+          '<td class="td-price">R&nbsp;' + fmtNum(l.price) + '</td>' +
+          '<td>' + (l.quantity || 0) + '</td>' +
+          '<td>' + condLabel(l.condition) + '</td>' +
+          '<td>' + statusPill(l.status) + '</td>' +
+          '<td style="font-size:11px;color:var(--gray-400);">' + fmtDate(l.createdAt) + '</td>' +
+          '<td>' + actionBtns(l) + '</td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    /* ── STATS ── */
+    function updateStats() {
+      document.getElementById('stat-total').textContent  = allListings.length;
+      document.getElementById('stat-live').textContent   = allListings.filter(function(l){ return l.status === 'live'; }).length;
+      document.getElementById('stat-draft').textContent  = allListings.filter(function(l){ return l.status === 'draft'; }).length;
+      document.getElementById('stat-paused').textContent = allListings.filter(function(l){ return l.status === 'paused'; }).length;
+    }
+
+    /* ── FILTER ── */
+    function setFilter(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-tab').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderTable(allListings);
+    }
+
+    function filterListings(query) {
+      var q = query.toLowerCase();
+      var filtered = allListings.filter(function(l) {
+        return (l.title || '').toLowerCase().includes(q) ||
+               (l.category || '').toLowerCase().includes(q) ||
+               (l.brand || '').toLowerCase().includes(q);
+      });
+      renderTable(filtered);
+    }
+
+    /* ── ACTIONS ── */
+    function publishListing(id) {
+      updateStatus(id, 'live');
+    }
+    function pauseListing(id) {
+      updateStatus(id, 'paused');
+    }
+    async function deleteListing(id) {
+      if (!confirm('Permanently delete this listing? This cannot be undone.')) return;
+      var uid = '';
+      try { uid = localStorage.getItem('lue_uid') || ''; } catch(e) {}
+
+      // Hard delete from DB
+      try {
+        var url = (window.lue_apiUrl ? lue_apiUrl('listings') : '../api/listings.php')
+                  + '?action=delete&id=' + encodeURIComponent(id)
+                  + '&user_id=' + encodeURIComponent(uid);
+        var res  = await fetch(url, {
+          method:      'POST',
+          credentials: 'same-origin',
+          headers:     { 'Content-Type': 'application/json' },
+          body:        JSON.stringify({ id: id, user_id: uid })
+        });
+        var data = await res.json();
+        if (!data.ok) {
+          toast('Delete failed: ' + (data.error || 'Unknown error'));
+          return;
+        }
+      } catch(e) {
+        toast('Could not connect to server.');
+        return;
+      }
+
+      // Remove from local list and re-render
+      allListings = allListings.filter(function(l) { return l.id !== id; });
+      // Also clear from localStorage so homepage doesn't show stale data
+      try {
+        var stored = JSON.parse(localStorage.getItem('lue_listings') || '[]');
+        stored = stored.filter(function(l) { return l.id !== id; });
+        localStorage.setItem('lue_listings', JSON.stringify(stored));
+      } catch(e) {}
+      renderTable(allListings);
+      updateStats();
+      toast('Listing permanently deleted.');
+    }
+
+    async function updateStatus(id, status) {
+      var uid = '';
+      try { uid = localStorage.getItem('lue_uid') || ''; } catch(e) {}
+
+      allListings = allListings.map(function(l) {
+        return l.id === id ? Object.assign({}, l, { status: status }) : l;
+      });
+
+      try {
+        var action = status === 'live' ? 'publish' : status === 'paused' ? 'pause' : 'delete';
+        var url = (window.lue_apiUrl ? lue_apiUrl('listings') : '../api/listings.php')
+                  + '?action=' + action + '&id=' + encodeURIComponent(id)
+                  + '&user_id=' + encodeURIComponent(uid);
+        await fetch(url, {
+          method:      'POST',
+          credentials: 'same-origin',
+          headers:     { 'Content-Type': 'application/json' },
+          body:        JSON.stringify({ id: id, user_id: uid })
+        });
+      } catch(e) {}
+
+      renderTable(allListings);
+      updateStats();
+      toast('Listing ' + status + '!');
+    }
+
+    /* ── HELPERS ── */
+    function actionBtns(l) {
+      var btns = '<button class="tbl-btn tbl-btn-edit" onclick="window.location.href=\'create-listing.html\'">Edit</button>';
+      if (l.status === 'draft' || l.status === 'paused') {
+        btns += '<button class="tbl-btn tbl-btn-live" onclick="publishListing(\'' + l.id + '\')">Publish</button>';
+      }
+      if (l.status === 'live') {
+        btns += '<button class="tbl-btn tbl-btn-pause" onclick="pauseListing(\'' + l.id + '\')">Pause</button>';
+      }
+      btns += '<button class="tbl-btn tbl-btn-delete" onclick="deleteListing(\'' + l.id + '\')">Remove</button>';
+      return btns;
+    }
+
+    function statusPill(s) {
+      var map = { live: 'pill-live', draft: 'pill-draft', paused: 'pill-paused', removed: 'pill-removed' };
+      return '<span class="pill ' + (map[s] || 'pill-draft') + '">' + (s || 'draft') + '</span>';
+    }
+
+    function condLabel(c) {
+      var map = { new: 'New', open_box: 'Open Box', used_good: 'Used – Good', used_fair: 'Used – Fair', for_parts: 'For Parts' };
+      return map[c] || c || 'New';
+    }
+
+    function fmtNum(n) {
+      return Number(n || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function fmtDate(str) {
+      if (!str) return '—';
+      var d = new Date(str);
+      return d.toLocaleDateString('en-ZA', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function esc(str) {
+      return String(str || '').replace(/[&<>"']/g, function(c) {
+        return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+      });
+    }
+
+    function toast(msg, type) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.background = type === 'error' ? 'var(--red)' : 'var(--blue)';
+      t.classList.add('show');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+
+    window.setFilter      = setFilter;
+    window.filterListings = filterListings;
+    window.publishListing = publishListing;
+    window.pauseListing   = pauseListing;
+    window.deleteListing  = deleteListing;
+  </script>
+</body>
+</html>

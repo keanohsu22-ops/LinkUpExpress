@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details – LinkUp Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/shared.css" />
+  <link rel="stylesheet" href="../assets/css/product-detail.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-links">
+        <a href="../../index.html">← Back to Store</a>
+        <span>|</span><span>|</span>
+        <a href="contact.html">Help &amp; Support</a>
+      </div>
+      <div class="topbar-links">
+        <a href="signup.html">Sell on LinkUp Express</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="../../index.html" class="logo">LinkUp<span>Express</span></a>
+      <div class="search-bar">
+        <input type="text" placeholder="Search for products, brands, categories…" autocomplete="off" />
+        <button class="search-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          Search
+        </button>
+      </div>
+      <div class="header-actions">
+        <button class="btn-sell" onclick="window.location.href='signup.html'">+ Sell</button>
+        <a href="signup.html" class="header-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Sign In</span>
+        </a>
+
+        <a href="cart.html" class="header-action">
+          <div class="badge" id="cart-count">0</div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span>Cart</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar">
+    <div class="breadcrumb">
+      <a href="../../index.html">Home</a>
+      <span class="sep">›</span>
+      <a href="#">Electronics</a>
+      <span class="sep">›</span>
+      <a href="#">Audio &amp; Headphones</a>
+      <span class="sep">›</span>
+      <span class="current" id="breadcrumb-title">Product Details</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- PRODUCT DETAIL -->
+    <div class="product-layout">
+
+      <!-- LEFT: PRODUCT IMAGE -->
+      <div class="gallery">
+        <div class="main-image">
+          <img id="product-main-image" src="" alt="Product image"
+               style="max-width:100%;max-height:420px;object-fit:contain;display:none;" />
+          <div class="main-image-emoji" id="main-emoji" style="font-size:80px;">📦</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: PRODUCT INFO -->
+      <div class="product-info-panel">
+
+        <div class="product-brand-row">
+          <span class="product-brand" id="product-brand">—</span>
+          <span class="product-sku">SKU: —</span>
+        </div>
+
+        <h1 class="product-title" id="product-title">Loading product...</h1>
+
+        <div class="rating-row">
+          <div class="stars">
+            <span class="star" style="color:var(--gray-200);">★</span><span class="star" style="color:var(--gray-200);">★</span><span class="star" style="color:var(--gray-200);">★</span><span class="star" style="color:var(--gray-200);">★</span><span class="star" style="color:var(--gray-200);">★</span>
+          </div>
+          <span class="rating-num" style="color:var(--gray-400);">No ratings yet</span>
+          <a href="#reviews" class="review-count" onclick="openTab('reviews')">Be the first to review</a>
+        </div>
+
+        <!-- PRICE -->
+        <div class="price-block">
+          <div class="price-row">
+            <span class="price-now" id="product-price">—</span>
+            
+          </div>
+          <span class="price-note">Inclusive of VAT · Free delivery on this item</span>
+        </div>
+
+        <!-- STOCK -->
+        <div class="stock-row">
+          <div class="stock-dot"></div>
+          <span class="stock-label">In Stock</span>
+          <span class="stock-qty">— <span id="product-stock-count">—</span> left</span>
+        </div>
+
+        <!-- DELIVERY -->
+        <div class="delivery-info">
+          🚚 <strong>Free delivery</strong> available on this item.
+        </div>
+
+        
+        </div>
+
+        <!-- QUANTITY -->
+        <div class="option-group">
+          <span class="option-label">Quantity</span>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <div class="qty-display" id="qty-val">1</div>
+            <button class="qty-btn" onclick="changeQty(1)" style="border-left:none; border-radius:0 var(--radius) var(--radius) 0;">+</button>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-group">
+          <button class="btn-add-cart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Add to Cart
+          </button>
+          <button class="btn-buy-now">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+            Buy Now
+          </button>
+        </div>
+
+        <!-- TRUST BADGES -->
+        <div class="trust-badges">
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Secure payment
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Fast delivery
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Genuine product
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            24/7 Support
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SELLER INFO -->
+    <div class="seller-box">
+      <div class="seller-avatar" id="seller-avatar">?</div>
+      <div class="seller-details">
+        <div class="seller-name" id="product-seller">—</div>
+        <div class="seller-meta">
+          <span id="seller-rating-display"></span>
+          <span id="seller-phone-display"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAIL TABS -->
+    <div class="detail-tabs" id="detail-tabs">
+      <div class="tab-header">
+        <button class="detail-tab-btn active" onclick="openTab('description')">Description</button>
+        <button class="detail-tab-btn" onclick="openTab('specs')">Specifications</button>
+        <button class="detail-tab-btn" onclick="openTab('reviews')">Reviews</button>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="tab-content active" id="tab-description">
+        <p class="desc-text" id="product-description">—</p>
+      </div>
+
+      <!-- SPECIFICATIONS -->
+      <div class="tab-content" id="tab-specs">
+        <table class="specs-table">
+          <tr><td>Brand</td><td id="product-brand-spec">—</td></tr>
+          <tr><td>Model</td><td id="product-model">—</td></tr>
+          <tr><td>Condition</td><td id="product-condition">—</td></tr>
+          <tr><td>SKU</td><td id="product-sku">—</td></tr>
+          <tr><td>Warranty</td><td id="product-warranty">—</td></tr>
+          <tr><td>Stock</td><td id="product-stock">—</td></tr>
+        </table>
+      </div>
+
+      <!-- REVIEWS -->
+      <div class="tab-content" id="tab-reviews">
+        <!-- Existing reviews list -->
+        <div id="reviews-list" style="margin-bottom:24px;"></div>
+
+        <!-- Add review form -->
+        <div id="review-form-section" style="border-top:1px solid var(--gray-100);padding-top:20px;">
+          <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;color:var(--dark);">Leave a Review</h3>
+
+          <!-- Star rating -->
+          <div style="margin-bottom:12px;">
+            <label style="font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Your Rating</label>
+            <div id="star-selector" style="display:flex;gap:6px;font-size:28px;cursor:pointer;">
+              <span data-val="1" style="color:var(--gray-200);">★</span>
+              <span data-val="2" style="color:var(--gray-200);">★</span>
+              <span data-val="3" style="color:var(--gray-200);">★</span>
+              <span data-val="4" style="color:var(--gray-200);">★</span>
+              <span data-val="5" style="color:var(--gray-200);">★</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Review Title</label>
+            <input id="review-title" type="text" placeholder="Summarise your experience"
+              style="width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:Barlow,sans-serif;" />
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <label style="font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Your Review</label>
+            <textarea id="review-body" rows="4" placeholder="Tell other buyers about your experience with this product..."
+              style="width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:Barlow,sans-serif;resize:vertical;"></textarea>
+          </div>
+
+          <button onclick="submitReview()" id="review-submit-btn"
+            style="background:var(--blue);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Barlow,sans-serif;">
+            Submit Review
+          </button>
+          <div id="review-feedback" style="margin-top:10px;font-size:13px;font-weight:600;display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+      
+        
+      </div>
+      
+        
+      </div>
+      
+        
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2025 LinkUp Express (Pty) Ltd · Registered in South Africa</span>
+    <span style="margin:0 12px;">·</span>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="contact.html">Contact Us</a>
+  </footer>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <span id="toast-msg">Item added to cart!</span>
+  </div>
+
+  <script>
+    var qty = 1;
+
+    function changeQty(delta) {
+      qty = Math.max(1, Math.min(99, qty + delta));
+      document.getElementById('qty-val').textContent = qty;
+    }
+
+
+
+    function showToast(msg) {
+      var toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 3000);
+    }
+
+    function setThumb(el, emoji) {
+      document.querySelectorAll('.thumb').forEach(function(t) { t.classList.remove('active'); });
+      el.classList.add('active');
+      document.getElementById('main-emoji').textContent = emoji;
+    }
+
+    function selectColor(el, name) {
+      document.querySelectorAll('.color-swatch').forEach(function(s) { s.classList.remove('active'); });
+      el.classList.add('active');
+      var label = document.querySelector('.option-label strong');
+      if (label) label.textContent = name;
+    }
+
+    function openTab(tab) {
+      document.querySelectorAll('.detail-tab-btn').forEach(function(btn, i) {
+        var tabs = ['description', 'specs', 'reviews'];
+        btn.classList.toggle('active', tabs[i] === tab);
+      });
+      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('detail-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Related product add to cart
+    document.querySelectorAll('.btn-card-cart').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var name = btn.closest('.product-card').querySelector('.card-name').textContent;
+        var count = parseInt(document.getElementById('cart-count').textContent) + 1;
+        document.getElementById('cart-count').textContent = count;
+        showToast('Added to cart!');
+      });
+    });
+  </script>
+
+  <script src="../assets/java/auth.js"></script>
+  <script src="../assets/java/product-detail.js"></script>
+
+</body>
+</html>

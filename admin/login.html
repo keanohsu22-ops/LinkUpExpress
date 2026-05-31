@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login – LinkUp Express</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--blue:#0A2463;--yellow:#F5C518;--red:#C0392B;--gray-100:#F1F3F5;--gray-200:#E9ECEF;--gray-400:#ADB5BD;--gray-600:#495057;--dark:#0D1B2A;--white:#fff}
+    body{font-family:'Barlow',sans-serif;background:var(--blue);min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:var(--white);border-radius:16px;padding:48px 40px;width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+    .logo{font-size:24px;font-weight:800;color:var(--blue);text-align:center;margin-bottom:6px}
+    .logo span{color:var(--yellow)}
+    .subtitle{text-align:center;font-size:13px;color:var(--gray-400);margin-bottom:32px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gray-600);margin-bottom:5px}
+    input{width:100%;padding:11px 14px;border:1.5px solid var(--gray-200);border-radius:8px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--dark);outline:none;margin-bottom:16px}
+    input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,36,99,.1)}
+    .btn{width:100%;background:var(--blue);color:var(--white);border:none;border-radius:8px;padding:13px;font-family:'Barlow',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:4px}
+    .btn:hover{background:#1B3A8C}
+    .error{background:#FEE;border:1px solid #fcc;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);font-weight:600;margin-bottom:16px;display:none}
+    .lock{text-align:center;font-size:40px;margin-bottom:20px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="lock">🔐</div>
+    <div class="logo">LinkUp<span>Express</span></div>
+    <div class="subtitle">Admin Portal</div>
+    <div id="login-info" style="display:none;text-align:center;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:700;margin-bottom:16px;"></div>
+    <div class="error" id="err"></div>
+    <label>Email Address</label>
+    <input type="text" id="username" placeholder="admin@linkupexpress.com" autocomplete="off"/>
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Admin password"/>
+    <button class="btn" onclick="doLogin()">Sign In to Admin</button>
+  </div>
+  <script>
+    function doLogin() {
+      var u = document.getElementById('username').value.trim().toLowerCase();
+      var p = document.getElementById('password').value;
+      var err = document.getElementById('err');
+      err.style.display = 'none';
+      if (!u || !p) { err.textContent = 'Please enter username and password.'; err.style.display = 'block'; return; }
+      fetch('api/auth.php', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({username: u, password: p})
+      }).then(function(r){ return r.json(); })
+        .then(function(d){
+          if (d.ok) {
+            sessionStorage.setItem('admin_token', d.token);
+            sessionStorage.setItem('admin_user', d.username || u);
+            sessionStorage.setItem('admin_super', d.super_admin ? 'true' : 'false');
+            window.location.href = 'index.html';
+          } else {
+            err.textContent = d.error || 'Invalid credentials.';
+            err.style.display = 'block';
+          }
+        }).catch(function(){ err.textContent = 'Cannot connect to server.'; err.style.display = 'block'; });
+    }
+    document.addEventListener('keydown', function(e){ if (e.key === 'Enter') doLogin(); });
+  </script>
+</body>
+</html>
