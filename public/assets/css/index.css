@@ -687,3 +687,16 @@
       font-weight: 500;
     }
     .toast-strip strong { font-weight: 700; }
+
+/* ── INDEX PAGE MOBILE ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
+  .section { padding: 16px; }
+  .cat-filter-section > div { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .cat-filter-btn { flex-shrink: 0; }
+}
+@media (max-width: 480px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; padding: 0 12px; }
+  .product-card .add-to-cart-btn { font-size: 12px; padding: 8px; }
+  .product-img { padding: 10px; }
+}
