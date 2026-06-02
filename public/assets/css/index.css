@@ -691,13 +691,55 @@ footer {
 
 /* ── INDEX PAGE MOBILE ──────────────────────────────────────────── */
 @media (max-width: 768px) {
+  /* Outer padding */
+  .main { padding: 14px; }
+
+  /* ===== HERO — stack the two columns ===== */
+  .hero {
+    grid-template-columns: 1fr !important;   /* was: 1fr 280px */
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .hero-main {
+    padding: 28px 22px;
+    min-height: auto;
+  }
+  .hero-main h1 { font-size: 30px; }
+  .hero-main p { font-size: 14px; max-width: 100%; }
+  .hero-side { gap: 12px; }
+  .hero-card {
+    min-height: auto;
+    padding: 20px;
+  }
+
+  /* ===== PROMO STRIP — stack into one column ===== */
+  .promo-strip {
+    grid-template-columns: 1fr !important;   /* was: repeat(3,1fr) */
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  /* ===== PRODUCT GRID — 2 across ===== */
   .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
-  .section { padding: 16px; }
+
+  .section { padding: 0; margin-bottom: 20px; }
   .cat-filter-section > div { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
   .cat-filter-btn { flex-shrink: 0; }
+
+  /* Footer — 2 columns on tablet */
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
 }
+
 @media (max-width: 480px) {
-  .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; padding: 0 12px; }
+  .hero-main { padding: 24px 18px; }
+  .hero-main h1 { font-size: 26px; }
+  .hero-card h3 { font-size: 15px; }
+
+  .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; }
   .product-card .add-to-cart-btn { font-size: 12px; padding: 8px; }
   .product-img { padding: 10px; }
+
+  /* Footer — single column on phones */
+  .footer-main { grid-template-columns: 1fr; }
 }
