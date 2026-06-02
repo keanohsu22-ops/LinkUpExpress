@@ -691,10 +691,15 @@ footer {
 
 /* ── INDEX PAGE MOBILE ──────────────────────────────────────────── */
 @media (max-width: 768px) {
-  header { position: relative !important; z-index: 100; }
-  .hero, .hero-main { z-index: 1; }
-  /* Outer padding */
-  .main { padding: 14px; }
+  header {
+    position: relative !important;
+    z-index: 1000 !important;
+  }
+  .topbar { position: relative; z-index: 1000; }
+  .main { position: relative; z-index: 1; }
+  .hero,
+  .hero-main,
+  .hero-side { z-index: auto !important; }
 
   /* ===== HERO — stack the two columns ===== */
   .hero {
