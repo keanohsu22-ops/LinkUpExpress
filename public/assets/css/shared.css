@@ -931,13 +931,7 @@ footer {
   animation: fadeUp 0.35s ease both;
 }
 
-/* ─── RESPONSIVE ─────────────────────────────────────────────────── */
-
-  .footer-main {
-    grid-template-columns: 1fr;
-  }
-
-
+/* ─── RESPONSIVE — see MOBILE RESPONSIVE section below ──────────── */
 
 /* ================================================================
    MOBILE RESPONSIVE — LinkUp Express
