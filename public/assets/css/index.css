@@ -691,6 +691,7 @@ footer {
 
 /* ── INDEX PAGE MOBILE ──────────────────────────────────────────── */
 @media (max-width: 768px) {
+  header { position: static !important; }
   /* Outer padding */
   .main { padding: 14px; }
 
