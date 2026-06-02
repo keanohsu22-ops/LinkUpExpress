@@ -247,3 +247,47 @@
       .receipt-card { box-shadow: none; border: 1px solid #ddd; }
       .main { padding: 0; max-width: 100%; }
     }
+
+
+/* ═══════════════════════════════════════════════════
+   ORDER CONFIRMATION — MOBILE
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .header-inner { flex-wrap: wrap; height: auto; padding: 10px 14px; gap: 8px; }
+  .search-bar { order: 3; width: 100%; max-width: 100%; }
+  .header-action span { display: none; }
+  .main { padding: 16px 14px 40px; }
+  .receipt-header { padding: 20px 16px; flex-direction: column; gap: 8px; }
+  .receipt-header h2 { font-size: 20px; }
+  .rh-val { font-size: 22px !important; }
+  .meta-strip {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  .receipt-section { padding: 16px; }
+  .receipt-section-head { padding: 12px 16px; }
+  .delivery-boxes, .delivery-info-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+  .delivery-box { padding: 14px; }
+  .cost-breakdown { padding: 0 16px 16px; }
+  .cost-row { font-size: 13px; }
+  .order-ref-box { flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .order-ref-box strong { font-size: 18px; }
+  /* Tracking steps — scroll horizontally */
+  .tracking-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+  .tracking-steps { min-width: 480px; }
+  .order-actions { flex-direction: column; gap: 10px; }
+  .order-actions a, .order-actions button { width: 100%; text-align: center; }
+  .steps-inner { padding: 0 14px; }
+}
+@media (max-width: 480px) {
+  .receipt-header h2 { font-size: 17px; }
+  .rh-val { font-size: 18px !important; }
+  .meta-lbl { font-size: 9px; }
+  .meta-val { font-size: 11px; }
+  .cost-row { font-size: 12px; }
+  .total-row .val { font-size: 16px; }
+}

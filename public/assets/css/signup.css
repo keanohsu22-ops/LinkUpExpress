@@ -358,3 +358,34 @@
     }
     footer a { color: var(--gray-400); margin: 0 8px; }
     footer a:hover { color: var(--white); }
+
+
+/* ═══════════════════════════════════════════════════
+   SIGNUP / LOGIN — MOBILE
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .header-inner { flex-wrap: wrap; height: auto; padding: 10px 14px; gap: 8px; }
+  .logo { font-size: 18px; }
+  .auth-outer, .auth-page { padding: 20px 14px 40px; }
+  .auth-card { padding: 24px 18px; max-width: 100%; }
+  .tab-bar { border-radius: 8px; }
+  .tab-btn { font-size: 13px; padding: 10px; }
+  .role-cards { grid-template-columns: 1fr 1fr !important; gap: 10px; }
+  .role-card { padding: 14px 10px; }
+  .role-icon { font-size: 24px; }
+  .role-name { font-size: 12px; }
+  input, select { font-size: 16px !important; } /* prevent iOS zoom */
+  .btn-submit { font-size: 14px; padding: 13px; width: 100%; }
+  .form-group { margin-bottom: 14px; }
+  .auth-logo { font-size: 20px; margin-bottom: 16px; }
+  .strength-bar { height: 4px; }
+}
+@media (max-width: 480px) {
+  .auth-outer, .auth-page { padding: 14px 10px 40px; }
+  .auth-card { padding: 18px 14px; border-radius: 12px; }
+  .role-cards { gap: 8px; }
+  .role-card { padding: 10px 8px; border-radius: 8px; }
+  .role-icon { font-size: 20px; }
+  .tab-btn { font-size: 12px; padding: 8px; }
+  .helper-text { font-size: 11px; }
+}
