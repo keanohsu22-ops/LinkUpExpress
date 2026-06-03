@@ -88,61 +88,139 @@
     #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
     .loading{text-align:center;padding:40px;color:var(--gray-400)}
+
+    /* ── HAMBURGER ── */
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;}
+    .hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .2s;}
+
+    /* ── SIDEBAR OVERLAY ── */
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;}
+    .sidebar-overlay.open{display:block;}
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      body { overflow-x: hidden; }
+
+      /* Sidebar becomes slide-in drawer */
+      .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100vh;
+        width: 240px;
+        z-index: 200;
+        transition: left .25s ease;
+        overflow-y: auto;
+      }
+      .sidebar.open { left: 0; }
+
+      /* Main takes full width */
+      .main { width: 100%; }
+
+      /* Topbar */
+      .topbar { padding: 12px 14px; gap: 8px; }
+      .topbar h1 { font-size: 15px; }
+      .admin-badge { font-size: 10px; padding: 4px 8px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .hamburger { display: flex; }
+
+      /* Content */
+      .content { padding: 14px; }
+
+      /* Stats grid — 2 cols */
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+      .stat-card { padding: 14px; }
+      .stat-num { font-size: 20px; }
+      .stat-lbl { font-size: 11px; }
+
+      /* Panel */
+      .panel-header { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 14px; }
+      .panel-actions { width: 100%; flex-wrap: wrap; }
+      .search-input { width: 100%; }
+      .btn-add, .btn-refresh { font-size: 12px; padding: 7px 12px; }
+
+      /* Table */
+      .table-wrap { max-height: 60vh; }
+      table { font-size: 12px; }
+      th, td { padding: 8px 8px; }
+      .td-actions { gap: 4px; }
+      .btn-edit, .btn-del, .btn-pause { padding: 3px 7px; font-size: 10px; }
+
+      /* Modal */
+      .modal { padding: 20px 16px; margin: 10px; width: calc(100% - 20px); max-width: none; max-height: 85vh; }
+      .modal h3 { font-size: 15px; }
+      .modal input, .modal select, .modal textarea { font-size: 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .stat-num { font-size: 18px; }
+      .topbar h1 { font-size: 13px; }
+      .admin-badge { display: none; }
+      th, td { padding: 6px; font-size: 11px; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- SIDEBAR OVERLAY (mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
   <!-- SIDEBAR -->
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-logo">LinkUp<span>Express</span><small>Admin Dashboard</small></div>
 
     <div class="sidebar-section">Overview</div>
     <button class="nav-btn active" onclick="showSection('dashboard')" id="nav-dashboard">
-      <span class="icon"></span> Dashboard
+      <span class="icon">📊</span> Dashboard
     </button>
 
     <div class="sidebar-section">Database Tables</div>
     <button class="nav-btn" onclick="showSection('users')" id="nav-users">
-      <span class="icon"></span> Users
+      <span class="icon">👥</span> Users
     </button>
     <button class="nav-btn" onclick="showSection('seller_profiles')" id="nav-seller_profiles">
-      <span class="icon"></span> Seller Profiles
+      <span class="icon">🏪</span> Seller Profiles
     </button>
     <button class="nav-btn" onclick="showSection('listings')" id="nav-listings">
-      <span class="icon"></span> Listings
+      <span class="icon">📦</span> Listings
     </button>
     <button class="nav-btn" onclick="showSection('products')" id="nav-products">
-      <span class="icon"></span> Products
+      <span class="icon">🛍️</span> Products
     </button>
     <button class="nav-btn" onclick="showSection('categories')" id="nav-categories">
-      <span class="icon"></span> Categories
+      <span class="icon">🏷️</span> Categories
     </button>
     <button class="nav-btn" onclick="showSection('orders')" id="nav-orders">
-      <span class="icon"></span> Orders
+      <span class="icon">📋</span> Orders
     </button>
     <button class="nav-btn" onclick="showSection('order_items')" id="nav-order_items">
-      <span class="icon"></span> Order Items
+      <span class="icon">🔖</span> Order Items
     </button>
     <button class="nav-btn" onclick="showSection('cart_items')" id="nav-cart_items">
-      <span class="icon"></span> Cart Items
+      <span class="icon">🛒</span> Cart Items
     </button>
 
     <div class="sidebar-section">Super Admin Only</div>
     <button class="nav-btn" onclick="showSection('admin_users')" id="nav-admin_users" style="display:none;">
-      <span class="icon"></span> Admin Users
+      <span class="icon">🛡️</span> Admin Users
     </button>
 
     <div class="sidebar-footer">
       <div id="admin-type-badge" style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:10px;padding:6px 10px;background:rgba(255,255,255,.05);border-radius:6px;text-align:center;"></div>
-      <button class="btn-logout" onclick="adminLogout()"> Sign Out</button>
+      <button class="btn-logout" onclick="adminLogout()">🚪 Sign Out</button>
     </div>
   </div>
 
   <!-- MAIN -->
   <div class="main">
     <div class="topbar">
-      <h1 id="page-title">Dashboard</h1>
-      <span class="admin-badge"> Admin: <span id="admin-name">—</span></span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="hamburger" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <h1 id="page-title">Dashboard</h1>
+      </div>
+      <span class="admin-badge">🔐 Admin: <span id="admin-name">—</span></span>
     </div>
     <div class="content" id="content">
       <div class="loading">Loading...</div>
@@ -176,7 +254,7 @@
     // Set type badge in sidebar
     var badge = document.getElementById('admin-type-badge');
     if (badge) {
-      badge.textContent  = isSuperAdmin ? ' Super Admin' : ' Admin';
+      badge.textContent  = isSuperAdmin ? '🛡️ Super Admin' : '👤 Admin';
       badge.style.color  = isSuperAdmin ? 'var(--yellow)' : 'rgba(255,255,255,.5)';
     }
 
@@ -403,7 +481,7 @@
         html += '<label>Password *</label><input type="password" name="password" placeholder="Strong password"/>';
         html += '<label>Super Admin</label>';
         html += '<select name="super_admin"><option value="0">No — Regular Admin</option><option value="1">Yes — Super Admin</option></select>';
-        html += '<small style="color:var(--gray-400);font-size:11px;margin-top:8px;display:block;"> Super Admins can manage other admin accounts.</small>';
+        html += '<small style="color:var(--gray-400);font-size:11px;margin-top:8px;display:block;">⚠️ Super Admins can manage other admin accounts.</small>';
         document.getElementById('modal-fields').innerHTML = html;
         return;
       }
@@ -540,6 +618,25 @@
 
     // ── BOOT ─────────────────────────────────────────────────────
     loadDashboard();
+
+    // ── MOBILE SIDEBAR TOGGLE ──────────────────────────────────────
+    function toggleSidebar() {
+      var sidebar  = document.getElementById('sidebar');
+      var overlay  = document.getElementById('sidebar-overlay');
+      var isOpen   = sidebar.classList.contains('open');
+      sidebar.classList.toggle('open', !isOpen);
+      overlay.classList.toggle('open', !isOpen);
+    }
+
+    // Close sidebar when a nav item is clicked on mobile
+    document.querySelectorAll('.nav-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (window.innerWidth <= 768) {
+          document.getElementById('sidebar').classList.remove('open');
+          document.getElementById('sidebar-overlay').classList.remove('open');
+        }
+      });
+    });
   </script>
 </body>
 </html>
