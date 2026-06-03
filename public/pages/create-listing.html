@@ -128,7 +128,7 @@
           </div>
           <div>
             <h2>Product Images</h2>
-            <p>Upload 1 product image.</p>
+            <p>Upload 1 product image. <span style="color:var(--red,#C0392B);font-weight:700;">*Required</span></p>
           </div>
         </div>
         <div class="section-body">
@@ -384,6 +384,7 @@
       if (!price || parseFloat(price) <= 0) errors.push('Please enter a valid price.');
       if (!quantity || parseInt(quantity) < 1) errors.push('Please enter a valid quantity.');
       if (!location)    errors.push('Location is required.');
+      if (!uploadedImages || uploadedImages.length === 0) errors.push('Please upload a product image.');
 
       if (errors.length > 0) {
         alert(errors.join('\n'));

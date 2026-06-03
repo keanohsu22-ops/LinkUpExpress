@@ -92,13 +92,7 @@
         </div>
 
         <h1 class="product-title" id="product-title">Loading product...</h1>
-
-        <div class="rating-row">
-          <div class="stars">
-            <span class="star" style="color:var(--gray-200);">★</span><span class="star" style="color:var(--gray-200);">★</span><span class="star" style="color:var(--gray-200);">★</span><span class="star" style="color:var(--gray-200);">★</span><span class="star" style="color:var(--gray-200);">★</span>
-          </div>
-          <span class="rating-num" style="color:var(--gray-400);">No ratings yet</span>
-          <a href="#reviews" class="review-count" onclick="openTab('reviews')">Be the first to review</a>
+        <span class="rating-num" style="color:var(--gray-400);">No ratings yet</span>
         </div>
 
         <!-- PRICE -->
@@ -309,7 +303,7 @@
 
     function openTab(tab) {
       document.querySelectorAll('.detail-tab-btn').forEach(function(btn, i) {
-        var tabs = ['description', 'specs', 'reviews'];
+        var tabs = ['description', 'specs'];
         btn.classList.toggle('active', tabs[i] === tab);
       });
       document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });

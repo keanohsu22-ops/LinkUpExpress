@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   initGallery();
   initStarSelector();
   var _lid = sessionStorage.getItem('viewingListingId') || new URLSearchParams(window.location.search).get('id') || '';
-  if (_lid) loadReviews(_lid);
   initQuantitySelector();
   initAddToCart();
   initBuyNow();
@@ -265,92 +264,6 @@ function initStarSelector() {
 /* ═══════════════════════════════════════════════════════════════════
    SUBMIT REVIEW
 ═══════════════════════════════════════════════════════════════════ */
-async function submitReview() {
-  var session = lue_getSession ? lue_getSession() : null;
-  var uid     = session ? session.id : (localStorage.getItem('lue_uid') || '');
-  var fb      = document.getElementById('review-feedback');
-  var btn     = document.getElementById('review-submit-btn');
-
-  var showFeedback = function(msg, ok) {
-    fb.textContent   = msg;
-    fb.style.color   = ok ? 'green' : '#C0392B';
-    fb.style.display = 'block';
-  };
-
-  if (!uid) { showFeedback('Please log in to leave a review.', false); return; }
-  if (!_selectedRating) { showFeedback('Please select a star rating.', false); return; }
-
-  var title = (document.getElementById('review-title').value || '').trim();
-  var body  = (document.getElementById('review-body').value  || '').trim();
-  if (!body) { showFeedback('Please write your review.', false); return; }
-
-  var listingId = sessionStorage.getItem('viewingListingId') ||
-    new URLSearchParams(window.location.search).get('id') || '';
-
-  btn.disabled    = true;
-  btn.textContent = 'Submitting...';
-
-  // Store review in localStorage keyed by listingId
-  var reviews = [];
-  try { reviews = JSON.parse(localStorage.getItem('lue_reviews_' + listingId) || '[]'); } catch(e) {}
-  reviews.unshift({
-    rating:        _selectedRating,
-    title:         title,
-    body:          body,
-    reviewer_name: session ? session.fullName : 'Anonymous',
-    created_at:    new Date().toISOString()
-  });
-  localStorage.setItem('lue_reviews_' + listingId, JSON.stringify(reviews));
-
-  // Reset form
-  _selectedRating = 0;
-  document.getElementById('review-title').value = '';
-  document.getElementById('review-body').value  = '';
-  document.querySelectorAll('#star-selector span').forEach(function(s) {
-    s.style.color = 'var(--gray-200)';
-  });
-
-  showFeedback('✓ Review submitted! Thank you.', true);
-  btn.disabled    = false;
-  btn.textContent = 'Submit Review';
-
-  // Reload reviews display
-  loadReviews(listingId);
-}
-window.submitReview = submitReview;
-
-/* ═══════════════════════════════════════════════════════════════════
-   LOAD AND DISPLAY REVIEWS
-═══════════════════════════════════════════════════════════════════ */
-function loadReviews(listingId) {
-  var list = document.getElementById('reviews-list');
-  if (!list) return;
-  var reviews = [];
-  try { reviews = JSON.parse(localStorage.getItem('lue_reviews_' + listingId) || '[]'); } catch(e) {}
-
-  if (reviews.length === 0) {
-    list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;padding:10px 0;">No reviews yet — be the first!</p>';
-    return;
-  }
-
-  list.innerHTML = reviews.map(function(r) {
-    var stars = '';
-    for (var i = 1; i <= 5; i++) {
-      stars += '<span style="color:' + (i <= r.rating ? '#F5C518' : 'var(--gray-200)') + ';">★</span>';
-    }
-    var date = r.created_at ? new Date(r.created_at).toLocaleDateString('en-ZA') : '';
-    return '<div style="border-bottom:1px solid var(--gray-100);padding:14px 0;">' +
-      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">' +
-      '<span style="font-weight:700;font-size:14px;">' + (r.reviewer_name || 'Buyer') + '</span>' +
-      '<span>' + stars + '</span>' +
-      '<span style="font-size:11px;color:var(--gray-400);">' + date + '</span>' +
-      '</div>' +
-      (r.title ? '<div style="font-weight:600;font-size:13px;margin-bottom:3px;">' + r.title + '</div>' : '') +
-      '<div style="font-size:13px;color:var(--gray-600);">' + r.body + '</div>' +
-      '</div>';
-  }).join('');
-}
-
 function initGallery() {
   document.querySelectorAll('.thumb').forEach(function (thumb) {
     thumb.addEventListener('click', function () {

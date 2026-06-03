@@ -98,9 +98,6 @@ function handle_one()
     $s->execute([$id]);
     $listing['shipping_options'] = $s->fetchAll();
 
-    // Reviews table removed — return empty array
-    $listing['reviews'] = [];
-
     lue_ok($listing);
 }
 
