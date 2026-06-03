@@ -422,13 +422,18 @@ function handle_delete(): void {
         }
         $db->exec('SET FOREIGN_KEY_CHECKS = 1');
     } elseif ($table === 'listings') {
-        // Hard delete listing and orphaned product
+        // Get product_id before deleting
         $stmt = $db->prepare("SELECT product_id FROM listings WHERE id = ?");
         $stmt->execute([$id]);
         $listing = $stmt->fetch();
+
+        // Delete all child rows first (MySQL FK order)
+        $db->prepare("DELETE FROM shipping_options WHERE listing_id = ?")->execute([$id]);
         $db->prepare("DELETE FROM order_items WHERE listing_id = ?")->execute([$id]);
         $db->prepare("DELETE FROM cart_items WHERE listing_id = ?")->execute([$id]);
         $db->prepare("DELETE FROM listings WHERE id = ?")->execute([$id]);
+
+        // Delete orphaned product
         if ($listing) {
             $remaining = $db->prepare("SELECT COUNT(*) FROM listings WHERE product_id = ?");
             $remaining->execute([$listing['product_id']]);
@@ -436,6 +441,20 @@ function handle_delete(): void {
                 $db->prepare("DELETE FROM products WHERE id = ?")->execute([$listing['product_id']]);
             }
         }
+
+    } elseif ($table === 'products') {
+        // Delete all listings for this product first, then the product
+        $lstmt = $db->prepare("SELECT id FROM listings WHERE product_id = ?");
+        $lstmt->execute([$id]);
+        $productListings = $lstmt->fetchAll();
+        foreach ($productListings as $pl) {
+            $db->prepare("DELETE FROM shipping_options WHERE listing_id = ?")->execute([$pl['id']]);
+            $db->prepare("DELETE FROM order_items WHERE listing_id = ?")->execute([$pl['id']]);
+            $db->prepare("DELETE FROM cart_items WHERE listing_id = ?")->execute([$pl['id']]);
+            $db->prepare("DELETE FROM listings WHERE id = ?")->execute([$pl['id']]);
+        }
+        $db->prepare("DELETE FROM products WHERE id = ?")->execute([$id]);
+
     } else {
         $db->prepare("DELETE FROM {$table} WHERE id = ?")->execute([$id]);
     }
