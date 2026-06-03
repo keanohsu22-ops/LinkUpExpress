@@ -128,15 +128,15 @@
           </div>
           <div>
             <h2>Product Images</h2>
-            <p>Upload up to 8 photos. First image will be the cover image.</p>
+            <p>Upload 1 product image.</p>
           </div>
         </div>
         <div class="section-body">
           <div class="upload-zone" id="upload-zone">
-            <input type="file" accept="image/*" multiple onchange="handleImages(event)" />
+            <input type="file" accept="image/*" onchange="handleImages(event)" />
             <div class="upload-icon">📸</div>
             <h4>Drag &amp; drop images here</h4>
-            <p>JPG, PNG or WEBP · Max 5 MB per image · Up to 8 images</p>
+            <p>JPG, PNG or WEBP · Max 5 MB</p>
             <span class="btn-browse">Browse Files</span>
           </div>
           <div class="image-previews" id="image-previews"></div>
@@ -323,9 +323,10 @@
     var uploadedImages = []; // stores base64 data URLs
 
     function handleImages(e) {
+      uploadedImages = []; // reset — only 1 image allowed
       var files = Array.from(e.target.files);
       files.forEach(function(file) {
-        if (uploadedImages.length >= 8) return;
+        if (uploadedImages.length >= 1) return; // max 1 image
         if (!file.type.startsWith('image/')) return;
         var reader = new FileReader();
         reader.onload = function(ev) {
