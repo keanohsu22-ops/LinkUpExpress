@@ -281,7 +281,8 @@ function handle_update(): void {
         $lParts = []; $lParams = [];
         foreach ($listingCols as $col) {
             if (isset($body[$col])) {
-                $lParts[]  = "{$col} = ?";
+                $colName   = $col === 'condition' ? '`condition`' : $col;
+                $lParts[]  = "{$colName} = ?";
                 $lParams[] = ($body[$col] === '' || $body[$col] === '—') ? null : $body[$col];
             }
         }
@@ -317,6 +318,7 @@ function handle_update(): void {
             }
         }
         admin_ok(['message' => 'Listing updated successfully.']);
+        return; // prevent fall-through to general update
     }
 
     // ── General update for all other tables ───────────────────────
