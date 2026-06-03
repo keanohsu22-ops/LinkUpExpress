@@ -92,7 +92,6 @@
         </div>
 
         <h1 class="product-title" id="product-title">Loading product...</h1>
-        <span class="rating-num" style="color:var(--gray-400);">No ratings yet</span>
         </div>
 
         <!-- PRICE -->
@@ -170,7 +169,6 @@
       <div class="seller-details">
         <div class="seller-name" id="product-seller">—</div>
         <div class="seller-meta">
-          <span id="seller-rating-display"></span>
           <span id="seller-phone-display"></span>
         </div>
       </div>
@@ -181,7 +179,6 @@
       <div class="tab-header">
         <button class="detail-tab-btn active" onclick="openTab('description')">Description</button>
         <button class="detail-tab-btn" onclick="openTab('specs')">Specifications</button>
-        <button class="detail-tab-btn" onclick="openTab('reviews')">Reviews</button>
       </div>
 
       <!-- DESCRIPTION -->
@@ -201,46 +198,6 @@
         </table>
       </div>
 
-      <!-- REVIEWS -->
-      <div class="tab-content" id="tab-reviews">
-        <!-- Existing reviews list -->
-        <div id="reviews-list" style="margin-bottom:24px;"></div>
-
-        <!-- Add review form -->
-        <div id="review-form-section" style="border-top:1px solid var(--gray-100);padding-top:20px;">
-          <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;color:var(--dark);">Leave a Review</h3>
-
-          <!-- Star rating -->
-          <div style="margin-bottom:12px;">
-            <label style="font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Your Rating</label>
-            <div id="star-selector" style="display:flex;gap:6px;font-size:28px;cursor:pointer;">
-              <span data-val="1" style="color:var(--gray-200);">★</span>
-              <span data-val="2" style="color:var(--gray-200);">★</span>
-              <span data-val="3" style="color:var(--gray-200);">★</span>
-              <span data-val="4" style="color:var(--gray-200);">★</span>
-              <span data-val="5" style="color:var(--gray-200);">★</span>
-            </div>
-          </div>
-
-          <div style="margin-bottom:12px;">
-            <label style="font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Review Title</label>
-            <input id="review-title" type="text" placeholder="Summarise your experience"
-              style="width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:Barlow,sans-serif;" />
-          </div>
-
-          <div style="margin-bottom:16px;">
-            <label style="font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Your Review</label>
-            <textarea id="review-body" rows="4" placeholder="Tell other buyers about your experience with this product..."
-              style="width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:Barlow,sans-serif;resize:vertical;"></textarea>
-          </div>
-
-          <button onclick="submitReview()" id="review-submit-btn"
-            style="background:var(--blue);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Barlow,sans-serif;">
-            Submit Review
-          </button>
-          <div id="review-feedback" style="margin-top:10px;font-size:13px;font-weight:600;display:none;"></div>
-        </div>
-      </div>
     </div>
 
       
