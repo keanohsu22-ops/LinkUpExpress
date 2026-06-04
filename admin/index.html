@@ -171,43 +171,43 @@
 
     <div class="sidebar-section">Overview</div>
     <button class="nav-btn active" onclick="showSection('dashboard')" id="nav-dashboard">
-      <span class="icon">📊</span> Dashboard
+      <span class="icon"></span> Dashboard
     </button>
 
     <div class="sidebar-section">Database Tables</div>
     <button class="nav-btn" onclick="showSection('users')" id="nav-users">
-      <span class="icon">👥</span> Users
+      <span class="icon"></span> Users
     </button>
     <button class="nav-btn" onclick="showSection('seller_profiles')" id="nav-seller_profiles">
-      <span class="icon">🏪</span> Seller Profiles
+      <span class="icon"></span> Seller Profiles
     </button>
     <button class="nav-btn" onclick="showSection('listings')" id="nav-listings">
-      <span class="icon">📦</span> Listings
+      <span class="icon"></span> Listings
     </button>
     <button class="nav-btn" onclick="showSection('products')" id="nav-products">
-      <span class="icon">🛍️</span> Products
+      <span class="icon"></span> Products
     </button>
     <button class="nav-btn" onclick="showSection('categories')" id="nav-categories">
-      <span class="icon">🏷️</span> Categories
+      <span class="icon"></span> Categories
     </button>
     <button class="nav-btn" onclick="showSection('orders')" id="nav-orders">
-      <span class="icon">📋</span> Orders
+      <span class="icon"></span> Orders
     </button>
     <button class="nav-btn" onclick="showSection('order_items')" id="nav-order_items">
-      <span class="icon">🔖</span> Order Items
+      <span class="icon"></span> Order Items
     </button>
     <button class="nav-btn" onclick="showSection('cart_items')" id="nav-cart_items">
-      <span class="icon">🛒</span> Cart Items
+      <span class="icon"></span> Cart Items
     </button>
 
     <div class="sidebar-section">Super Admin Only</div>
     <button class="nav-btn" onclick="showSection('admin_users')" id="nav-admin_users" style="display:none;">
-      <span class="icon">🛡️</span> Admin Users
+      <span class="icon"></span> Admin Users
     </button>
 
     <div class="sidebar-footer">
       <div id="admin-type-badge" style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:10px;padding:6px 10px;background:rgba(255,255,255,.05);border-radius:6px;text-align:center;"></div>
-      <button class="btn-logout" onclick="adminLogout()">🚪 Sign Out</button>
+      <button class="btn-logout" onclick="adminLogout()"> Sign Out</button>
     </div>
   </div>
 
@@ -220,7 +220,7 @@
         </button>
         <h1 id="page-title">Dashboard</h1>
       </div>
-      <span class="admin-badge">🔐 Admin: <span id="admin-name">—</span></span>
+      <span class="admin-badge"> Admin: <span id="admin-name">—</span></span>
     </div>
     <div class="content" id="content">
       <div class="loading">Loading...</div>
@@ -254,7 +254,7 @@
     // Set type badge in sidebar
     var badge = document.getElementById('admin-type-badge');
     if (badge) {
-      badge.textContent  = isSuperAdmin ? '🛡️ Super Admin' : '👤 Admin';
+      badge.textContent  = isSuperAdmin ? ' Super Admin' : ' Admin';
       badge.style.color  = isSuperAdmin ? 'var(--yellow)' : 'rgba(255,255,255,.5)';
     }
 
@@ -481,7 +481,7 @@
         html += '<label>Password *</label><input type="password" name="password" placeholder="Strong password"/>';
         html += '<label>Super Admin</label>';
         html += '<select name="super_admin"><option value="0">No — Regular Admin</option><option value="1">Yes — Super Admin</option></select>';
-        html += '<small style="color:var(--gray-400);font-size:11px;margin-top:8px;display:block;">⚠️ Super Admins can manage other admin accounts.</small>';
+        html += '<small style="color:var(--gray-400);font-size:11px;margin-top:8px;display:block;"> Super Admins can manage other admin accounts.</small>';
         document.getElementById('modal-fields').innerHTML = html;
         return;
       }
