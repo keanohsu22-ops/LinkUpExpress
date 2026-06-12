@@ -501,12 +501,12 @@
       </div>
 
       <!-- PAYMENT METHOD -->
-      <div class="card">
+      <div class="card" id="payment-method-card">
         <div class="card-header">
           <div class="step-badge">3</div>
           <h2>Payment Method</h2>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="payment-method-body">
           <div class="pay-methods" style="grid-template-columns:1fr;">
             <label class="pay-method selected" id="pm-card">
               <input type="radio" name="paymethod" value="card" checked />
@@ -544,6 +544,10 @@
             </div>
           </div>
 
+          <!-- Pickup notice — shown instead of card fields when Collect from Seller is chosen -->
+          <div id="pickup-notice" style="display:none;background:var(--gray-50);border:1.5px dashed var(--gray-200);border-radius:8px;padding:16px;text-align:center;color:var(--gray-600);font-size:13px;">
+            🏪 No payment required online. You'll arrange payment and collection directly with the seller.
+          </div>
 
         </div>
       </div>
@@ -670,8 +674,30 @@
           });
           radio.closest('.delivery-opt').classList.add('selected');
           renderSummary();
+          togglePaymentSection();
         });
       });
+      togglePaymentSection(); // run once on load
+    }
+
+    /* ── TOGGLE PAYMENT SECTION FOR PICKUP ── */
+    function togglePaymentSection() {
+      var cardFields   = document.getElementById('card-fields');
+      var pickupNotice = document.getElementById('pickup-notice');
+      var payMethods   = document.querySelector('#payment-method-body .pay-methods');
+      var btnPay       = document.getElementById('btn-pay');
+
+      if (selectedDelivery === 'pickup') {
+        if (cardFields)   cardFields.style.display   = 'none';
+        if (payMethods)   payMethods.style.display   = 'none';
+        if (pickupNotice) pickupNotice.style.display = 'block';
+        if (btnPay)        btnPay.textContent          = 'Place Order';
+      } else {
+        if (cardFields)   cardFields.style.display   = '';
+        if (payMethods)   payMethods.style.display   = '';
+        if (pickupNotice) pickupNotice.style.display = 'none';
+        if (btnPay)        btnPay.textContent          = 'Place Order & Pay';
+      }
     }
 
     /* ── PAYMENT METHOD ── */
@@ -701,6 +727,8 @@
     /* ── VALIDATE ── */
     function validate() {
       var ok = true;
+      // No payment validation needed for pickup — arranged with seller
+      if (selectedDelivery === 'pickup') return true;
       if (selectedPayMethod !== 'card') return true;
 
       var checks = [

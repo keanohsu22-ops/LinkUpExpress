@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   guardLogin();
   lue_syncHeader();
   populateProfileFromSession();
-  populateStats();
+  await populateStats();
   initSidebarNav();
   initSectionEditing();
   initRoleCards();
@@ -171,31 +171,50 @@ function setInput(id, value) {
    Pulls live counts from localStorage where available.
 ═══════════════════════════════════════════════════════════════════ */
 
-function populateStats() {
+async function populateStats() {
   const session  = lue_getSession();
   const cart     = lue_getCart();
 
   const statCards = document.querySelectorAll('.stat-card');
   if (statCards.length < 4) return;
 
-  // Orders placed — from session.totalOrders or fall back to stored user data
-  const users     = lue_getUsers();
-  const userRecord = users.find(function (u) { return session && u.id === session.id; });
-  const orders    = userRecord ? (userRecord.totalOrders || 0) : 0;
+  // Defaults from localStorage while we wait for the API
+  let orders = 0;
+  let saved  = 0;
+  let activeListings = 0;
+
+  // ── Fetch LIVE stats from the database ─────────────────────────
+  if (session && window.lue_apiUrl) {
+    try {
+      const res = await fetch(lue_apiUrl('profile') + '?action=get&user_id=' + encodeURIComponent(session.id), {
+        method: 'GET',
+        credentials: 'same-origin'
+      });
+      const data = await res.json();
+      if (data.ok && data.data) {
+        orders = data.data.total_orders || 0;
+        saved  = data.data.total_spent  || 0;
+        activeListings = data.data.active_listings || 0;
+      }
+    } catch (e) {
+      console.error('Could not load profile stats:', e);
+    }
+  }
 
   statCards[0].querySelector('.stat-num').textContent = orders;
+
   // Active listings — only relevant for sellers
   if (session && session.role === 'seller') {
-    statCards[2].querySelector('.stat-num').textContent = '—';
+    statCards[2].querySelector('.stat-num').textContent = activeListings;
     statCards[2].querySelector('.stat-label').textContent = 'Active listings';
   } else {
     statCards[2].querySelector('.stat-num').textContent = cart.length;
     statCards[2].querySelector('.stat-label').textContent = 'Items in cart';
   }
-  // Total saved — from userRecord
-  const saved = userRecord ? (userRecord.totalSpent || 0) : 0;
+
+  // Total saved
   statCards[3].querySelector('.stat-num').textContent =
-    saved > 0 ? 'R\u00A0' + saved.toLocaleString('en-ZA') : '—';
+    saved > 0 ? 'R\u00A0' + Number(saved).toLocaleString('en-ZA') : '—';
 }
 
 /* ═══════════════════════════════════════════════════════════════════

@@ -43,17 +43,50 @@ function handle_get()
     $profile = $stmt->fetch();
     if (!$profile) lue_error('User not found.', 404);
 
-    // Attach role-specific profile data
+    // Attach role-specific profile data with LIVE counts from the database
     if ($profile['role'] === 'buyer') {
         $bp = $db->prepare('SELECT id, total_orders, total_spent FROM buyer_profiles WHERE user_id = ?');
         $bp->execute([$user['id']]);
-        $profile['buyer_profile'] = $bp->fetch();
+        $buyerProfile = $bp->fetch();
+        $profile['buyer_profile'] = $buyerProfile;
+
+        if ($buyerProfile) {
+            // Live count of orders placed
+            $oc = $db->prepare('SELECT COUNT(*) AS cnt, COALESCE(SUM(total),0) AS spent FROM orders WHERE buyer_id = ?');
+            $oc->execute([$buyerProfile['id']]);
+            $orderStats = $oc->fetch();
+            $profile['total_orders'] = (int) $orderStats['cnt'];
+            $profile['total_spent']  = (float) $orderStats['spent'];
+        } else {
+            $profile['total_orders'] = 0;
+            $profile['total_spent']  = 0;
+        }
     } else {
         $sp = $db->prepare('SELECT id, store_name, store_bio, rating, total_sales, verified FROM seller_profiles WHERE user_id = ?');
         $sp->execute([$user['id']]);
-        $profile['seller_profile'] = $sp->fetch();
-    }
+        $sellerProfile = $sp->fetch();
+        $profile['seller_profile'] = $sellerProfile;
 
+        if ($sellerProfile) {
+            // Live count of active (live) listings
+            $lc = $db->prepare("SELECT COUNT(*) AS cnt FROM listings WHERE seller_id = ? AND status = 'live'");
+            $lc->execute([$sellerProfile['id']]);
+            $profile['active_listings'] = (int) $lc->fetch()['cnt'];
+
+            // Live count of total orders containing this seller's listings
+            $oc = $db->prepare("
+                SELECT COUNT(DISTINCT oi.order_id) AS cnt
+                FROM order_items oi
+                JOIN listings l ON l.id = oi.listing_id
+                WHERE l.seller_id = ?
+            ");
+            $oc->execute([$sellerProfile['id']]);
+            $profile['total_orders'] = (int) $oc->fetch()['cnt'];
+        } else {
+            $profile['active_listings'] = 0;
+            $profile['total_orders']    = 0;
+        }
+    }
 
     lue_ok($profile);
 }

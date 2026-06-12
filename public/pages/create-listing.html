@@ -320,25 +320,37 @@
       document.querySelector('[value="' + val + '"]').checked = true;
     }
 
-    var uploadedImages = []; // stores base64 data URLs
+    var uploadedImages = []; // stores base64 data URLs — max 1 image
+    var imageGeneration = 0;  // guards against async race conditions
 
     function handleImages(e) {
-      uploadedImages = []; // reset — only 1 image allowed
       var files = Array.from(e.target.files);
-      files.forEach(function(file) {
-        if (uploadedImages.length >= 1) return; // max 1 image
-        if (!file.type.startsWith('image/')) return;
-        var reader = new FileReader();
-        reader.onload = function(ev) {
-          var dataUrl = ev.target.result;
-          var idx = uploadedImages.length;
-          uploadedImages.push(dataUrl);
-          renderPreview(dataUrl, idx);
-          // Save image data to sessionStorage for preview page
-          try { sessionStorage.setItem('pendingListingImages', JSON.stringify(uploadedImages)); } catch(err) {}
-        };
-        reader.readAsDataURL(file);
-      });
+      if (files.length === 0) return;
+
+      var file = files[0]; // only ever process the first file
+      if (!file.type.startsWith('image/')) return;
+
+      // Increment generation — any in-flight reader from a previous
+      // selection will check this and bail out if it's stale.
+      imageGeneration++;
+      var myGeneration = imageGeneration;
+
+      // Clear previous preview + array immediately (synchronous)
+      var container = document.getElementById('image-previews');
+      if (container) container.innerHTML = '';
+      uploadedImages = [];
+
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        // Ignore stale reads from a superseded selection
+        if (myGeneration !== imageGeneration) return;
+
+        var dataUrl = ev.target.result;
+        uploadedImages = [dataUrl]; // always exactly 1 image
+        renderPreview(dataUrl, 0);
+        try { sessionStorage.setItem('pendingListingImages', JSON.stringify(uploadedImages)); } catch(err) {}
+      };
+      reader.readAsDataURL(file);
     }
 
     function renderPreview(dataUrl, idx) {
@@ -355,8 +367,12 @@
     function removeImage(idx) {
       var el = document.getElementById('preview-' + idx);
       if (el) el.remove();
-      uploadedImages.splice(idx, 1);
+      uploadedImages = [];
+      imageGeneration++; // invalidate any in-flight reader
       try { sessionStorage.setItem('pendingListingImages', JSON.stringify(uploadedImages)); } catch(err) {}
+      // Allow re-selecting the same file
+      var fileInput = document.querySelector('input[type="file"][accept="image/*"]');
+      if (fileInput) fileInput.value = '';
     }
 
     function saveDraft() {
