@@ -1,3 +1,15 @@
+// Robustly redirect to the project's index.html regardless of current page depth
+function _redirectToHome() {
+  var href = window.location.href;
+  if (href.includes('/public/')) {
+    window.location.href = href.substring(0, href.indexOf('/public/')) + '/index.html';
+  } else {
+    var parts = href.split('/');
+    parts.pop();
+    window.location.href = parts.join('/') + '/index.html';
+  }
+}
+
 /**
  * signup.js — LinkUp Express Sign Up / Login Page
  * ─────────────────────────────────────────────────────────────────
@@ -26,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   await lue_initSession();
   // If user is already logged in redirect to homepage
   if (lue_isLoggedIn()) {
-    window.location.href = '../../index.html';
+    _redirectToHome();
     return;
   }
 
@@ -173,7 +185,7 @@ async function handleRegister(formOrEvent) {
       submitBtn.textContent = '✓ Account created!';
       var firstName = (result.data.fullName || fullName).split(' ')[0];
       showFormBanner(form, 'Welcome to LinkUp Express, ' + firstName + '! Redirecting…', 'success');
-      setTimeout(function() { window.location.href = '../../index.html'; }, 1400);
+      setTimeout(function() { _redirectToHome(); }, 1400);
     } else {
       submitBtn.disabled    = false;
       submitBtn.textContent = 'Create My Account';
@@ -321,7 +333,7 @@ async function handleLogin(formOrEvent) {
       submitBtn.textContent = '✓ Signed in!';
       var firstName = (result.data.fullName || '').split(' ')[0];
       showFormBanner(form, 'Welcome back, ' + firstName + '! Redirecting…', 'success');
-      setTimeout(function() { window.location.href = '../../index.html'; }, 1200);
+      setTimeout(function() { _redirectToHome(); }, 1200);
     } else {
       submitBtn.disabled    = false;
       submitBtn.textContent = 'Log In to My Account';
