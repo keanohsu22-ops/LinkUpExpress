@@ -175,10 +175,7 @@ async function populateStats() {
   const session  = lue_getSession();
   const cart     = lue_getCart();
 
-  const statCards = document.querySelectorAll('.stat-card');
-  if (statCards.length < 4) return;
-
-  // Defaults from localStorage while we wait for the API
+  // Defaults while we wait for the API
   let orders = 0;
   let saved  = 0;
   let activeListings = 0;
@@ -201,20 +198,32 @@ async function populateStats() {
     }
   }
 
-  statCards[0].querySelector('.stat-num').textContent = orders;
+  // Orders placed
+  setEl('stat-orders', orders);
 
-  // Active listings — only relevant for sellers
+  // Active listings (sellers) or items in cart (buyers)
+  const listingsLabelEl = document.querySelector('#stat-listings').nextElementSibling
+    || document.querySelector('#stat-listings ~ .stat-label');
+  const statListingsCard = document.getElementById('stat-listings')
+    ? document.getElementById('stat-listings').closest('.stat-card')
+    : null;
+
   if (session && session.role === 'seller') {
-    statCards[2].querySelector('.stat-num').textContent = activeListings;
-    statCards[2].querySelector('.stat-label').textContent = 'Active listings';
+    setEl('stat-listings', activeListings);
+    if (statListingsCard) {
+      const label = statListingsCard.querySelector('.stat-label');
+      if (label) label.textContent = 'Active listings';
+    }
   } else {
-    statCards[2].querySelector('.stat-num').textContent = cart.length;
-    statCards[2].querySelector('.stat-label').textContent = 'Items in cart';
+    setEl('stat-listings', cart.length);
+    if (statListingsCard) {
+      const label = statListingsCard.querySelector('.stat-label');
+      if (label) label.textContent = 'Items in cart';
+    }
   }
 
   // Total saved
-  statCards[3].querySelector('.stat-num').textContent =
-    saved > 0 ? 'R\u00A0' + Number(saved).toLocaleString('en-ZA') : '—';
+  setEl('stat-saved', saved > 0 ? 'R\u00A0' + Number(saved).toLocaleString('en-ZA') : '—');
 }
 
 /* ═══════════════════════════════════════════════════════════════════
