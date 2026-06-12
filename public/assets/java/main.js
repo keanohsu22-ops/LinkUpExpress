@@ -210,3 +210,13 @@ function initHeaderSignIn() {
     });
   }
 }
+
+/** Handle "+ Sell" button click — go to create-listing if logged in, else signup */
+function handleSellClick() {
+  if (lue_isLoggedIn()) {
+    window.location.href = _page('create-listing.html');
+  } else {
+    window.location.href = _page('signup.html');
+  }
+}
+window.handleSellClick = handleSellClick;
