@@ -38,7 +38,7 @@ function handle_get()
     $user = lue_require_auth();
     $db   = lue_db();
 
-    $stmt = $db->prepare('SELECT id, full_name, email, phone, role, status, email_verified, created_at, last_login FROM users WHERE id = ?');
+    $stmt = $db->prepare('SELECT id, full_name, email, phone, role, status, email_verified, created_at FROM users WHERE id = ?');
     $stmt->execute([$user['id']]);
     $profile = $stmt->fetch();
     if (!$profile) lue_error('User not found.', 404);
