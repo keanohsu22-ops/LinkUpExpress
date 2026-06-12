@@ -222,6 +222,14 @@ function lue_syncHeader() {
     badge.textContent   = total > 0 ? String(total) : '';
     badge.style.display = total > 0 ? 'flex' : 'none';
   }
+
+  // Update the Sign In button / user dropdown based on login state
+  if (typeof updateHeaderAuthUI === 'function') {
+    updateHeaderAuthUI();
+  }
+  if (typeof initHeaderSignIn === 'function') {
+    initHeaderSignIn();
+  }
 }
 window.lue_syncHeader = lue_syncHeader;
 

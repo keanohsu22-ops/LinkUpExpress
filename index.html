@@ -286,6 +286,8 @@
     document.addEventListener('DOMContentLoaded', async function() {
       // Load session from PHP
       await lue_initSession();
+      // Update header UI (Sign In button vs user dropdown)
+      if (typeof lue_syncHeader === 'function') lue_syncHeader();
       // ── Cart badge ─────────────────────────────────────────────
       var cart = [];
       try { cart = JSON.parse(localStorage.getItem('lue_cart') || '[]'); } catch(e) {}
