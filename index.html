@@ -115,8 +115,8 @@
 
       <!-- Search -->
       <div class="search-bar">
-        <input type="text" placeholder="Search for products, brands, categories…" />
-        <button class="search-btn">
+        <input type="text" id="site-search-input" placeholder="Search for products, brands, categories…" onkeyup="if(event.key==='Enter') runSiteSearch()" oninput="runSiteSearch()" />
+        <button class="search-btn" onclick="runSiteSearch()" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </svg>
@@ -343,6 +343,7 @@
       card.style.cursor    = 'pointer';
       // Make the whole card clickable except the button
       card.setAttribute('data-category', (category || '').toLowerCase());
+      card.setAttribute('data-search', (name + ' ' + brand + ' ' + category + ' ' + seller).toLowerCase());
       card.style.cursor = 'pointer';
       card.addEventListener('click', function(e) {
         if (e.target.tagName === 'BUTTON') return;
@@ -453,9 +454,44 @@
 
     // Category filter for product grid
     var _allProductCards = [];
+    function runSiteSearch() {
+      var input = document.getElementById('site-search-input');
+      var grid  = document.getElementById('product-grid');
+      var noMsg = document.getElementById('no-products-msg');
+      if (!input || !grid) return;
+
+      var query = input.value.trim().toLowerCase();
+
+      // Cache cards if not already cached
+      if (_allProductCards.length === 0) {
+        _allProductCards = Array.from(grid.children);
+      }
+
+      // Reset category filter highlight to "All" when searching
+      if (query) {
+        document.querySelectorAll('.cat-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        var allBtn = document.querySelector('.cat-filter-btn');
+        if (allBtn) allBtn.classList.add('active');
+      }
+
+      var anyVisible = false;
+      _allProductCards.forEach(function(card) {
+        var haystack = card.getAttribute('data-search') || '';
+        var match = !query || haystack.includes(query);
+        card.style.display = match ? '' : 'none';
+        if (match) anyVisible = true;
+      });
+
+      if (noMsg) noMsg.style.display = anyVisible ? 'none' : '';
+    }
+    window.runSiteSearch = runSiteSearch;
+
     function filterByCategory(btn, cat) {
       document.querySelectorAll('.cat-filter-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
+      // Clear search when switching categories
+      var searchInput = document.getElementById('site-search-input');
+      if (searchInput) searchInput.value = '';
       var grid = document.getElementById('product-grid');
       if (!grid) return;
       // If no cards cached yet, cache them now
