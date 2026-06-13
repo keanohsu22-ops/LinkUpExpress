@@ -214,7 +214,7 @@
       <div class="product-grid" id="product-grid">
       </div>
       <div id="no-products-msg" style="text-align:center; padding:60px 20px; color:var(--gray-400);">
-        <div style="font-size:48px; margin-bottom:16px;">🛍️</div>
+        <div style="font-size:48px; margin-bottom:16px;"></div>
         <h3 style="font-family:var(--font-cond);font-size:22px;color:var(--blue);margin-bottom:8px;">No products yet</h3>
         <p style="font-size:14px;">Products added by sellers will appear here.</p>
       </div>
@@ -264,7 +264,7 @@
   </a>
 
   <script>
-    /* Category sidebar filter - unused */
+    /* Category sidebar filter  */
     function filterCategory(btn, category) {
       document.querySelectorAll('.sidebar-link').forEach(function(el) { el.classList.remove('active'); });
       btn.classList.add('active');
@@ -288,14 +288,14 @@
       await lue_initSession();
       // Update header UI (Sign In button vs user dropdown)
       if (typeof lue_syncHeader === 'function') lue_syncHeader();
-      // ── Cart badge ─────────────────────────────────────────────
+      // ── Cart badge 
       var cart = [];
       try { cart = JSON.parse(localStorage.getItem('lue_cart') || '[]'); } catch(e) {}
       var total = cart.reduce(function(s,i){ return s + (i.quantity||1); }, 0);
       var badge = document.getElementById('cart-count');
       if (badge) { badge.textContent = total||''; badge.style.display = total > 0 ? 'flex' : 'none'; }
 
-      // ── Load products from database ────────────────────────────
+      // ── Load products from database 
       loadProducts();
     });
 
@@ -335,7 +335,6 @@
 
     function makeProductCard(id, name, brand, category, seller, price, imageUrls) {
       var catLower = category.toLowerCase();
-      var emoji    = getCategoryEmoji(catLower);
       var priceStr = price.toLocaleString('en-ZA', { minimumFractionDigits: 2 });
       var card = document.createElement('div');
       card.className       = 'product-card';
@@ -350,7 +349,7 @@
         if (id) sessionStorage.setItem('viewingListingId', String(id));
         window.location.href = 'public/pages/product-detail.html?id=' + encodeURIComponent(id);
       });
-      // Get first image from image_urls (JSON array of base64 strings)
+      // Get first image from image_urls 
       var imgHtml;
       var firstImg = '';
       if (imageUrls) {
@@ -361,12 +360,8 @@
           if (typeof imageUrls === 'string' && imageUrls.startsWith('data:')) firstImg = imageUrls;
         }
       }
-      if (firstImg) {
-        imgHtml = '<div style="height:180px;overflow:hidden;border-radius:var(--radius) var(--radius) 0 0;">' +
+      imgHtml = '<div style="height:180px;overflow:hidden;border-radius:var(--radius) var(--radius) 0 0;">' +
           '<img src="' + firstImg + '" alt="' + esc(name) + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/></div>';
-      } else {
-        imgHtml = '<div style="background:var(--gray-50);display:flex;align-items:center;justify-content:center;height:180px;font-size:64px;">' + emoji + '</div>';
-      }
       card.innerHTML =
         imgHtml +
         '<div style="padding:12px;">' +
@@ -387,7 +382,7 @@
     }
 
     function loadLocalListings(grid, noMsg) {
-      // Never use localStorage for products — always show empty state
+      
       // so deleted listings don't appear
       if (noMsg) noMsg.style.display = 'block';
       return;
@@ -406,21 +401,6 @@
       });
     }
 
-    function getCategoryEmoji(cat) {
-      cat = (cat || '').toLowerCase();
-      if (cat.includes('gaming') | cat.includes('game'))         return '🎮';
-      if (cat.includes('phone') | cat.includes('mobile'))        return '📱';
-      if (cat.includes('laptop') | cat.includes('computer'))     return '💻';
-      if (cat.includes('audio') | cat.includes('headphone'))     return '🎧';
-      if (cat.includes('camera'))                                  return '📷';
-      if (cat.includes('tv') | cat.includes('display'))          return '🖥️';
-      if (cat.includes('fashion') | cat.includes('clothing'))    return '👗';
-      if (cat.includes('kitchen') | cat.includes('home'))        return '🏠';
-      if (cat.includes('sport'))                                   return '⚽';
-      if (cat.includes('electronic'))                             return '⚡';
-      return '📦';
-    }
-
     function addToCartQuick(id, name, price) {
       var cart = [];
       try { cart = JSON.parse(localStorage.getItem('lue_cart') || '[]'); } catch(e) {}
@@ -428,11 +408,13 @@
       if (existing) { existing.quantity = (existing.quantity || 1) + 1; }
       else { cart.push({ id: id, name: name, price: price, quantity: 1 }); }
       localStorage.setItem('lue_cart', JSON.stringify(cart));
-      // Update badge
+      
+
       var badge = document.getElementById('cart-count');
       var total = cart.reduce(function(s,i){ return s + (i.quantity||1); }, 0);
       if (badge) { badge.textContent = total; badge.style.display = 'flex'; }
-      // Show quick toast
+      
+
       var t = document.createElement('div');
       t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;padding:12px 24px;border-radius:32px;font-weight:600;font-size:13px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);';
       t.textContent = '✓ ' + name + ' added to cart!';
