@@ -1,9 +1,4 @@
-/**
- * auth.js — LinkUp Express
- * Pure database authentication — zero localStorage for user data.
- * PHP session cookie keeps the user logged in across pages.
- * Cart items are the only thing stored in localStorage.
- */
+
 
 'use strict';
 
@@ -26,9 +21,7 @@ function lue_passwordStrength(password) {
 }
 window.lue_passwordStrength = lue_passwordStrength;
 
-/* ════════════════════════════════════════════════════════════════
-   API URL BUILDER
-════════════════════════════════════════════════════════════════ */
+
 function lue_apiUrl(endpoint) {
   var href = window.location.href;
   if (href.includes('/public/pages/')) {
@@ -53,11 +46,7 @@ function lue_apiUrl(endpoint) {
 }
 window.lue_apiUrl = lue_apiUrl;
 
-/* ════════════════════════════════════════════════════════════════
-   SESSION — stored in PHP only, fetched via API
-   _lueSession is an in-memory variable for the current page only.
-   It is populated by lue_initSession() on every page load.
-════════════════════════════════════════════════════════════════ */
+
 var _lueSession = null;
 
 /**
@@ -122,9 +111,7 @@ function lue_isLoggedIn() {
 }
 window.lue_isLoggedIn = lue_isLoggedIn;
 
-/* ════════════════════════════════════════════════════════════════
-   CORE API CALLER
-════════════════════════════════════════════════════════════════ */
+
 async function lue_api(endpoint, action, method, body) {
   method = method || 'GET';
   var userId = _lueSession ? (_lueSession.id || '') : '';
@@ -153,9 +140,7 @@ async function lue_api(endpoint, action, method, body) {
 }
 window.lue_api = lue_api;
 
-/* ════════════════════════════════════════════════════════════════
-   LOGOUT
-════════════════════════════════════════════════════════════════ */
+
 async function lue_logout() {
   try {
     await fetch(lue_apiUrl('auth') + '?action=logout', {
@@ -180,9 +165,7 @@ async function lue_logout() {
 }
 window.lue_logout = lue_logout;
 
-/* ════════════════════════════════════════════════════════════════
-   CART — localStorage only (no sensitive data)
-════════════════════════════════════════════════════════════════ */
+
 var CART_KEY = 'lue_cart';
 
 function lue_getCart() {
@@ -211,9 +194,7 @@ window.lue_addToCart    = lue_addToCart;
 window.lue_removeFromCart = lue_removeFromCart;
 window.lue_clearCart    = lue_clearCart;
 
-/* ════════════════════════════════════════════════════════════════
-   HEADER SYNC
-════════════════════════════════════════════════════════════════ */
+
 function lue_syncHeader() {
   var cart  = lue_getCart();
   var total = cart.reduce(function (s, i) { return s + (i.quantity || 1); }, 0);
@@ -233,9 +214,7 @@ function lue_syncHeader() {
 }
 window.lue_syncHeader = lue_syncHeader;
 
-/* ════════════════════════════════════════════════════════════════
-   TOAST
-════════════════════════════════════════════════════════════════ */
+
 function lue_toast(message, type, duration) {
   type     = type     || 'success';
   duration = duration || 3000;
@@ -261,9 +240,7 @@ function lue_toast(message, type, duration) {
 }
 window.lue_toast = lue_toast;
 
-/* ════════════════════════════════════════════════════════════════
-   FIELD ERROR HELPERS
-════════════════════════════════════════════════════════════════ */
+
 function lue_fieldError(field, message) {
   if (!field) return;
   field.style.borderColor = '#C0392B';
@@ -286,9 +263,7 @@ function lue_clearFieldError(field) {
 window.lue_fieldError      = lue_fieldError;
 window.lue_clearFieldError = lue_clearFieldError;
 
-/* ════════════════════════════════════════════════════════════════
-   UTILITIES
-════════════════════════════════════════════════════════════════ */
+
 function lue_formatZAR(amount) {
   return 'R\u00A0' + Number(amount).toLocaleString('en-ZA', {
     minimumFractionDigits: 2, maximumFractionDigits: 2
@@ -298,9 +273,7 @@ function lue_navigate(path) { window.location.href = path; }
 window.lue_formatZAR = lue_formatZAR;
 window.lue_navigate  = lue_navigate;
 
-/* ════════════════════════════════════════════════════════════════
-   FORM UTILITIES (used by signup.js)
-════════════════════════════════════════════════════════════════ */
+
 function lue_clearAllErrors(form) {
   if (!form) return;
   form.querySelectorAll('.lue-field-error').forEach(function(e) { e.remove(); });

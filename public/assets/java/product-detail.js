@@ -1,32 +1,8 @@
-/**
- * product-detail.js — LinkUp Express
- * ─────────────────────────────────────────────────────────────────
- * Handles all interactive behaviour on product-detail.html:
- *
- *   1.  Header auth sync (cart badge, user menu)
- *   2.  Image gallery — thumbnail switching with zoom effect
- *   3.  Colour swatch selection with live label update
- *   4.  Quantity selector (+/−) with min/max guards
- *   5.  Add to Cart — persists to localStorage via auth.js helpers
- *   6.  Buy Now — cart then redirects to cart page
- *   7.  Wishlist heart toggle — persists state in localStorage
- *   8.  Detail tabs (Description / Specifications / Reviews)
- *   9.  Related product card Add to Cart buttons
- *   10. Stock countdown urgency display
- *   11. Breadcrumb back navigation
- *   12. Sell button guard (login / role check)
- *
- * Dependencies: auth.js must be loaded before this file.
- * ─────────────────────────────────────────────────────────────────
- */
+
 
 'use strict';
 
-/* ═══════════════════════════════════════════════════════════════════
-   PRODUCT STATE
-   Holds the current page's product data and selected options.
-   In a real backend this would be populated from an API response.
-═══════════════════════════════════════════════════════════════════ */
+
 
 // Live product data — populated by loadProductFromApi
 var PRODUCT = {
@@ -46,9 +22,7 @@ var selectedQty    = 1;
 var selectedColour = '';
 var wishlisted     = false;
 
-/* ═══════════════════════════════════════════════════════════════════
-   BOOT
-═══════════════════════════════════════════════════════════════════ */
+
 
 document.addEventListener('DOMContentLoaded', async function () {
   // Must init session FIRST before any function that calls lue_isLoggedIn()
@@ -216,9 +190,7 @@ async function loadProductFromApi(listingId) {
     console.warn('loadProductFromApi error:', e.message);
   }
 }
-/* ═══════════════════════════════════════════════════════════════════
-   1. HEADER CART BADGE
-═══════════════════════════════════════════════════════════════════ */
+
 
 function syncCartBadge() {
   const count = lue_getCart().reduce(function (s, i) { return s + (i.quantity || 1); }, 0);
@@ -229,13 +201,7 @@ function syncCartBadge() {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   2. IMAGE GALLERY — thumbnail switching
-═══════════════════════════════════════════════════════════════════ */
 
-/* ═══════════════════════════════════════════════════════════════════
-   STAR RATING SELECTOR
-═══════════════════════════════════════════════════════════════════ */
 var _selectedRating = 0;
 
 function initStarSelector() {
@@ -261,9 +227,7 @@ function initStarSelector() {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   SUBMIT REVIEW
-═══════════════════════════════════════════════════════════════════ */
+
 function initGallery() {
   document.querySelectorAll('.thumb').forEach(function (thumb) {
     thumb.addEventListener('click', function () {
@@ -317,9 +281,7 @@ window.setThumb = function (el, emoji) {
   }
 };
 
-/* ═══════════════════════════════════════════════════════════════════
-   3. COLOUR SWATCHES
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initColourSwatches() {
   document.querySelectorAll('.color-swatch').forEach(function (swatch) {
@@ -353,9 +315,7 @@ window.selectColor = function (el, name) {
   selectedColour = name;
 };
 
-/* ═══════════════════════════════════════════════════════════════════
-   4. QUANTITY SELECTOR
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initQuantitySelector() {
   // The qty buttons use inline onclick="changeQty(-1/+1)" — expose them
@@ -386,9 +346,7 @@ function changeQty(delta) {
 }
 window.changeQty = changeQty;
 
-/* ═══════════════════════════════════════════════════════════════════
-   5. ADD TO CART
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initAddToCart() {
   const btn = document.querySelector('.btn-add-cart');
@@ -473,9 +431,7 @@ function animateAddToCartBtn() {
 // Expose for inline onclick="addToCart()"
 window.addToCart = function () { handleAddToCart(); };
 
-/* ═══════════════════════════════════════════════════════════════════
-   6. BUY NOW
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initBuyNow() {
   const btn = document.querySelector('.btn-buy-now');
@@ -492,9 +448,7 @@ function initBuyNow() {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   7. WISHLIST HEART BUTTON
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initWishlistButton() {
   const btn = document.getElementById('wishlist-btn');
@@ -531,9 +485,7 @@ function updateHeartIcon(isFilled) {
 // Expose for inline onclick="toggleWishlist()"
 window.toggleWishlist = function () { handleWishlistToggle(); };
 
-/* ═══════════════════════════════════════════════════════════════════
-   8. DETAIL TABS (Description / Specifications / Reviews)
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initDetailTabs() {
   document.querySelectorAll('.detail-tab-btn').forEach(function (btn, index) {
@@ -575,9 +527,7 @@ function openTab(tab) {
 }
 window.openTab = openTab;
 
-/* ═══════════════════════════════════════════════════════════════════
-   9. RELATED PRODUCT CARDS
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initRelatedCards() {
   document.querySelectorAll('.btn-card-cart').forEach(function (btn) {
@@ -620,10 +570,7 @@ function initRelatedCards() {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   10. STOCK URGENCY DISPLAY
-   Shows a red "low stock" warning when stock is 5 or fewer.
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initStockUrgency() {
   const stockQtyEl = document.querySelector('.stock-qty');
@@ -643,9 +590,7 @@ function initStockUrgency() {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   11. SELL BUTTON GUARD
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initSellButton() {
   document.querySelectorAll('.btn-sell').forEach(function (btn) {
@@ -664,9 +609,7 @@ function initSellButton() {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   TOAST — uses the existing #toast element in the HTML
-═══════════════════════════════════════════════════════════════════ */
+
 
 function showProductToast(msg) {
   const toast = document.getElementById('toast');

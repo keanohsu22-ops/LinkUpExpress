@@ -1,41 +1,12 @@
-/**
- * profile.js — LinkUp Express User Profile Page
- * ─────────────────────────────────────────────────────────────────
- * Handles all interactive behaviour on profile.html:
- *
- *   1.  Load the logged-in user's data and populate all fields
- *   2.  Populate stats strip (orders, wishlist items, listings, saved)
- *   3.  Sidebar navigation — smooth scroll + active state tracking
- *   4.  Edit / Save / Cancel per section
- *       · Personal details (name, display name, DOB)
- *       · Contact info   (email, phone, alt phone)
- *       · Delivery address (street, city, postal, province, country)
- *       · Password & security
- *   5.  Live updates — avatar initials + sidebar name/email on input
- *   6.  Role selector cards (Buyer ↔ Seller) — persists to localStorage
- *   7.  Password strength meter
- *   8.  Show / hide password toggles
- *   9.  Per-field inline validation with error messages
- *   10. Delete account with confirmation dialog
- *   11. Toast notifications (success / error / info)
- *   12. Redirect to login if no active session
- *   13. Avatar photo upload placeholder
- *
- * Dependencies: auth.js must be loaded before this file.
- * ─────────────────────────────────────────────────────────────────
- */
+
 
 'use strict';
 
-/* ═══════════════════════════════════════════════════════════════════
-   STATE — snapshot of field values before editing (for cancel)
-═══════════════════════════════════════════════════════════════════ */
+
 
 const originalValues = {};
 
-/* ═══════════════════════════════════════════════════════════════════
-   BOOT
-═══════════════════════════════════════════════════════════════════ */
+
 
 document.addEventListener('DOMContentLoaded', async function () {
   await lue_initSession();
@@ -53,9 +24,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   trackScrollForSidebar();
 });
 
-/* ═══════════════════════════════════════════════════════════════════
-   1. LOGIN GUARD
-═══════════════════════════════════════════════════════════════════ */
 
 function guardLogin() {
   if (!lue_isLoggedIn()) {
@@ -64,11 +32,7 @@ function guardLogin() {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   2. POPULATE PROFILE FROM SESSION
-   Reads the active session and fills every read-view field value
-   as well as pre-filling the edit input values.
-═══════════════════════════════════════════════════════════════════ */
+
 
 function populateProfileFromSession() {
   var session = lue_getSession();
@@ -152,7 +116,7 @@ function populateProfileFromSession() {
     setInput('i-dob', session.dob);
   }
 
-  // ── Role card ─────────────────────────────────────────────────
+  // ── Role card ──────────────────────────────────
   applyRoleCard(session.role || 'buyer');
 }
 
@@ -166,10 +130,7 @@ function setInput(id, value) {
   if (el) el.value = value;
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   3. STATS STRIP
-   Pulls live counts from localStorage where available.
-═══════════════════════════════════════════════════════════════════ */
+
 
 async function populateStats() {
   const session  = lue_getSession();
@@ -226,9 +187,7 @@ async function populateStats() {
   setEl('stat-saved', saved > 0 ? 'R\u00A0' + Number(saved).toLocaleString('en-ZA') : '—');
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   4. SIDEBAR NAVIGATION
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initSidebarNav() {
   document.querySelectorAll('.sidebar-nav-item').forEach(function (item) {
@@ -292,13 +251,10 @@ function trackScrollForSidebar() {
   }, { passive: true });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   5. SECTION EDIT / SAVE / CANCEL
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initSectionEditing() {
-  // All edit/save/cancel buttons use inline onclick= in the HTML.
-  // We only need to expose the functions globally here.
+  
 }
 
 /**
@@ -373,7 +329,7 @@ function saveSection(id) {
 
   let hasError = false;
 
-  // ── PERSONAL ─────────────────────────────────────────────────
+  // ── PERSONAL ──────────────────────────────────────
   if (id === 'personal') {
     const firstName   = getVal('i-first-name');
     const lastName    = getVal('i-last-name');
@@ -408,7 +364,7 @@ function saveSection(id) {
     showToast('Personal details saved!');
   }
 
-  // ── CONTACT ──────────────────────────────────────────────────
+  // ── CONTACT ─────────────────────────────────────
   else if (id === 'contact') {
     const email    = getVal('i-email');
     const phone    = getVal('i-phone');
@@ -440,7 +396,7 @@ function saveSection(id) {
     showToast('Contact information saved!');
   }
 
-  // ── ADDRESS ───────────────────────────────────────────────────
+  // ── ADDRESS ────────────────────────────────────
   else if (id === 'address') {
     var street   = getVal('i-street');
     var city     = getVal('i-city');
@@ -509,7 +465,7 @@ function saveSection(id) {
     showToast('Delivery address saved!');
   }
 
-  // ── PASSWORD ──────────────────────────────────────────────────
+  // ── PASSWORD ─────────────────────────
   else if (id === 'password') {
     const currentPwd = document.getElementById('i-current-pwd')?.value || '';
     const newPwd     = document.getElementById('i-new-pwd')?.value || '';
@@ -561,7 +517,7 @@ function saveSection(id) {
 }
 window.saveSection = saveSection;
 
-/* ── Field helpers ─────────────────────────────────────────────── */
+/* ── Field helpers ─────────────────── */
 
 function getVal(id) {
   const el = document.getElementById(id);
@@ -635,9 +591,7 @@ function formatDOBDisplay(dobStr) {
   return dobStr;
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   6. LIVE UPDATES — avatar initials + sidebar
-═══════════════════════════════════════════════════════════════════ */
+
 
 function updateAvatarInitials(first, last) {
   const initials = ((first || '').charAt(0) + (last || '').charAt(0)).toUpperCase();
@@ -659,9 +613,7 @@ function updateSidebarEmail() {
 }
 window.updateSidebarEmail = updateSidebarEmail;
 
-/* ═══════════════════════════════════════════════════════════════════
-   7. ROLE SELECTOR CARDS
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initRoleCards() {
   document.querySelectorAll('.role-option').forEach(function (card) {
@@ -730,9 +682,7 @@ function selectRole(role) {
 }
 window.selectRole = selectRole;
 
-/* ═══════════════════════════════════════════════════════════════════
-   8. PASSWORD TOGGLES (show / hide)
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initPasswordToggles() {
   // Toggles use inline onclick="togglePwd('inputId')" — just expose the function.
@@ -759,9 +709,7 @@ function togglePwd(inputId) {
 }
 window.togglePwd = togglePwd;
 
-/* ═══════════════════════════════════════════════════════════════════
-   9. PASSWORD STRENGTH METER
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initPasswordStrength() {
   const newPwd = document.getElementById('i-new-pwd');
@@ -801,9 +749,7 @@ function resetStrengthBars() {
   if (lbl) { lbl.textContent = ''; lbl.style.color = ''; }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   10. AVATAR UPLOAD PLACEHOLDER
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initAvatarUpload() {
   const btn = document.querySelector('.avatar-edit-btn');
@@ -813,9 +759,7 @@ function initAvatarUpload() {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   11. DELETE ACCOUNT
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initDeleteAccount() {
   const deleteBtn = document.querySelector('.btn-danger');
@@ -864,9 +808,7 @@ function confirmDelete() {
 }
 window.confirmDelete = confirmDelete;
 
-/* ═══════════════════════════════════════════════════════════════════
-   12. TOAST — uses existing #toast element in profile.html
-═══════════════════════════════════════════════════════════════════ */
+
 
 function showToast(msg, type) {
   const toast = document.getElementById('toast');

@@ -1,21 +1,4 @@
-/**
- * main.js — LinkUp Express Homepage
- * ─────────────────────────────────────────────────────────────────
- * Handles all interactive behaviour on index.html:
- *
- *   1. Header auth state sync (Sign In / user name / logout)
- *   2. Search bar functionality
- *   3. Category card navigation
- *   4. Product card Add to Cart and Wishlist buttons
- *   5. Brand pill active toggle
- *   6. Sell button — redirects to create-listing or signup
- *   7. Mini login modal triggered from header Sign In button
- *   8. Scroll-to-top button
- *   9. Toast notifications
- *
- * Dependencies: auth.js must be loaded before this file.
- * ─────────────────────────────────────────────────────────────────
- */
+
 
 'use strict';
 

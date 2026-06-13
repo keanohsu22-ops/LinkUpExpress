@@ -10,29 +10,11 @@ function _redirectToHome() {
   }
 }
 
-/**
- * signup.js — LinkUp Express Sign Up / Login Page
- * ─────────────────────────────────────────────────────────────────
- * Handles all interactive behaviour on signup.html:
- *
- *   1. Tab switching between Create Account and Log In panels
- *   2. Registration form — full validation, field errors, submission
- *   3. Login form — validation, error feedback, submission
- *   4. Role selector cards (Buyer / Seller)
- *   5. Password strength meter (register form)
- *   6. Show / hide password toggles
- *   7. Redirect after successful login or registration
- *   8. If already logged in, skip to homepage
- *
- * Dependencies: auth.js must be loaded before this file.
- * ─────────────────────────────────────────────────────────────────
- */
+
 
 'use strict';
 
-/* ═══════════════════════════════════════════════════════════════════
-   BOOT
-═══════════════════════════════════════════════════════════════════ */
+
 
 document.addEventListener('DOMContentLoaded', async function () {
   await lue_initSession();
@@ -56,9 +38,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 });
 
-/* ═══════════════════════════════════════════════════════════════════
-   1. TAB SWITCHER
-═══════════════════════════════════════════════════════════════════ */
+
 
 /**
  * Switch between the Create Account and Log In panels.
@@ -100,9 +80,7 @@ function initTabSwitcher() {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   2. REGISTRATION FORM
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initRegisterForm() {
   const form = document.getElementById('signup-form');
@@ -204,7 +182,7 @@ async function handleRegister(formOrEvent) {
   }
 }
 
-/* ── Per-field validators ──────────────────────────────────────── */
+
 
 function validateFullName(el) {
   if (!el) return true;
@@ -256,9 +234,7 @@ function validatePassword(el) {
   return true;
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   3. LOGIN FORM
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initLoginForm() {
   const form = document.getElementById('login-form');
@@ -352,9 +328,7 @@ async function handleLogin(formOrEvent) {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   4. ROLE SELECTOR CARDS
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initRoleCards() {
   document.querySelectorAll('.role-card').forEach(function (card) {
@@ -399,9 +373,7 @@ window.selectRole = function (roleValueOrCard) {
   if (card) _selectRoleInternal(card);
 };
 
-/* ═══════════════════════════════════════════════════════════════════
-   5. PASSWORD STRENGTH METER
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initPasswordStrengthMeter() {
   const pwdInput = document.getElementById('pwd-signup');
@@ -458,9 +430,7 @@ function updateStrengthMeter(value) {
   lbl.style.color = score > 0 ? (textCol[score] || '#9A9CA2') : '#9A9CA2';
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   6. PASSWORD VISIBILITY TOGGLES
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initPasswordToggles() {
   document.querySelectorAll('.pwd-toggle').forEach(function (btn) {
@@ -507,9 +477,7 @@ window.togglePwd = function (inputId, btn) {
   }
 };
 
-/* ═══════════════════════════════════════════════════════════════════
-   UTILITIES
-═══════════════════════════════════════════════════════════════════ */
+
 
 /**
  * Show a success or error banner at the top of a form.

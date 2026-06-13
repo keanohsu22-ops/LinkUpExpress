@@ -1,31 +1,8 @@
-/**
- * order-confirmation.js — LinkUp Express
- * ─────────────────────────────────────────────────────────────────
- * Handles all interactive behaviour on order-confirmation.html:
- *
- *   1.  Header auth sync
- *   2.  Generate and display a unique order reference number
- *   3.  Set live issue date and time on the receipt
- *   4.  Populate order items from sessionStorage checkout data
- *   5.  Populate the cost breakdown (subtotal, VAT, discount, total)
- *   6.  Populate Yoko payment details with a generated transaction ID
- *   7.  Copy order reference to clipboard
- *   8.  Print receipt (window.print)
- *   9.  Download PDF receipt (html2canvas + jsPDF fallback)
- *   10. Email receipt simulation
- *   11. Order tracking progress bar — set to correct step
- *   12. Clear cart after successful checkout
- *   13. Redirect to login if not logged in
- *
- * Dependencies: auth.js must be loaded before this file.
- * ─────────────────────────────────────────────────────────────────
- */
+
 
 'use strict';
 
-/* ═══════════════════════════════════════════════════════════════════
-   BOOT
-═══════════════════════════════════════════════════════════════════ */
+
 
 document.addEventListener('DOMContentLoaded', function () {
   lue_syncHeader();
@@ -35,10 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initReceiptActions();
 });
 
-/* ═══════════════════════════════════════════════════════════════════
-   1. LOGIN GUARD
-   If someone navigates to this page without a session, redirect them.
-═══════════════════════════════════════════════════════════════════ */
+
 
 function guardLoginRequired() {
   if (!lue_isLoggedIn()) {
@@ -49,11 +23,7 @@ function guardLoginRequired() {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   2. BUILD RECEIPT DATA
-   Reads sessionStorage for real checkout data.
-   Falls back to demo data if the page is visited directly.
-═══════════════════════════════════════════════════════════════════ */
+
 
 function buildReceiptData() {
   const session  = lue_getSession();
@@ -135,9 +105,7 @@ function buildReceiptData() {
   updateTrackingBar('preparing');
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   HELPERS — data generation
-═══════════════════════════════════════════════════════════════════ */
+
 
 /**
  * Read and parse checkout data from sessionStorage.
@@ -197,9 +165,7 @@ function setReceiptDate() {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   RENDER ORDER ITEMS FROM CHECKOUT DATA
-═══════════════════════════════════════════════════════════════════ */
+
 
 function renderOrderItems(items) {
   const container = document.querySelector('.order-items');
@@ -233,9 +199,7 @@ function renderOrderItems(items) {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   RENDER COST BREAKDOWN
-═══════════════════════════════════════════════════════════════════ */
+
 
 function renderCostBreakdown(items, promo) {
   const subtotal = items.reduce(function (s, i) { return s + i.price * (i.quantity || 1); }, 0);
@@ -286,9 +250,7 @@ function renderPaymentAmount(items, promo) {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   ORDER TRACKING BAR
-═══════════════════════════════════════════════════════════════════ */
+
 
 /**
  * Set the visual state of the order tracking progress bar.
@@ -321,9 +283,7 @@ function updateTrackingBar(stage) {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   3. COPY ORDER REF
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initCopyRef() {
   const copyBtn = document.querySelector('.order-ref button');
@@ -362,9 +322,7 @@ function fallbackCopy(text) {
 // Expose for inline onclick="copyRef()"
 window.copyRef = copyOrderRef;
 
-/* ═══════════════════════════════════════════════════════════════════
-   4–6. RECEIPT ACTIONS (Print, Download, Email)
-═══════════════════════════════════════════════════════════════════ */
+
 
 function initReceiptActions() {
   // Print button is handled inline (window.print()) — no JS needed beyond that.
@@ -399,9 +357,7 @@ function emailReceipt() {
 window.downloadPDF   = downloadReceiptPDF;
 window.emailReceipt  = emailReceipt;
 
-/* ═══════════════════════════════════════════════════════════════════
-   TOAST — uses the existing #toast element (or lue_toast fallback)
-═══════════════════════════════════════════════════════════════════ */
+
 
 function showConfirmToast(msg) {
   // The order-confirmation page builds its toast dynamically in the original JS.
@@ -437,9 +393,7 @@ function showConfirmToast(msg) {
 // Expose for any remaining inline onclick="showToast(...)" in the HTML
 window.showToast = showConfirmToast;
 
-/* ═══════════════════════════════════════════════════════════════════
-   UTILITIES
-═══════════════════════════════════════════════════════════════════ */
+
 
 function setElement(id, value) {
   const el = document.getElementById(id);
