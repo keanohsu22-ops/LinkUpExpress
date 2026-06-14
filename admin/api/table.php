@@ -457,6 +457,12 @@ function handle_delete(): void {
         }
         $db->prepare("DELETE FROM products WHERE id = ?")->execute([$id]);
 
+    } elseif ($table === 'orders') {
+        // Delete child rows first before removing the order
+        $db->prepare("DELETE FROM order_items WHERE order_id = ?")->execute([$id]);
+        $db->prepare("DELETE FROM payments WHERE order_id = ?")->execute([$id]);
+        $db->prepare("DELETE FROM orders WHERE id = ?")->execute([$id]);
+
     } else {
         $db->prepare("DELETE FROM {$table} WHERE id = ?")->execute([$id]);
     }
