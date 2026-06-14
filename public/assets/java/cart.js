@@ -1,12 +1,42 @@
-
+/**
+ * cart.js — LinkUp Express Shopping Cart
+ * ─────────────────────────────────────────────────────────────────
+ * Handles all interactive behaviour on cart.html:
+ *
+ *   1.  Load and render cart items from localStorage on page load
+ *   2.  Quantity controls (+/− per item) with live total recalculation
+ *   3.  Remove individual item (animated slide-out)
+ *   4.  Move item to wishlist
+ *   5.  Select all / deselect all checkbox
+ *   6.  Remove all selected items
+ *   7.  Promo code application and validation
+ *   8.  Order summary live recalculation (subtotal, VAT, discount, total)
+ *   9.  Upsell "Add to Cart" cards
+ *   10. Proceed to Payment guard (must be logged in)
+ *   11. Empty cart state toggle
+ *   12. Cart badge in header kept in sync
+ *
+ * Dependencies: auth.js must be loaded before this file.
+ * ─────────────────────────────────────────────────────────────────
+ */
 
 'use strict';
 
+/* ═══════════════════════════════════════════════════════════════════
+   VALID PROMO CODES
+   In a real app these would be validated server-side.
+═══════════════════════════════════════════════════════════════════ */
 
+const PROMO_CODES = {
+  'LINKUP10':  { type: 'percent', value: 10,  label: 'LINKUP10 — 10% off' },
+  'SAVE10':    { type: 'percent', value: 10,  label: 'SAVE10 — 10% off' },
+  'SHOPZA10':  { type: 'percent', value: 10,  label: 'SHOPZA10 — 10% off' },
+  'FLAT200':   { type: 'fixed',   value: 200, label: 'FLAT200 — R200 off' },
+};
 
-
-
-
+/* ═══════════════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════════════ */
 
 /** Cart items — each: { id, name, brand, price, quantity, colour?, seller? } */
 let cartItems     = [];
@@ -17,7 +47,9 @@ let itemHtmlMap   = {};
 
 const VAT_RATE = 0.15;  // 15% VAT included in price
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', async function () {
   // Init session first so lue_isLoggedIn() works correctly
@@ -32,7 +64,9 @@ document.addEventListener('DOMContentLoaded', async function () {
   initContinueShopping();
 });
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   1. LOAD CART FROM LOCALSTORAGE
+═══════════════════════════════════════════════════════════════════ */
 
 function loadCartFromStorage() {
   cartItems = lue_getCart();
@@ -50,7 +84,10 @@ function loadCartFromStorage() {
   }
 }
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   2. RENDER CART ITEMS
+   Dynamically build all cart-item rows from the cartItems array.
+═══════════════════════════════════════════════════════════════════ */
 
 function renderCartItems() {
   const container = document.getElementById('cart-items');
@@ -142,7 +179,9 @@ function escHtml(str) {
   });
 }
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   3 & 4. QUANTITY CHANGE + REMOVE
+═══════════════════════════════════════════════════════════════════ */
 
 function changeItemQty(itemId, delta) {
   const item = cartItems.find(function (i) { return i.id === itemId; });
@@ -194,7 +233,9 @@ window.removeItem = function (htmlIndex) {
   }
 };
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   5. MOVE TO WISHLIST
+═══════════════════════════════════════════════════════════════════ */
 
 function moveItemToWishlist(itemId) {
   const item = cartItems.find(function (i) { return i.id === itemId; });
@@ -213,7 +254,9 @@ window.moveToWishlist = function (htmlIndex) {
   if (itemId) moveItemToWishlist(itemId);
 };
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   6. SELECT ALL / DESELECT ALL + REMOVE SELECTED
+═══════════════════════════════════════════════════════════════════ */
 
 function initSelectAll() {
   const selectAll = document.getElementById('select-all');
@@ -257,7 +300,64 @@ function removeSelected() {
 }
 window.removeSelected = removeSelected;
 
+/* ═══════════════════════════════════════════════════════════════════
+   7. PROMO CODE
+═══════════════════════════════════════════════════════════════════ */
 
+function initPromoCode() {
+  const input = document.getElementById('promo-code');
+  if (input) {
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') applyPromo();
+    });
+  }
+}
+
+function applyPromo() {
+  const input  = document.getElementById('promo-code');
+  const code   = (input?.value || '').trim().toUpperCase();
+  const banner = document.getElementById('promo-success');
+  const discLine = document.getElementById('discount-line');
+
+  if (!code) {
+    showCartToast('Please enter a promo code.', 'info');
+    return;
+  }
+
+  if (appliedPromo) {
+    showCartToast('A promo code is already applied. Remove it first.', 'info');
+    return;
+  }
+
+  const promo = PROMO_CODES[code];
+  if (!promo) {
+    if (input) { input.style.borderColor = 'var(--red)'; }
+    showCartToast(`"${code}" is not a valid promo code.`, 'error');
+    setTimeout(function () { if (input) input.style.borderColor = ''; }, 2000);
+    return;
+  }
+
+  // Apply
+  appliedPromo = { ...promo, code };
+  if (input) {
+    input.value   = code;
+    input.disabled = true;
+    input.style.borderColor = 'var(--green)';
+  }
+  if (banner) {
+    banner.innerHTML = `✓ ${promo.label} applied!`;
+    banner.classList.add('show');
+  }
+  if (discLine) discLine.style.display = 'flex';
+
+  recalculate();
+  showCartToast(`Promo code ${code} applied!`);
+}
+window.applyPromo = applyPromo;
+
+/* ═══════════════════════════════════════════════════════════════════
+   8. ORDER SUMMARY RECALCULATION
+═══════════════════════════════════════════════════════════════════ */
 
 function recalculate() {
   // Only count checked items
@@ -280,7 +380,7 @@ function recalculate() {
     }
   });
 
-  
+  // Promo discount
   let discount = 0;
   if (appliedPromo) {
     if (appliedPromo.type === 'percent') {
@@ -312,7 +412,9 @@ function setText(id, value) {
   if (el) el.textContent = value;
 }
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   9. UPSELL CARDS
+═══════════════════════════════════════════════════════════════════ */
 
 function initUpsellCards() {
   document.querySelectorAll('.btn-upsell-add').forEach(function (btn) {
@@ -349,7 +451,9 @@ function handleUpsellAdd(btn) {
 // Legacy support for inline onclick="upsellAdd(this, name, price)"
 window.upsellAdd = function (btn, name, price) { handleUpsellAdd(btn); };
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   10. PROCEED TO PAYMENT
+═══════════════════════════════════════════════════════════════════ */
 
 function initCheckoutButton() {
   const btn = document.querySelector('.btn-checkout');
@@ -393,7 +497,9 @@ function initCheckoutButton() {
   });
 }
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   11. EMPTY STATE TOGGLE
+═══════════════════════════════════════════════════════════════════ */
 
 function checkEmptyState() {
   const emptyEl   = document.getElementById('empty-cart');
@@ -406,7 +512,9 @@ function checkEmptyState() {
   if (itemsEl)   itemsEl.style.display   = isEmpty ? 'none'  : 'block';
 }
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   12. HEADER BADGE
+═══════════════════════════════════════════════════════════════════ */
 
 function updateHeaderBadge() {
   const count = cartItems.reduce(function (s, i) { return s + (i.quantity || 1); }, 0);
@@ -417,7 +525,9 @@ function updateHeaderBadge() {
   }
 }
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   CONTINUE SHOPPING
+═══════════════════════════════════════════════════════════════════ */
 
 function initContinueShopping() {
   document.querySelectorAll('.btn-continue, a[href="../../index.html"]').forEach(function (el) {
@@ -429,7 +539,9 @@ function initContinueShopping() {
   });
 }
 
-
+/* ═══════════════════════════════════════════════════════════════════
+   TOAST — uses the existing #toast element in the HTML
+═══════════════════════════════════════════════════════════════════ */
 
 function showCartToast(msg, type) {
   const toast = document.getElementById('toast');
