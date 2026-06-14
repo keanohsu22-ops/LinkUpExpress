@@ -292,7 +292,7 @@
             </div>
           </div>
 
-          <a href="#" class="forgot-link">Forgot your password?</a>
+          <a href="#" class="forgot-link" onclick="showForgotModal(); return false;">Forgot your password?</a>
 
           <button type="submit" class="btn-submit" id="login-btn">Log In to My Account</button>
 
@@ -479,5 +479,37 @@
   <script src="../assets/java/auth.js"></script>
   <script src="../assets/java/signup.js"></script>
 
+
+  <!-- ── FORGOT PASSWORD MODAL ─────────────────────────────────── -->
+  <div id="forgot-modal" style="display:none;position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;">
+    <!-- Overlay -->
+    <div onclick="hideForgotModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.5);"></div>
+    <!-- Panel -->
+    <div style="position:relative;background:#fff;border-radius:16px;padding:36px 32px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);z-index:1;">
+      <div style="font-size:40px;margin-bottom:12px;"></div>
+      <h2 style="font-size:20px;font-weight:700;color:#0A2463;margin-bottom:12px;">Forgot Your Password?</h2>
+      <p style="font-size:14px;color:#555555;line-height:1.6;margin-bottom:24px;">
+        To verify that this account is yours contact us at<br>
+        <a href="mailto:linkupexpress@gmail.com" style="color:#0A2463;font-weight:600;">linkupexpress@gmail.com</a>
+        or call <a href="tel:0679082655" style="color:#0A2463;font-weight:600;">067 908 2655</a>
+      </p>
+      <button onclick="hideForgotModal()" style="background:#0A2463;color:#fff;border:none;padding:12px 32px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Got it</button>
+    </div>
+  </div>
+
+  <script>
+    function showForgotModal() {
+      var m = document.getElementById('forgot-modal');
+      m.style.display = 'flex';
+    }
+    function hideForgotModal() {
+      var m = document.getElementById('forgot-modal');
+      m.style.display = 'none';
+    }
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') hideForgotModal();
+    });
+  </script>
 </body>
 </html>
