@@ -1,3 +1,14 @@
+function _redirectToHome() {
+  var href = window.location.href;
+  if (href.includes('/public/')) {
+    window.location.href = href.substring(0, href.indexOf('/public/')) + '/index.html';
+  } else {
+    var parts = href.split('/');
+    parts.pop();
+    window.location.href = parts.join('/') + '/index.html';
+  }
+}
+
 /**
  * profile.js — LinkUp Express User Profile Page
  * ─────────────────────────────────────────────────────────────────
@@ -517,31 +528,31 @@ function saveSection(id) {
 
     if (!currentPwd) {
       showFieldError('i-current-pwd', 'Please enter your current password.'); hasError = true;
-    } else {
-      // Verify current password matches the stored hash
-      const session = lue_getSession();
-      const users   = lue_getUsers();
-      const user    = users.find(function (u) { return session && u.id === session.id; });
-      if (user && user.passwordHash !== lue_hashPassword(currentPwd)) {
-        showFieldError('i-current-pwd', 'Current password is incorrect.'); hasError = true;
-      }
     }
-    if (newPwd.length < LUE.MIN_PASSWORD_LENGTH) {
-      showFieldError('i-new-pwd', `New password must be at least ${LUE.MIN_PASSWORD_LENGTH} characters.`); hasError = true;
+    if (newPwd.length < 8) {
+      showFieldError('i-new-pwd', 'New password must be at least 8 characters.'); hasError = true;
     }
     if (newPwd && confirmPwd !== newPwd) {
       showFieldError('i-confirm-pwd', 'Passwords do not match.'); hasError = true;
     }
     if (hasError) return;
 
-    // Update the stored password hash
+    // Call PHP API to verify current password and update to new one
     const session = lue_getSession();
-    const users   = lue_getUsers();
-    const idx     = users.findIndex(function (u) { return session && u.id === session.id; });
-    if (idx !== -1) {
-      users[idx].passwordHash = lue_hashPassword(newPwd);
-      lue_saveUsers(users);
-    }
+    fetch(lue_apiUrl('profile') + '?action=change_password&user_id=' + encodeURIComponent(session.id), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ user_id: session.id, current_password: currentPwd, new_password: newPwd })
+    }).then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (!d.ok) {
+          showFieldError('i-current-pwd', d.error || 'Current password is incorrect.');
+          return;
+        }
+        showToast('Password updated successfully!');
+      })
+      .catch(function() { showToast('Could not update password. Please try again.'); });
 
     // Clear fields and hide strength meter
     ['i-current-pwd', 'i-new-pwd', 'i-confirm-pwd'].forEach(function (pid) {
@@ -860,7 +871,7 @@ function confirmDelete() {
   lue_clearCart();
 
   showToast('Account deleted. Redirecting…', 'error');
-  setTimeout(function() { window.location.href = '../../index.html'; }, 1800);
+  setTimeout(function() { _redirectToHome(); }, 1800);
 }
 window.confirmDelete = confirmDelete;
 
