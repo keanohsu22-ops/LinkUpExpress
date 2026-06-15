@@ -543,13 +543,22 @@ function saveSection(id) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin',
-      body: JSON.stringify({ user_id: session.id, current_password: currentPwd, new_password: newPwd })
+      body: JSON.stringify({
+        user_id:          session.id,
+        current_password: currentPwd,
+        new_password:     newPwd,
+        confirm_password: confirmPwd
+      })
     }).then(function(r) { return r.json(); })
       .then(function(d) {
         if (!d.ok) {
           showFieldError('i-current-pwd', d.error || 'Current password is incorrect.');
           return;
         }
+        ['i-current-pwd', 'i-new-pwd', 'i-confirm-pwd'].forEach(function(pid) {
+          var el = document.getElementById(pid);
+          if (el) el.value = '';
+        });
         showToast('Password updated successfully!');
       })
       .catch(function() { showToast('Could not update password. Please try again.'); });
@@ -836,42 +845,38 @@ function initDeleteAccount() {
 }
 
 function confirmDelete() {
-  // First confirmation
-  const step1 = confirm(
+  var step1 = confirm(
     '⚠️  Are you sure you want to permanently delete your LinkUp Express account?\n\n' +
     'This will remove all your data, orders, and listings.\n\n' +
     'This action CANNOT be undone.'
   );
   if (!step1) return;
 
-  // Second confirmation with stronger warning
-  const step2 = confirm(
-    'FINAL WARNING\n\n' +
-    'Type "DELETE" in your mind and confirm below to permanently delete your account.\n\n' +
-    'All data will be lost immediately.'
-  );
-  if (!step2) return;
+  var password = prompt('Enter your current password to confirm account deletion:');
+  if (!password) return;
 
   var session = lue_getSession();
+  if (!session || !window.lue_apiUrl) return;
 
-  // Call PHP API to delete from database
-  if (session && window.lue_apiUrl) {
-    fetch(lue_apiUrl('profile') + '?action=delete&user_id=' + encodeURIComponent(session.id), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'same-origin',
-      body: JSON.stringify({ user_id: session.id })
-    }).then(function(r) { return r.json(); })
-      .then(function(d) { console.log('Account deleted from DB:', d); })
-      .catch(function(e) { console.warn('Delete API not reachable:', e.message); });
-  }
-
-  // Clear session cache
-  lue_clearSession();
-  lue_clearCart();
-
-  showToast('Account deleted. Redirecting…', 'error');
-  setTimeout(function() { _redirectToHome(); }, 1800);
+  fetch(lue_apiUrl('profile') + '?action=delete&user_id=' + encodeURIComponent(session.id), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify({ user_id: session.id, password: password })
+  }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d.ok) {
+        alert(d.error || 'Could not delete account. Please check your password and try again.');
+        return;
+      }
+      lue_clearSession();
+      lue_clearCart();
+      showToast('Account deleted. Redirecting…');
+      setTimeout(function() { _redirectToHome(); }, 1800);
+    })
+    .catch(function() {
+      alert('Something went wrong. Please try again.');
+    });
 }
 window.confirmDelete = confirmDelete;
 
