@@ -838,10 +838,7 @@ function initAvatarUpload() {
 ═══════════════════════════════════════════════════════════════════ */
 
 function initDeleteAccount() {
-  const deleteBtn = document.querySelector('.btn-danger');
-  if (deleteBtn) {
-    deleteBtn.addEventListener('click', function () { confirmDelete(); });
-  }
+  // confirmDelete() is called via onclick in profile.html — no listener needed here
 }
 
 function confirmDelete() {
